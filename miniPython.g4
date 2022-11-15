@@ -6,24 +6,25 @@ ELIF  : 'elif';
 ELSE  : 'else';
 WHILE : 'while';
 CLAZZ : 'class';
-DEF      : 'def';
-RET      : 'return';
+DEF   : 'def';
+RET   : 'return';
 SELF  : 'self';
 
 WS    : [ \t]+ -> skip;
-NL      : [\n\r]+;
+NL    : [\n\r]+;
 
 /** DATATYPES */
 INT   : [1-9][0-9]*;
 BOOL  : 'True' | 'False';
+STRING: ["|'][a-zA-Z_ ]*[a-zA-Z_0-9 ]*["|'];
 
 /** IDENTIFIER */
 ID    : [a-zA-Z_][a-zA-Z_0-9]*;
 
 /** END-MARKER TO CLOSE SCOPES */
-END   : '#end' NL;
+END   : '#end' NL?;
 
-lit   : INT | BOOL;
+lit   : INT | BOOL | STRING;
 
 expr : expr  '*'   expr    # MUL
      | expr  '/'   expr # DIV
@@ -49,15 +50,15 @@ assign : ID '=' expr NL
        | ID '=' funcCall
        | ID '=' obj;
 
-funcCall : ID '(' (expr  (','expr)*)? ') NL';
+funcCall : ID '(' (expr  (','expr)*)? ')' NL;
 
-methodCall : ID'.'ID'(' (expr (','expr)*)? ') NL';
+methodCall : ID'.'ID'(' (expr (','expr)*)? ')' NL;
 
 obj : ID'('(expr  (','expr)*)? ')' NL;
 
 whileStmt : WHILE expr ':' NL (inst)* END;
 
-ifStmt : IF expr ':' NL (inst)* (ELIF expr ':' NL (inst)*)* (ELSE ':' (inst)*)? END;
+ifStmt : IF expr ':' NL (inst)* (ELIF expr ':' NL (inst)*)* (ELSE ':' NL (inst)*)? END;
 
 inst : assign
      | funcCall 
