@@ -1,0 +1,3 @@
+def foo():
+print("ich bin eine Funktion")
+#end

@@ -1,0 +1,12 @@
+a= 2
+if a == 2:
+    print('a is ', a)
+#end
+
+if a == 2:
+print("a is ", a)
+elif a == 3:
+print("a is ", a)
+else:
+print("a is neither 2 and 3")
+#end
