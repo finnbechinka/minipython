@@ -50,15 +50,17 @@ assign : ID '=' expr NL
        | ID '=' funcCall
        | ID '=' obj;
 
+block : (inst)*;
+
 funcCall : ID '(' (expr  (','expr)*)? ')' NL;
 
 methodCall : ID'.'ID'(' (expr (','expr)*)? ')' NL;
 
 obj : ID'('(expr  (','expr)*)? ')' NL;
 
-whileStmt : WHILE expr ':' NL (inst)* END;
+whileStmt : WHILE expr ':' NL block END;
 
-ifStmt : IF expr ':' NL (inst)* (ELIF expr ':' NL (inst)*)* (ELSE ':' NL (inst)*)? END;
+ifStmt : IF expr ':' NL block (ELIF expr ':' NL block)* (ELSE ':' NL block)? END;
 
 inst : assign
      | funcCall 
@@ -68,11 +70,11 @@ inst : assign
 
 /** FUNCTION, METHOD, CLASS DEFINITION */
 
-funcDef : DEF ID '(' (ID (','ID)*)? '):' NL (inst)* (RET expr NL)? END;
+funcDef : DEF ID '(' (ID (','ID)*)? '):' NL block (RET expr NL)? END;
 
 clazz : CLAZZ ID '(' ID? '):' NL (methodDef)* END;
 
-methodDef : DEF ID '(' SELF (','ID)* '):' NL (inst)* (RET expr NL)? END;
+methodDef : DEF ID '(' SELF (','ID)* '):' NL block (RET expr NL)? END;
 
 
 prog : (funcDef | clazz | inst | NL)* EOF;

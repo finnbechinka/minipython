@@ -1,4 +1,5 @@
-*.class
-*.java
-*.interp
-*.tokens
+/*.class
+/*.java
+/*.interp
+/*.tokens
+/.antlr/
