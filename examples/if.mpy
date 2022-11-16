@@ -1,6 +1,6 @@
 a= 2
 if a == 2:
-    print('a is ', a)
+    print("a is ", a)
 #end
 
 if a == 2:

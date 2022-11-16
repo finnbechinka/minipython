@@ -16,7 +16,7 @@ NL    : [\n\r]+;
 /** DATATYPES */
 INT   : [1-9][0-9]*;
 BOOL  : 'True' | 'False';
-STRING: ["|'][a-zA-Z_ ]*[a-zA-Z_0-9 ]*["|'];
+STRING: '"' ('\\' ["\\] | ~["\\\r\n])* '"';
 
 /** IDENTIFIER */
 ID    : [a-zA-Z_][a-zA-Z_0-9]*;
