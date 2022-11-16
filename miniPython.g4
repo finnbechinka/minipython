@@ -26,7 +26,7 @@ END   : '#end' NL?;
 
 lit   : INT | BOOL | STRING;
 
-expr : expr  '*'   expr    # MUL
+expr : expr  '*'   expr # MUL
      | expr  '/'   expr # DIV
      | expr  '+'   expr # ADD
      | expr  '-'   expr # SUB
@@ -39,14 +39,14 @@ expr : expr  '*'   expr    # MUL
      | expr  'or'  expr # OR
      | expr  'and' expr # AND
      |       'not' expr # NOT
-     | ID                # ID
-     | lit                # ATOM
+     | ID               # ID
+     | lit              # ATOM
      ;
 
 /** INSTRUCTIONS */
 
 assign : ID '=' expr NL
-       | ID '=' methodCall 
+       | ID '=' methodCall
        | ID '=' funcCall
        | ID '=' obj;
 
