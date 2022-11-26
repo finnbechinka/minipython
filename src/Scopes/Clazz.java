@@ -1,4 +1,4 @@
-package Scopes;
+package scopes;
 
 public class Clazz extends Scope implements Symbol, Type {
     
@@ -38,7 +38,7 @@ public class Clazz extends Scope implements Symbol, Type {
 
     @Override
     public Scope getScope() {
-        return super.getScope();
+        return super.getEnclosingScope();
     }
     
 }

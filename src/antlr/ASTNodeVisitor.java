@@ -1,10 +1,12 @@
+package antlr;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import Nodes.*;
+import nodes.*;
 
 public class ASTNodeVisitor extends MiniPythonBaseVisitor<ASTNode> {
     
@@ -20,7 +22,6 @@ public class ASTNodeVisitor extends MiniPythonBaseVisitor<ASTNode> {
         else if (ctx.STRING() != null){
             return new LitNode<String>(ctx.STRING().getText());
         }
-        
         return null;
     }
 
@@ -202,7 +203,7 @@ public class ASTNodeVisitor extends MiniPythonBaseVisitor<ASTNode> {
         String id = ctx.ID(0).getText();
         String parentId = ctx.ID().size() > 1 ? ctx.ID(1).getText() : "";
 
-        return new ClazzDef(id, parentId, methods); 
+        return new ClazzDefNode(id, parentId, methods);
     }
 	
 	@Override 
@@ -236,7 +237,7 @@ public class ASTNodeVisitor extends MiniPythonBaseVisitor<ASTNode> {
         ListIterator<ParseTree> it = ctx.children.listIterator();
         List<ASTNode> statements = new ArrayList<ASTNode>();
         
-        while(it.hasNext()){
+        while(it.hasNext()) {
             ASTNode t = visit(it.next());
             if(t != null) statements.add(t);
         }

@@ -1,7 +1,8 @@
-package Nodes;
+package nodes;
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.Tree;
+import visitors.ASTVisitor;
 
 public class BlockNode extends ASTNode {
 
@@ -23,5 +24,17 @@ public class BlockNode extends ASTNode {
     public String toStringTree() {
         return "Block";
     }
-    
+
+    public List<ASTNode> getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(List<ASTNode> instructions) {
+        this.instructions = instructions;
+    }
+
+    @Override
+    public <T> T accept(ASTVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }

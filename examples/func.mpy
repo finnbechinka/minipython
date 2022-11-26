@@ -1,3 +1,4 @@
 def foo():
 print("ich bin eine Funktion")
+return 1
 #end

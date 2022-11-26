@@ -1,4 +1,4 @@
-package Scopes;
+package scopes;
 
 public class Function extends Scope implements Symbol {
     
@@ -38,6 +38,6 @@ public class Function extends Scope implements Symbol {
 
     @Override
     public Scope getScope() {
-        return super.getScope();
+        return super.getEnclosingScope();
     }
 }

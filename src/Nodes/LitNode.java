@@ -1,4 +1,6 @@
-package Nodes;
+package nodes;
+
+import visitors.ASTVisitor;
 
 public class LitNode<T> extends ASTNode {
 
@@ -12,5 +14,17 @@ public class LitNode<T> extends ASTNode {
     public String toStringTree() {
         return value.getClass().getSimpleName() + ": " + value.toString();
     }
-    
+
+    public T getValue() {
+        return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    @Override
+    public <T> T accept(ASTVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }

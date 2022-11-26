@@ -1,10 +1,15 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Collections;
-import Nodes.*;
+import nodes.*;
+import antlr.ASTNodeVisitor;
+import antlr.MiniPythonLexer;
+import antlr.MiniPythonParser;
 import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+import visitors.ASTStringVisitor;
+import visitors.ASTSymbolVisitor;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -29,7 +34,10 @@ public class App {
         ParseTree tree = parser.prog();    // Start-Regel
 
         ASTNodeVisitor eval = new ASTNodeVisitor();
+        ASTStringVisitor str = new ASTStringVisitor();
+        ASTSymbolVisitor symbol = new ASTSymbolVisitor();
         ASTNode ast = tree.accept(eval);
+        ast.accept(symbol);
         
         TreeViewer viewer = new TreeViewer(Collections.emptyList(), ast);
         viewer.open();

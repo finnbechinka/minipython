@@ -1,5 +1,6 @@
-package Nodes;
+package nodes;
 import org.antlr.v4.runtime.tree.Tree;
+import visitors.ASTVisitor;
 
 public class UnaryExprNode extends ExprNode{
 
@@ -23,5 +24,25 @@ public class UnaryExprNode extends ExprNode{
     public String toStringTree() {
         return "Op: " + operator;
     }
-    
+
+    public ASTNode getChildNode() {
+        return childNode;
+    }
+
+    public void setChildNode(ASTNode childNode) {
+        this.childNode = childNode;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    @Override
+    public <T> T accept(ASTVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }

@@ -1,4 +1,4 @@
-package Scopes;
+package scopes;
 
 public class Builtin implements Type,Symbol{
 

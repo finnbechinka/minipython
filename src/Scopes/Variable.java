@@ -1,6 +1,6 @@
-package Scopes;
+package scopes;
 
-public class Variable implements Symbol{
+public class Variable implements Symbol {
 
     private String name;
     private Type type;

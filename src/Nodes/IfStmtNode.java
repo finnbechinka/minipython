@@ -1,7 +1,8 @@
-package Nodes;
+package nodes;
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.Tree;
+import visitors.ASTVisitor;
 
 public class IfStmtNode extends InstructionNode {
 
@@ -33,5 +34,41 @@ public class IfStmtNode extends InstructionNode {
     public String toStringTree() {
         return "IF";
     }
-    
+
+    public ASTNode getIfCondition() {
+        return ifCondition;
+    }
+
+    public void setIfCondition(ASTNode ifCondition) {
+        this.ifCondition = ifCondition;
+    }
+
+    public ASTNode getIfBody() {
+        return ifBody;
+    }
+
+    public void setIfBody(ASTNode ifBody) {
+        this.ifBody = ifBody;
+    }
+
+    public List<ASTNode> getElifs() {
+        return elifs;
+    }
+
+    public void setElifs(List<ASTNode> elifs) {
+        this.elifs = elifs;
+    }
+
+    public ASTNode getElseBody() {
+        return elseBody;
+    }
+
+    public void setElseBody(ASTNode elseBody) {
+        this.elseBody = elseBody;
+    }
+
+    @Override
+    public <T> T accept(ASTVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }

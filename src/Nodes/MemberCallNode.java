@@ -1,17 +1,19 @@
 package nodes;
-
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.Tree;
 import visitors.ASTVisitor;
 
-public class CallNode extends ASTNode {
+public class MemberCallNode extends ASTNode {
 
-    private String id;
+    private String instanceID;
+    private String methodID;
+
     private List<ASTNode> args;
 
-    public CallNode(String id, List<ASTNode> args){
-        this.id = id;
+    public MemberCallNode(String instanceID, String methodID, List<ASTNode> args){
+        this.instanceID = instanceID;
+        this.methodID = methodID;
         this.args = args;
     }
 
@@ -25,15 +27,23 @@ public class CallNode extends ASTNode {
 
     @Override
     public String toStringTree() {
-        return "FuncCall: " + id;
+        return "MethodCall: " + instanceID + "." + methodID;
     }
 
-    public String getId() {
-        return id;
+    public String getInstanceID() {
+        return instanceID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setInstanceID(String instanceID) {
+        this.instanceID = instanceID;
+    }
+
+    public String getMethodID() {
+        return methodID;
+    }
+
+    public void setMethodID(String methodID) {
+        this.methodID = methodID;
     }
 
     public List<ASTNode> getArgs() {

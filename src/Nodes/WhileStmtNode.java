@@ -1,6 +1,7 @@
-package Nodes;
+package nodes;
 
 import org.antlr.v4.runtime.tree.Tree;
+import visitors.ASTVisitor;
 
 public class WhileStmtNode extends InstructionNode {
 
@@ -24,5 +25,25 @@ public class WhileStmtNode extends InstructionNode {
     public String toStringTree() {
         return "WHILE";
     }
-    
+
+    public ASTNode getCondition() {
+        return condition;
+    }
+
+    public void setCondition(ASTNode condition) {
+        this.condition = condition;
+    }
+
+    public ASTNode getBody() {
+        return body;
+    }
+
+    public void setBody(ASTNode body) {
+        this.body = body;
+    }
+
+    @Override
+    public <T> T accept(ASTVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }
