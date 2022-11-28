@@ -12,7 +12,7 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
 
     @Override
     public Object visit(AssignNode node) {
-        return env.getElements().put(node.getId(), visit(node.getValueNode()));
+        return env.getElements().put(((IDNode)node.getId()).getId(), visit(node.getValueNode()));
     }
 
     @Override
@@ -114,7 +114,7 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
 
     @Override
     public Object visit(CallNode node) {
-        Object callObj = env.get(node.getId());
+        Object callObj = env.get(((IDNode)node.getId()).getId());
         List<Object> args = new ArrayList<>();
 
         for(ASTNode arg: node.getArgs())
@@ -203,11 +203,6 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
     @Override
     public Object visit(LitNode<?> node) {
         return node.getValue();
-    }
-
-    @Override
-    public Object visit(MemberCallNode node) {
-        return null;
     }
 
     @Override
