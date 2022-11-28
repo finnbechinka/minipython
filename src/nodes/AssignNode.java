@@ -1,14 +1,18 @@
 package nodes;
-
 import org.antlr.v4.runtime.tree.Tree;
+
+import scopes.Scope;
 import visitors.ASTVisitor;
 
-public class AssignNode extends InstructionNode {
+public class AssignNode extends InstructionNode{
+
+    private Scope scope;
 
     private String id;
     private ASTNode valueNode;
 
-    public AssignNode(String id, ASTNode valueNode) {
+    public AssignNode(String id, ASTNode valueNode){
+
         this.id = id;
         this.valueNode = valueNode;
     }
@@ -21,6 +25,14 @@ public class AssignNode extends InstructionNode {
         return 1;
     }
 
+    public String getId(){
+        return this.id;
+    }
+
+    public ASTNode getValueNode(){
+        return this.valueNode;
+    }
+
     @Override
     public String toStringTree() {
         return "Assign: " + id;
@@ -31,19 +43,14 @@ public class AssignNode extends InstructionNode {
         return visitor.visit(this);
     }
 
-    public String getId() {
-        return id;
+    @Override
+    public Scope getScope() {
+        return this.scope;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    @Override
+    public void setScope(Scope scope) {
+        this.scope = scope;
     }
-
-    public ASTNode getValueNode() {
-        return valueNode;
-    }
-
-    public void setValueNode(ASTNode valueNode) {
-        this.valueNode = valueNode;
-    }
+    
 }

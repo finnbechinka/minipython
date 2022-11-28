@@ -1,109 +1,132 @@
 package visitors;
 
-import nodes.*;
+import nodes.ASTNode;
+import nodes.AssignNode;
+import nodes.BinaryExprNode;
+import nodes.BlockNode;
+import nodes.CallNode;
+import nodes.ClazzDefNode;
+import nodes.ElifStmtNode;
+import nodes.FuncDefNode;
+import nodes.IDNode;
+import nodes.IfStmtNode;
+import nodes.LitNode;
+import nodes.MemberCallNode;
+import nodes.ProgNode;
+import nodes.UnaryExprNode;
+import nodes.WhileStmtNode;
 
-public class ASTStringVisitor implements ASTVisitor<String> {
+public class ASTStringVisitor implements ASTVisitor<String>{
 
     @Override
     public String visit(AssignNode node) {
-        return node.toString() + "\n" + visit(node.getValueNode());
+        return "";
     }
 
     @Override
     public String visit(BinaryExprNode node) {
-        return node.toString() + "\n" + visit(node.getLeftNode()) + "\n" + visit(node.getRightNode());
+        return "";
     }
 
     @Override
     public String visit(UnaryExprNode node) {
-        return node.toString() + "\n" + visit(node.getChildNode());
+        
+        return "";
     }
 
     @Override
     public String visit(BlockNode node) {
-        StringBuilder str = new StringBuilder(node.toString());
+        String s = "\n";
 
-        for(ASTNode instr: node.getInstructions()) {
-            str.append("\n").append(visit(instr));
-        }
-        return str.toString();
+        s += node.toStringTree() +": "+ node.getScope();
+        
+        for(ASTNode inst : node.getInstructions()) s += visit(inst);
+
+        return s;
     }
 
     @Override
     public String visit(CallNode node) {
-        StringBuilder str = new StringBuilder(node.toString());
-
-        for(ASTNode arg: node.getArgs()) {
-            str.append("\n").append(visit(arg));
-        }
-        return str.toString();
+        
+        return "";
     }
 
     @Override
     public String visit(ClazzDefNode node) {
-        StringBuilder str = new StringBuilder(node.toString());
-
-        for(ASTNode method: node.getMethods()) {
-            str.append("\n").append(visit(method));
-        }
-        return str.toString();
+        
+        return "";
     }
 
     @Override
     public String visit(IfStmtNode node) {
-        StringBuilder str = new StringBuilder(node.toString());
-        str.append("\n").append(visit(node.getIfCondition()));
-        str.append("\n").append(visit(node.getIfBody()));
+        String s = "\n";
 
-        for(ASTNode elif: node.getElifs()) {
-            str.append("\n").append(visit(elif));
-        }
-        str.append("\nELSE\n").append(visit(node.getElseBody()));
+        s += node.toStringTree() +": "+ node.getScope();
+        s += visit(node.getIfBody());
 
-        return str.toString();
+        for(ASTNode elif : node.getElifs()) s += visit(elif);
+
+        s +=visit(node.getElseBody());
+
+        return s;
     }
 
     @Override
     public String visit(ElifStmtNode node) {
-        return node.toString() + "\n" + visit(node.getCondition()) + "\n" + visit(node.getBody());
+        String s = "\n";
+
+        s += node.toStringTree() +": "+ node.getScope();
+        s += visit(node.getBody());
+
+        return s;
     }
 
     @Override
     public String visit(WhileStmtNode node) {
-        return node.toString() + "\n" + visit(node.getCondition()) + "\n" + visit(node.getBody());
+        String s = "\n";
+
+        s += node.toStringTree() +": "+ node.getScope();
+        s += visit(node.getCondition());
+        s +=visit(node.getBody());
+
+        return s;
     }
 
     @Override
     public String visit(FuncDefNode node) {
-        return node.toString()
-                + "\n" + visit(node.getBody())
-                + "\n" + visit(node.getReturnExpr());
+        String s = "\n";
+
+        s += node.toStringTree() +": "+ node.getScope();
+
+        s+=visit(node.getBody());
+
+        return s;
     }
 
     @Override
     public String visit(IDNode node) {
-        return node.toString();
+        
+        return "";
     }
 
     @Override
     public String visit(LitNode<?> node) {
-        return node.toString();
+        
+        return "";
     }
 
     @Override
     public String visit(MemberCallNode node) {
-        StringBuilder str = new StringBuilder(node.toString());
-
-        for(ASTNode arg: node.getArgs())
-            str.append("\n").append(visit(arg));
-        return str.toString();
+        
+        return "";
     }
 
     @Override
     public String visit(ProgNode node) {
-        StringBuilder str = new StringBuilder(node.toString());
-        for(ASTNode childNode: node.getStmts()) str.append("\n\t").append(visit(childNode));
+        String s = node.toStringTree() + ": " + node.getStmts().get(0).getScope().toString();
+        for(ASTNode stmt : node.getStmts()) s += visit(stmt);
 
-        return str.toString();
+        return s;
     }
+    
 }

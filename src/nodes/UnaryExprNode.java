@@ -1,8 +1,12 @@
 package nodes;
 import org.antlr.v4.runtime.tree.Tree;
+
+import scopes.Scope;
 import visitors.ASTVisitor;
 
 public class UnaryExprNode extends ExprNode{
+
+    private Scope scope;
 
     private ASTNode childNode;
     private String operator;
@@ -20,29 +24,31 @@ public class UnaryExprNode extends ExprNode{
         return 1;
     }
 
+    public ASTNode getChildNode(){
+        return this.childNode;
+    }
+
+    public String getOperator(){
+        return this.operator;
+    }
+
     @Override
     public String toStringTree() {
         return "Op: " + operator;
     }
 
-    public ASTNode getChildNode() {
-        return childNode;
-    }
-
-    public void setChildNode(ASTNode childNode) {
-        this.childNode = childNode;
-    }
-
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
-    }
-
     @Override
     public <T> T accept(ASTVisitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public Scope getScope() {
+        return this.scope;
+    }
+
+    @Override
+    public void setScope(Scope scope) {
+        this.scope = scope;
     }
 }

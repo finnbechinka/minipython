@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Scope {
+
     private Scope enclosingScope;
     private Map<String, Symbol> symbols;
 
@@ -14,7 +15,6 @@ public class Scope {
 
     public void bind(Symbol symbol){
         symbols.put(symbol.getName(), symbol);
-        symbol.setScope(this);
     }
 
     public Symbol resolve(String name){
@@ -24,28 +24,12 @@ public class Scope {
         return null;
     }
 
-    public Scope getEnclosingScope(){
+    public Scope getScope(){
         return this.enclosingScope;
     }
 
-    public void setEnclosingScope(Scope enclosingScope) {
-        this.enclosingScope = enclosingScope;
-    }
-
-    public Map<String, Symbol> getSymbols() {
-        return symbols;
-    }
-
-    public void setSymbols(Map<String, Symbol> symbols) {
-        this.symbols = symbols;
-    }
-
     @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-
-        str.append("Symboltabelle: ").append(symbols);
-
-        return str.toString();
+    public String toString(){
+        return symbols.toString();
     }
- }
+}

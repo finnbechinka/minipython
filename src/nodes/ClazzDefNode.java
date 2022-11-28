@@ -1,18 +1,23 @@
 package nodes;
 
-import org.antlr.v4.runtime.tree.Tree;
-import visitors.ASTVisitor;
-
 import java.util.List;
 
-public class ClazzDefNode extends ASTNode {
+import org.antlr.v4.runtime.tree.Tree;
+
+import scopes.Scope;
+import visitors.ASTVisitor;
+
+public class ClazzDefNode extends ASTNode{
+
+    private Scope scope;
 
     private String id;
     private String parentId;
 
     private List<ASTNode> methods;
 
-    public ClazzDefNode(String id, String parentId, List<ASTNode> methods) {
+    public ClazzDefNode(String id, String parentId, List<ASTNode> methods){
+        
         this.id = id;
         this.parentId = parentId;
         this.methods = methods;
@@ -26,37 +31,36 @@ public class ClazzDefNode extends ASTNode {
         return methods.size();
     }
 
+    public String getId(){
+        return this.id;
+    }
+
+    public String getParentId(){
+        return this.parentId;
+    }
+
+    public List<ASTNode> getMethods(){
+        return this.methods;
+    }
+
     @Override
     public String toStringTree() {
         return "Class: " + id + " Extends: " + parentId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public List<ASTNode> getMethods() {
-        return methods;
-    }
-
-    public void setMethods(List<ASTNode> methods) {
-        this.methods = methods;
     }
 
     @Override
     public <T> T accept(ASTVisitor<T> visitor) {
         return visitor.visit(this);
     }
+
+    @Override
+    public Scope getScope() {
+        return this.scope;
+    }
+
+    @Override
+    public void setScope(Scope scope) {
+        this.scope = scope;
+    }
+    
 }

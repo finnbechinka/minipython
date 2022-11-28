@@ -1,20 +1,24 @@
 package nodes;
 
-import org.antlr.v4.runtime.tree.Tree;
-import visitors.ASTVisitor;
-
 import java.util.List;
 
-public class FuncDefNode extends ASTNode {
+import org.antlr.v4.runtime.tree.Tree;
+
+import scopes.Scope;
+import visitors.ASTVisitor;
+
+public class FuncDefNode extends ASTNode{
+
+    private Scope scope;
 
     private String id;
     private List<String> parameters;
     private ASTNode body;
     private ASTNode returnExpr;
 
-    public FuncDefNode(String id, List<String> parameters, ASTNode body, ASTNode returnExpr) {
+    public FuncDefNode(String id, List<String> parameters, ASTNode body, ASTNode returnExpr){
         this.id = id;
-        this.parameters = parameters;
+        this. parameters = parameters;
         this.body = body;
         this.returnExpr = returnExpr;
     }
@@ -27,45 +31,39 @@ public class FuncDefNode extends ASTNode {
         return 2;
     }
 
+    public String getId(){
+        return this.id;
+    }
+
+    public List<String> getParameters(){
+        return this.parameters;
+    }
+
+    public ASTNode getBody(){
+        return this.body;
+    }
+
+    public ASTNode getReturnExpr(){
+        return this.returnExpr;
+    }
+    
     @Override
     public String toStringTree() {
         return "FuncDef: " + id + " " + parameters.toString();
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<String> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(List<String> parameters) {
-        this.parameters = parameters;
-    }
-
-    public ASTNode getBody() {
-        return body;
-    }
-
-    public void setBody(ASTNode body) {
-        this.body = body;
-    }
-
-    public ASTNode getReturnExpr() {
-        return returnExpr;
-    }
-
-    public void setReturnExpr(ASTNode returnExpr) {
-        this.returnExpr = returnExpr;
-    }
-
     @Override
     public <T> T accept(ASTVisitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public Scope getScope() {
+        return this.scope;
+    }
+
+    @Override
+    public void setScope(Scope scope) {
+        this.scope = scope;
     }
 }

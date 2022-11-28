@@ -22,11 +22,6 @@ public class Clazz extends Scope implements Symbol, Type {
     }
 
     @Override
-    public void setScope(Scope scope) {
-        //this.scope = scope;
-    }
-
-    @Override
     public String getName() {
         return this.name;
     }
@@ -37,8 +32,7 @@ public class Clazz extends Scope implements Symbol, Type {
     }
 
     @Override
-    public Scope getScope() {
-        return super.getEnclosingScope();
+    public String toString() {
+        return this.getClass().getSimpleName() + ": " + super.toString();
     }
-    
 }

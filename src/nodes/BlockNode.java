@@ -2,9 +2,13 @@ package nodes;
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.Tree;
+
+import scopes.Scope;
 import visitors.ASTVisitor;
 
 public class BlockNode extends ASTNode {
+
+    private Scope scope;
 
     private List<ASTNode> instructions;
     
@@ -20,21 +24,27 @@ public class BlockNode extends ASTNode {
         return instructions.size();
     }
 
+    public List<ASTNode> getInstructions(){
+        return this.instructions;
+    }
+
     @Override
     public String toStringTree() {
         return "Block";
     }
 
-    public List<ASTNode> getInstructions() {
-        return instructions;
-    }
-
-    public void setInstructions(List<ASTNode> instructions) {
-        this.instructions = instructions;
-    }
-
     @Override
     public <T> T accept(ASTVisitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public Scope getScope() {
+        return this.scope;
+    }
+
+    @Override
+    public void setScope(Scope scope) {
+        this.scope = scope;
     }
 }

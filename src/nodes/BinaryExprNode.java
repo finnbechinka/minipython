@@ -1,15 +1,19 @@
 package nodes;
-
 import org.antlr.v4.runtime.tree.Tree;
+
+import scopes.Scope;
 import visitors.ASTVisitor;
 
 public class BinaryExprNode extends ExprNode {
 
+    private Scope scope;
+
     private ASTNode leftNode;
     private ASTNode rightNode;
-    private String operator;
+    private String  operator;
 
-    public BinaryExprNode(ASTNode leftNode, ASTNode rightNode, String operator) {
+    public BinaryExprNode(ASTNode leftNode, ASTNode rightNode, String operator){
+
         this.leftNode = leftNode;
         this.rightNode = rightNode;
         this.operator = operator;
@@ -23,37 +27,35 @@ public class BinaryExprNode extends ExprNode {
         return 2;
     }
 
+    public ASTNode getLeftNode(){
+        return this.leftNode;
+    }
+
+    public ASTNode getRightNode(){
+        return this.rightNode;
+    }
+
+    public String getOperator(){
+        return this.operator;
+    }
+
     @Override
     public String toStringTree() {
         return "Op: " + operator;
     }
 
     @Override
-    public <T> T accept(ASTVisitor<T> visitor) {
+    public <T> T accept(ASTVisitor<T> visitor)  {
         return visitor.visit(this);
     }
 
-    public ASTNode getLeftNode() {
-        return leftNode;
+    @Override
+    public Scope getScope() {
+        return this.scope;
     }
 
-    public void setLeftNode(ASTNode leftNode) {
-        this.leftNode = leftNode;
-    }
-
-    public ASTNode getRightNode() {
-        return rightNode;
-    }
-
-    public void setRightNode(ASTNode rightNode) {
-        this.rightNode = rightNode;
-    }
-
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
+    @Override
+    public void setScope(Scope scope) {
+        this.scope = scope;
     }
 }

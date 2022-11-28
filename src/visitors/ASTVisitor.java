@@ -1,5 +1,4 @@
 package visitors;
-
 import nodes.*;
 
 public interface ASTVisitor<T> {
@@ -19,7 +18,8 @@ public interface ASTVisitor<T> {
     T visit(MemberCallNode node);
     T visit(ProgNode node);
 
-    default T visit(ASTNode node){
+    default T visit(ASTNode node) {
+
         if      (node instanceof AssignNode)       return visit((AssignNode) node);
         else if (node instanceof BinaryExprNode)   return visit((BinaryExprNode) node);
         else if (node instanceof UnaryExprNode)    return visit((UnaryExprNode) node);

@@ -2,9 +2,13 @@ package nodes;
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.Tree;
+
+import scopes.Scope;
 import visitors.ASTVisitor;
 
 public class MemberCallNode extends ASTNode {
+
+    private Scope scope;
 
     private String instanceID;
     private String methodID;
@@ -25,37 +29,35 @@ public class MemberCallNode extends ASTNode {
         return args.size();
     }
 
+    public String getInstanceId(){
+        return this.instanceID;
+    }
+
+    public String getMethodId(){
+        return this.methodID;
+    }
+
+    public List<ASTNode> getArgs(){
+        return this.args;
+    }
+
     @Override
     public String toStringTree() {
         return "MethodCall: " + instanceID + "." + methodID;
     }
 
-    public String getInstanceID() {
-        return instanceID;
-    }
-
-    public void setInstanceID(String instanceID) {
-        this.instanceID = instanceID;
-    }
-
-    public String getMethodID() {
-        return methodID;
-    }
-
-    public void setMethodID(String methodID) {
-        this.methodID = methodID;
-    }
-
-    public List<ASTNode> getArgs() {
-        return args;
-    }
-
-    public void setArgs(List<ASTNode> args) {
-        this.args = args;
-    }
-
     @Override
     public <T> T accept(ASTVisitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public Scope getScope() {
+        return this.scope;
+    }
+
+    @Override
+    public void setScope(Scope scope) {
+        this.scope = scope;
     }
 }

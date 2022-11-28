@@ -1,7 +1,4 @@
-a= 2
-if a == 2:
-    print("a is ", a)
-#end
+a = 2
 
 if a == 2:
 print("a is ", a)

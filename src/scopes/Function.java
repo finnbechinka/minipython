@@ -22,11 +22,6 @@ public class Function extends Scope implements Symbol {
     }
 
     @Override
-    public void setScope(Scope scope) {
-        //this.scope = scope;
-    }
-
-    @Override
     public String getName() {
         return this.name;
     }
@@ -37,7 +32,7 @@ public class Function extends Scope implements Symbol {
     }
 
     @Override
-    public Scope getScope() {
-        return super.getEnclosingScope();
+    public String toString() {
+        return this.getClass().getSimpleName() + ": " + super.toString();
     }
 }

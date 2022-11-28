@@ -1,9 +1,13 @@
 package nodes;
 
 import org.antlr.v4.runtime.tree.Tree;
+
+import scopes.Scope;
 import visitors.ASTVisitor;
 
 public class WhileStmtNode extends InstructionNode {
+
+    private Scope scope;
 
     private ASTNode condition;
     private ASTNode body;
@@ -21,29 +25,31 @@ public class WhileStmtNode extends InstructionNode {
         return 2;
     }
 
+    public ASTNode getCondition(){
+        return this.condition;
+    }
+
+    public ASTNode getBody(){
+        return this.body;
+    }
+
     @Override
     public String toStringTree() {
         return "WHILE";
     }
 
-    public ASTNode getCondition() {
-        return condition;
-    }
-
-    public void setCondition(ASTNode condition) {
-        this.condition = condition;
-    }
-
-    public ASTNode getBody() {
-        return body;
-    }
-
-    public void setBody(ASTNode body) {
-        this.body = body;
-    }
-
     @Override
     public <T> T accept(ASTVisitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public Scope getScope() {
+        return this.scope;
+    }
+
+    @Override
+    public void setScope(Scope scope) {
+        this.scope = scope;
     }
 }

@@ -1,8 +1,11 @@
 package nodes;
 
+import scopes.Scope;
 import visitors.ASTVisitor;
 
 public class LitNode<T> extends ASTNode {
+
+    private Scope scope;
 
     private T value;
 
@@ -10,21 +13,27 @@ public class LitNode<T> extends ASTNode {
         this.value = value;
     }
 
+    public T getValue(){
+        return value;
+    }
+
     @Override
     public String toStringTree() {
         return value.getClass().getSimpleName() + ": " + value.toString();
     }
 
-    public T getValue() {
-        return value;
-    }
-
-    public void setValue(T value) {
-        this.value = value;
+    @Override
+    public <G> G accept(ASTVisitor<G> visitor) {
+        return visitor.visit(this);
     }
 
     @Override
-    public <T> T accept(ASTVisitor<T> visitor) {
-        return visitor.visit(this);
+    public Scope getScope() {
+        return this.scope;
+    }
+
+    @Override
+    public void setScope(Scope scope) {
+        this.scope = scope;
     }
 }

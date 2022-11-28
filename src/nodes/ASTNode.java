@@ -1,7 +1,8 @@
 package nodes;
-
 import org.antlr.v4.runtime.tree.Tree;
-import visitors.ASTVisitor;
+
+import scopes.Scope;
+import visitors.*;
 
 public abstract class ASTNode implements Tree {
 
@@ -27,9 +28,12 @@ public abstract class ASTNode implements Tree {
     public abstract String toStringTree();
 
     @Override
-    public String toString() {
+    public String toString(){
         return toStringTree();
     }
 
     public abstract <T> T accept(ASTVisitor<T> visitor);
+    
+    public abstract Scope getScope();
+    public abstract void setScope(Scope scope);
 }
