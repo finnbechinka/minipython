@@ -22,7 +22,7 @@ public class Function extends Callable {
         Environment prev = interpreter.getEnv();
 
         interpreter.setEnv(new Environment(prev));
-        for(int x = 0; x < args.size(); x++) {
+        for (int x = 0; x < args.size(); x++) {
             interpreter.getEnv().define(def.getParameters().get(x), args.get(x));
         }
         Environment retEnv = (Environment) interpreter.visit(def.getBody());
@@ -30,12 +30,15 @@ public class Function extends Callable {
         interpreter.setEnv(retEnv);
         Object retVal = interpreter.visit(def.getReturnExpr());
         interpreter.setEnv(prev);
-        ret(retVal);
+
+        throw new Return(retVal);
     }
 
-    @Override
-    public void ret(Object val) {
-        throw new ReturnException(val);
+    public Function bind(Clazz.Instance i) {
+        Environment env = this.getEnv();
+
+        env.define("self", i);
+        return new Function(def.getId(), env, def);
     }
 
     public String getName() {
