@@ -26,9 +26,13 @@ public class Environment {
         elements.put(id, value);
     }
 
-    @Deprecated
-    public void assign(String id, Object value) {
-
+    public Object assign(String id, Object value) {
+        if(elements.get(id) != null)
+            return elements.put(id, value);
+        else if(enclosingEnvironment != null)
+            return enclosingEnvironment.assign(id, value);
+        else
+            return null;
     }
 
     public Environment getEnclosingEnvironment() {
