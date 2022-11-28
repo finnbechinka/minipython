@@ -13,9 +13,11 @@ public class Input extends Function {
 
     @Override
     public void call(ASTEvalVisitor interpreter, List<Object> args) {
-        Scanner s = new Scanner(System.in);
         System.out.println(args.get(0));
+        Scanner s = new Scanner(System.in);
+        String result = s.nextLine();
+        s.close();
 
-        ret(s.nextLine());
+        throw new Return(result);
     }
 }
