@@ -2,7 +2,7 @@ package visitors;
 import nodes.*;
 
 public interface ASTVisitor<T> {
-
+    
     T visit(AssignNode node);
     T visit(BinaryExprNode node);
     T visit(UnaryExprNode node);
@@ -15,11 +15,10 @@ public interface ASTVisitor<T> {
     T visit(FuncDefNode node);
     T visit(IDNode node);
     T visit(LitNode<?> node);
-    T visit(MemberCallNode node);
     T visit(ProgNode node);
 
-    default T visit(ASTNode node) {
-
+    default T visit(ASTNode node){
+        
         if      (node instanceof AssignNode)       return visit((AssignNode) node);
         else if (node instanceof BinaryExprNode)   return visit((BinaryExprNode) node);
         else if (node instanceof UnaryExprNode)    return visit((UnaryExprNode) node);
@@ -32,7 +31,6 @@ public interface ASTVisitor<T> {
         else if (node instanceof FuncDefNode)      return visit((FuncDefNode) node);
         else if (node instanceof IDNode)           return visit((IDNode) node);
         else if (node instanceof LitNode<?>)       return visit((LitNode<?>) node);
-        else if (node instanceof MemberCallNode)   return visit((MemberCallNode) node);
         else if (node instanceof ProgNode)         return visit((ProgNode) node);
         else return null;
     }

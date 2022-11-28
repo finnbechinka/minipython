@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.tree.Tree;
 import scopes.Scope;
 import visitors.ASTVisitor;
 
-public class WhileStmtNode extends InstructionNode {
+public class WhileStmtNode extends ASTNode {
 
     private Scope scope;
 

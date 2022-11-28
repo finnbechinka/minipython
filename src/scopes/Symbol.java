@@ -2,11 +2,12 @@ package scopes;
 
 public interface Symbol {
 
-    void setName(String name);
+    public void setName(String name);
 
-    void setType(Type type);
+    public void setType(Type type);
 
-    String getName();
+    public String getName();
 
-    Type getType();
+    public Type getType();
+    
 }

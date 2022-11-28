@@ -1,20 +1,6 @@
 package visitors;
 
-import nodes.ASTNode;
-import nodes.AssignNode;
-import nodes.BinaryExprNode;
-import nodes.BlockNode;
-import nodes.CallNode;
-import nodes.ClazzDefNode;
-import nodes.ElifStmtNode;
-import nodes.FuncDefNode;
-import nodes.IDNode;
-import nodes.IfStmtNode;
-import nodes.LitNode;
-import nodes.MemberCallNode;
-import nodes.ProgNode;
-import nodes.UnaryExprNode;
-import nodes.WhileStmtNode;
+import nodes.*;
 
 public class ASTStringVisitor implements ASTVisitor<String>{
 
@@ -53,8 +39,13 @@ public class ASTStringVisitor implements ASTVisitor<String>{
 
     @Override
     public String visit(ClazzDefNode node) {
+        String s = "\n";
+
+        s += node.toStringTree() +": "+ node.getScope();
         
-        return "";
+        for(ASTNode inst : node.getMethods()) s += visit(inst);
+
+        return s;
     }
 
     @Override
@@ -116,14 +107,8 @@ public class ASTStringVisitor implements ASTVisitor<String>{
     }
 
     @Override
-    public String visit(MemberCallNode node) {
-        
-        return "";
-    }
-
-    @Override
     public String visit(ProgNode node) {
-        String s = node.toStringTree() + ": " + node.getStmts().get(0).getScope().toString();
+        String s = node.toStringTree() + ": " + node.getScope();
         for(ASTNode stmt : node.getStmts()) s += visit(stmt);
 
         return s;

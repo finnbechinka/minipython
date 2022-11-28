@@ -5,3 +5,6 @@ return a
 sum(2)
 b=2
 c="KaNsNsT dU maL meHreRe VaRiabLEn BenUtzEN?"
+
+a = input("OOOOOO")
+print(a)

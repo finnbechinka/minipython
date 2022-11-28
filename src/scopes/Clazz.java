@@ -3,12 +3,26 @@ package scopes;
 public class Clazz extends Scope implements Symbol, Type {
     
     private String name;
+    private Clazz parent;
     private Type type;
 
-    public Clazz(String name, Type type, Scope scope) {
+    public Clazz(String name, Clazz parent, Type type, Scope scope) {
        super(scope);
        this.name = name;
+       this.parent = parent;
        this.type = type;
+    }
+
+    public Symbol resolveMember(String name){
+
+        if(symbols.get(name) != null) return symbols.get(name);
+        
+        try{
+            return parent.resolveMember(name);
+        }
+        catch(Exception e){
+           return null; 
+        }
     }
 
     @Override

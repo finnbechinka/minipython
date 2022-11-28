@@ -4,28 +4,28 @@ import org.antlr.v4.runtime.tree.Tree;
 import scopes.Scope;
 import visitors.ASTVisitor;
 
-public class AssignNode extends InstructionNode{
+public class AssignNode extends ASTNode{
 
     private Scope scope;
 
-    private String id;
+    private ASTNode id;
     private ASTNode valueNode;
 
-    public AssignNode(String id, ASTNode valueNode){
+    public AssignNode(ASTNode id, ASTNode valueNode){
 
         this.id = id;
         this.valueNode = valueNode;
     }
 
     public Tree getChild(int arg0) {
-        return valueNode;
+        return arg0 == 0 ? id : valueNode;
     }
 
     public int getChildCount() {
-        return 1;
+        return 2;
     }
 
-    public String getId(){
+    public ASTNode getId(){
         return this.id;
     }
 
@@ -35,7 +35,7 @@ public class AssignNode extends InstructionNode{
 
     @Override
     public String toStringTree() {
-        return "Assign: " + id;
+        return "Assign";
     }
 
     @Override

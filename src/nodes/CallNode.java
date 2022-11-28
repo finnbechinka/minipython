@@ -11,23 +11,23 @@ public class CallNode extends ASTNode {
 
     private Scope scope;
 
-    private String id;
+    private ASTNode id;
     private List<ASTNode> args;
 
-    public CallNode(String id, List<ASTNode> args){
+    public CallNode(ASTNode id, List<ASTNode> args){
         this.id = id;
         this.args = args;
     }
 
     public Tree getChild(int arg0) {
-        return args.get(arg0);
+        return arg0 == 0 ? id : args.get(arg0-1);
     }
 
     public int getChildCount() {
-        return args.size();
+        return args.size()+1;
     }
 
-    public String getId(){
+    public ASTNode getId(){
         return this.id;
     }
 
@@ -37,7 +37,7 @@ public class CallNode extends ASTNode {
 
     @Override
     public String toStringTree() {
-        return "FuncCall: " + id;
+        return "Call";
     }
 
     @Override

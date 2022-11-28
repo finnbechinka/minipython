@@ -39,12 +39,14 @@ public class App {
         MiniPythonASTVisitor cst = new MiniPythonASTVisitor();
         ASTStringVisitor str = new ASTStringVisitor();
         ASTSymbolVisitor symbol = new ASTSymbolVisitor();
-        ASTEvalVisitor eval = new ASTEvalVisitor();
+        //ASTEvalVisitor eval = new ASTEvalVisitor();
 
         ASTNode ast = tree.accept(cst);
-        ast.accept(eval);
+        ast.accept(symbol);
 
-        //System.out.println(ast.accept(str));
+        //ast.accept(eval);
+        
+        System.out.println(ast.accept(str));
 
         TreeViewer viewer = new TreeViewer(Collections.emptyList(), ast);
         viewer.open();

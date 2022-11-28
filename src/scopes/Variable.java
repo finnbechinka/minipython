@@ -1,6 +1,6 @@
 package scopes;
 
-public class Variable implements Symbol {
+public class Variable implements Symbol{
 
     private String name;
     private Type type;
@@ -12,7 +12,7 @@ public class Variable implements Symbol {
 
     @Override
     public void setName(String name) {
-        this.name = name;
+        this.name = name; 
     }
 
     @Override
@@ -34,4 +34,5 @@ public class Variable implements Symbol {
     public String toString() {
         return this.getClass().getSimpleName();
     }
+    
 }

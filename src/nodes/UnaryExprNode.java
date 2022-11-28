@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.tree.Tree;
 import scopes.Scope;
 import visitors.ASTVisitor;
 
-public class UnaryExprNode extends ExprNode{
+public class UnaryExprNode extends ASTNode{
 
     private Scope scope;
 

@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.Tree;
 import scopes.Scope;
 import visitors.ASTVisitor;
 
-public class IfStmtNode extends InstructionNode {
+public class IfStmtNode extends ASTNode {
 
     private Scope scope;
 
@@ -23,7 +23,7 @@ public class IfStmtNode extends InstructionNode {
     }
 
     public Tree getChild(int arg0) {
-
+        
         if(arg0 == 0) return ifCondition;
         else if(arg0 == 1) return ifBody;
         else if(arg0 == 2) return elseBody;

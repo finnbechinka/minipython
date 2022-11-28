@@ -26,13 +26,20 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
     }
 
     @Override 
+    public ASTNode visitIdentifier(MiniPythonParser.IdentifierContext ctx) { 
+
+        if(ctx.children.size() > 2) return new IDNode(ctx.children.get(0).getText(), ctx.children.get(2).getText());
+        else return new IDNode(null, ctx.ID(0).getText());
+    }
+
+    @Override 
     public ASTNode visitATOM(MiniPythonParser.ATOMContext ctx) { 
         return visit(ctx.lit()); 
     }
 
     @Override 
     public ASTNode visitID(MiniPythonParser.IDContext ctx) { 
-        return new IDNode(ctx.ID().getText());
+        return visit(ctx.identifier());
     }
 	
 	@Override 
@@ -98,16 +105,20 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
 	@Override 
     public ASTNode visitLESS(MiniPythonParser.LESSContext ctx) { 
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
-        
+    }
+
+    @Override 
+    public ASTNode visitExprCall(MiniPythonParser.ExprCallContext ctx) { 
+        return visit(ctx.call()); 
     }
 	
 	@Override 
     public ASTNode visitAssign(MiniPythonParser.AssignContext ctx) { 
-        return new AssignNode(ctx.ID().getText(), visit(ctx.getChild(2)));
+        return new AssignNode(visit(ctx.identifier()), visit(ctx.getChild(2)));
     }
 	
 	@Override 
-    public ASTNode visitArgs(MiniPythonParser.ArgsContext ctx) {
+    public ASTNode visitArguments(MiniPythonParser.ArgumentsContext ctx) {
         return visitChildren(ctx);
     }
 	
@@ -116,18 +127,13 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
         
         List<ASTNode> args = new ArrayList<>();
 
-        if(ctx.args() != null){
-            for(int i = 0; i < ctx.args().expr().size(); i++){
-                args.add(visit(ctx.args().expr().get(i)));
+        if(ctx.arguments() != null){
+            for(int i = 0; i < ctx.arguments().expr().size(); i++){
+                args.add(visit(ctx.arguments().expr().get(i)));
             }
         }
-        
-        return new CallNode(ctx.ID().getText(), args); 
-    }
-	
-	@Override 
-    public ASTNode visitMemberCall(MiniPythonParser.MemberCallContext ctx) { 
-        return visitChildren(ctx); 
+
+        return new CallNode(visit(ctx.identifier()), args); 
     }
 	
 	@Override 
@@ -157,22 +163,23 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
     }
 	
 	@Override 
-    public ASTNode visitInst(MiniPythonParser.InstContext ctx) { 
-        return visitChildren(ctx); 
+    public ASTNode visitStatement(MiniPythonParser.StatementContext ctx) { 
+        return visit(ctx.getChild(0)); 
     }
 	
 	@Override 
     public ASTNode visitBlock(MiniPythonParser.BlockContext ctx) { 
 
-        ListIterator<ParseTree> it = ctx.children.listIterator();
-        List<ASTNode> inst = new ArrayList<ASTNode>();
+        List<ASTNode> stmts = new ArrayList<ASTNode>();
 
-        while(it.hasNext()){
-            ASTNode t = visit(it.next());
-            if(t != null) inst.add(t);
+        if(ctx.children == null) return new BlockNode(stmts);
+
+        for(ParseTree stmt : ctx.children){
+            ASTNode t = visit(stmt);
+            if(t != null) stmts.add(t);
         }
 
-        return new BlockNode(inst);
+        return new BlockNode(stmts);
     }
 	
 	@Override 
@@ -185,7 +192,7 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
                 params.add(ctx.parameters().ID().get(i).toString());
             }
         }
-        
+
         return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()), visit(ctx.return_()));
     }
 	
@@ -193,7 +200,7 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
     public ASTNode visitClazz(MiniPythonParser.ClazzContext ctx) { 
         
         List<ASTNode> methods = new ArrayList<>();
-
+        
         if(ctx.methodDef() != null){
             for(int i = 0; i < ctx.methodDef().size(); i++){
                 methods.add(visit(ctx.methodDef().get(i)));
@@ -201,7 +208,7 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
         }
 
         String id = ctx.ID(0).getText();
-        String parentId = ctx.ID().size() > 1 ? ctx.ID(1).getText() : "";
+        String parentId = ctx.ID().size() > 1 ? ctx.ID(1).getText() : null;
 
         return new ClazzDefNode(id, parentId, methods); 
     }

@@ -1,5 +1,4 @@
 package antlr;
-
 // Generated from java-escape by ANTLR 4.11.1
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -17,6 +16,12 @@ public interface MiniPythonVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLit(MiniPythonParser.LitContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MiniPythonParser#identifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdentifier(MiniPythonParser.IdentifierContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code EQUI}
 	 * labeled alternative in {@link MiniPythonParser#expr}.
@@ -95,6 +100,13 @@ public interface MiniPythonVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDIV(MiniPythonParser.DIVContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code ExprCall}
+	 * labeled alternative in {@link MiniPythonParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExprCall(MiniPythonParser.ExprCallContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code NOT}
 	 * labeled alternative in {@link MiniPythonParser#expr}.
 	 * @param ctx the parse tree
@@ -123,29 +135,35 @@ public interface MiniPythonVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitID(MiniPythonParser.IDContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MiniPythonParser#parameters}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameters(MiniPythonParser.ParametersContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MiniPythonParser#arguments}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArguments(MiniPythonParser.ArgumentsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MiniPythonParser#return}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn(MiniPythonParser.ReturnContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MiniPythonParser#assign}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAssign(MiniPythonParser.AssignContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MiniPythonParser#args}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArgs(MiniPythonParser.ArgsContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MiniPythonParser#call}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitCall(MiniPythonParser.CallContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MiniPythonParser#memberCall}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMemberCall(MiniPythonParser.MemberCallContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MiniPythonParser#whileStmt}.
 	 * @param ctx the parse tree
@@ -165,11 +183,11 @@ public interface MiniPythonVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitElifStmt(MiniPythonParser.ElifStmtContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MiniPythonParser#inst}.
+	 * Visit a parse tree produced by {@link MiniPythonParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitInst(MiniPythonParser.InstContext ctx);
+	T visitStatement(MiniPythonParser.StatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MiniPythonParser#block}.
 	 * @param ctx the parse tree
@@ -183,29 +201,17 @@ public interface MiniPythonVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFuncDef(MiniPythonParser.FuncDefContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MiniPythonParser#clazz}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitClazz(MiniPythonParser.ClazzContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MiniPythonParser#methodDef}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitMethodDef(MiniPythonParser.MethodDefContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MiniPythonParser#parameters}.
+	 * Visit a parse tree produced by {@link MiniPythonParser#clazz}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParameters(MiniPythonParser.ParametersContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MiniPythonParser#return}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitReturn(MiniPythonParser.ReturnContext ctx);
+	T visitClazz(MiniPythonParser.ClazzContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MiniPythonParser#prog}.
 	 * @param ctx the parse tree

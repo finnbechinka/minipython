@@ -7,10 +7,16 @@ public class IDNode extends ASTNode{
 
     private Scope scope;
 
+    private String instanceId;
     private String id;
 
-    public IDNode(String id){
+    public IDNode(String instanceId, String id){
+        this.instanceId = instanceId;
         this.id = id;
+    }
+
+    public String getInstanceId(){
+        return this.instanceId;
     }
 
     public String getId(){
@@ -19,7 +25,8 @@ public class IDNode extends ASTNode{
 
     @Override
     public String toStringTree() {
-        return "ID: " + id;
+        if(instanceId == null) return "ID: " + id;
+        else return "ID: " + instanceId +"."+ id;
     }
 
     @Override

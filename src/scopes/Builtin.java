@@ -1,6 +1,6 @@
 package scopes;
 
-public class Builtin implements Type, Symbol{
+public class Builtin implements Type,Symbol{
 
     private String name;
     private Type type;
@@ -12,7 +12,7 @@ public class Builtin implements Type, Symbol{
 
     @Override
     public void setName(String name) {
-        this.name = name;
+        this.name = name; 
     }
 
     @Override
@@ -29,7 +29,7 @@ public class Builtin implements Type, Symbol{
     public Type getType() {
         return this.type;
     }
-
+   
 
     @Override
     public String toString() {
