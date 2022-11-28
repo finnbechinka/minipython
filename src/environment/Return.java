@@ -1,10 +1,10 @@
 package environment;
 
-public class ReturnException extends RuntimeException {
+public class Return extends RuntimeException {
 
     private Object val;
 
-    public ReturnException(Object val) {
+    public Return(Object val) {
         super("RETURN");
         this.val = val;
     }
