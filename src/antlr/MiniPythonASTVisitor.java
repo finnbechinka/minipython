@@ -8,10 +8,10 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import nodes.*;
 
 public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
-    
+
     @Override
-    public ASTNode visitLit(MiniPythonParser.LitContext ctx) { 
-        
+    public ASTNode visitLit(MiniPythonParser.LitContext ctx) {
+
         if(ctx.BOOL() != null){
             return new LitNode<Boolean>(ctx.BOOL().getText().equals("True") ? true : false);
         }
@@ -21,110 +21,110 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
         else if (ctx.STRING() != null){
             return new LitNode<String>(ctx.STRING().getText().replace("\"", ""));
         }
-        
+
         return null;
     }
 
-    @Override 
-    public ASTNode visitIdentifier(MiniPythonParser.IdentifierContext ctx) { 
+    @Override
+    public ASTNode visitIdentifier(MiniPythonParser.IdentifierContext ctx) {
 
         if(ctx.children.size() > 2) return new IDNode(ctx.children.get(0).getText(), ctx.children.get(2).getText());
         else return new IDNode(null, ctx.ID(0).getText());
     }
 
-    @Override 
-    public ASTNode visitATOM(MiniPythonParser.ATOMContext ctx) { 
-        return visit(ctx.lit()); 
+    @Override
+    public ASTNode visitATOM(MiniPythonParser.ATOMContext ctx) {
+        return visit(ctx.lit());
     }
 
-    @Override 
-    public ASTNode visitID(MiniPythonParser.IDContext ctx) { 
+    @Override
+    public ASTNode visitID(MiniPythonParser.IDContext ctx) {
         return visit(ctx.identifier());
     }
-	
-	@Override 
-    public ASTNode visitEQUI(MiniPythonParser.EQUIContext ctx) { 
-        return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText()); 
-    }
-	
-	@Override 
-    public ASTNode visitADD(MiniPythonParser.ADDContext ctx) { 
+
+	@Override
+    public ASTNode visitEQUI(MiniPythonParser.EQUIContext ctx) {
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
     }
-	
-	@Override 
-    public ASTNode visitSUB(MiniPythonParser.SUBContext ctx) { 
+
+	@Override
+    public ASTNode visitADD(MiniPythonParser.ADDContext ctx) {
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
     }
-	
-	@Override 
-    public ASTNode visitLEQUI(MiniPythonParser.LEQUIContext ctx) { 
+
+	@Override
+    public ASTNode visitSUB(MiniPythonParser.SUBContext ctx) {
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
     }
-	
-	@Override 
-    public ASTNode visitOR(MiniPythonParser.ORContext ctx) { 
+
+	@Override
+    public ASTNode visitLEQUI(MiniPythonParser.LEQUIContext ctx) {
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
     }
-	
-	@Override 
-    public ASTNode visitMUL(MiniPythonParser.MULContext ctx) { 
+
+	@Override
+    public ASTNode visitOR(MiniPythonParser.ORContext ctx) {
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
     }
-	
-	@Override 
+
+	@Override
+    public ASTNode visitMUL(MiniPythonParser.MULContext ctx) {
+        return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
+    }
+
+	@Override
     public ASTNode visitGREATER(MiniPythonParser.GREATERContext ctx) {
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
     }
-	
-	@Override 
-    public ASTNode visitUNEQUI(MiniPythonParser.UNEQUIContext ctx) { 
-        return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText()); 
-    }
-	
-	@Override 
-    public ASTNode visitGEQUI(MiniPythonParser.GEQUIContext ctx) { 
+
+	@Override
+    public ASTNode visitUNEQUI(MiniPythonParser.UNEQUIContext ctx) {
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
     }
 
-	@Override 
-    public ASTNode visitDIV(MiniPythonParser.DIVContext ctx) { 
+	@Override
+    public ASTNode visitGEQUI(MiniPythonParser.GEQUIContext ctx) {
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
     }
-	
-	@Override 
-    public ASTNode visitNOT(MiniPythonParser.NOTContext ctx) { 
+
+	@Override
+    public ASTNode visitDIV(MiniPythonParser.DIVContext ctx) {
+        return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
+    }
+
+	@Override
+    public ASTNode visitNOT(MiniPythonParser.NOTContext ctx) {
         return new UnaryExprNode(visit(ctx.expr()), ctx.op.getText());
     }
-	
-	@Override 
+
+	@Override
     public ASTNode visitAND(MiniPythonParser.ANDContext ctx) {
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
     }
-	
-	@Override 
-    public ASTNode visitLESS(MiniPythonParser.LESSContext ctx) { 
+
+	@Override
+    public ASTNode visitLESS(MiniPythonParser.LESSContext ctx) {
         return new BinaryExprNode(visit(ctx.expr(0)), visit(ctx.expr(1)), ctx.op.getText());
     }
 
-    @Override 
-    public ASTNode visitExprCall(MiniPythonParser.ExprCallContext ctx) { 
-        return visit(ctx.call()); 
+    @Override
+    public ASTNode visitExprCall(MiniPythonParser.ExprCallContext ctx) {
+        return visit(ctx.call());
     }
-	
-	@Override 
-    public ASTNode visitAssign(MiniPythonParser.AssignContext ctx) { 
+
+	@Override
+    public ASTNode visitAssign(MiniPythonParser.AssignContext ctx) {
         return new AssignNode(visit(ctx.identifier()), visit(ctx.getChild(2)));
     }
-	
-	@Override 
+
+	@Override
     public ASTNode visitArguments(MiniPythonParser.ArgumentsContext ctx) {
         return visitChildren(ctx);
     }
-	
-	@Override 
-    public ASTNode visitCall(MiniPythonParser.CallContext ctx) { 
-        
+
+	@Override
+    public ASTNode visitCall(MiniPythonParser.CallContext ctx) {
+
         List<ASTNode> args = new ArrayList<>();
 
         if(ctx.arguments() != null){
@@ -133,17 +133,17 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
             }
         }
 
-        return new CallNode(visit(ctx.identifier()), args); 
+        return new CallNode(visit(ctx.identifier()), args);
     }
-	
-	@Override 
-    public ASTNode visitWhileStmt(MiniPythonParser.WhileStmtContext ctx) { 
+
+	@Override
+    public ASTNode visitWhileStmt(MiniPythonParser.WhileStmtContext ctx) {
         return new WhileStmtNode(visit(ctx.expr()), visit(ctx.block()));
     }
-	
-	@Override 
-    public ASTNode visitIfStmt(MiniPythonParser.IfStmtContext ctx) { 
-        
+
+	@Override
+    public ASTNode visitIfStmt(MiniPythonParser.IfStmtContext ctx) {
+
         ListIterator<MiniPythonParser.ElifStmtContext> it = ctx.elifStmt().listIterator();
         List<ASTNode> elifs = new ArrayList<ASTNode>();
 
@@ -151,24 +151,24 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
             ASTNode t = visit(it.next());
             if(t != null) elifs.add(t);
         }
-        
+
         ASTNode elseBody = ctx.block().size() > 1 ? visit(ctx.block(1)) : new BlockNode(new ArrayList<>());
 
         return new IfStmtNode(visit(ctx.expr()), visit(ctx.block(0)), elifs, elseBody);
     }
-	
-	@Override 
+
+	@Override
     public ASTNode visitElifStmt(MiniPythonParser.ElifStmtContext ctx) {
-        return new ElifStmtNode(visit(ctx.expr()), visit(ctx.block())); 
+        return new ElifStmtNode(visit(ctx.expr()), visit(ctx.block()));
     }
-	
-	@Override 
-    public ASTNode visitStatement(MiniPythonParser.StatementContext ctx) { 
-        return visit(ctx.getChild(0)); 
+
+	@Override
+    public ASTNode visitStatement(MiniPythonParser.StatementContext ctx) {
+        return visit(ctx.getChild(0));
     }
-	
-	@Override 
-    public ASTNode visitBlock(MiniPythonParser.BlockContext ctx) { 
+
+	@Override
+    public ASTNode visitBlock(MiniPythonParser.BlockContext ctx) {
 
         List<ASTNode> stmts = new ArrayList<ASTNode>();
 
@@ -181,9 +181,9 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
 
         return new BlockNode(stmts);
     }
-	
-	@Override 
-    public ASTNode visitFuncDef(MiniPythonParser.FuncDefContext ctx) { 
+
+	@Override
+    public ASTNode visitFuncDef(MiniPythonParser.FuncDefContext ctx) {
 
         List<String> params = new ArrayList<>();
 
@@ -193,14 +193,14 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
             }
         }
 
-        return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()), visit(ctx.return_()));
+        return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()), ctx.return_() != null ? visit(ctx.return_()) : null);
     }
-	
-	@Override 
-    public ASTNode visitClazz(MiniPythonParser.ClazzContext ctx) { 
-        
+
+	@Override
+    public ASTNode visitClazz(MiniPythonParser.ClazzContext ctx) {
+
         List<ASTNode> methods = new ArrayList<>();
-        
+
         if(ctx.methodDef() != null){
             for(int i = 0; i < ctx.methodDef().size(); i++){
                 methods.add(visit(ctx.methodDef().get(i)));
@@ -210,12 +210,12 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
         String id = ctx.ID(0).getText();
         String parentId = ctx.ID().size() > 1 ? ctx.ID(1).getText() : null;
 
-        return new ClazzDefNode(id, parentId, methods); 
+        return new ClazzDefNode(id, parentId, methods);
     }
-	
-	@Override 
-    public ASTNode visitMethodDef(MiniPythonParser.MethodDefContext ctx) { 
-        
+
+	@Override
+    public ASTNode visitMethodDef(MiniPythonParser.MethodDefContext ctx) {
+
         List<String> params = new ArrayList<>();
         params.add("self");
 
@@ -224,26 +224,26 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
                 params.add(ctx.parameters().ID().get(i).toString());
             }
         }
-        
-        return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()), visit(ctx.return_()));
+
+        return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()), ctx.return_() != null ? visit(ctx.return_()) : null);
     }
-	
-	@Override 
-    public ASTNode visitParameters(MiniPythonParser.ParametersContext ctx) { 
+
+	@Override
+    public ASTNode visitParameters(MiniPythonParser.ParametersContext ctx) {
         return visitChildren(ctx);
     }
-	
-	@Override 
-    public ASTNode visitReturn(MiniPythonParser.ReturnContext ctx) { 
-        return visit(ctx.expr()); 
+
+	@Override
+    public ASTNode visitReturn(MiniPythonParser.ReturnContext ctx) {
+        return visit(ctx.expr());
     }
-	
-	@Override 
-    public ASTNode visitProg(MiniPythonParser.ProgContext ctx) { 
-        
+
+	@Override
+    public ASTNode visitProg(MiniPythonParser.ProgContext ctx) {
+
         ListIterator<ParseTree> it = ctx.children.listIterator();
         List<ASTNode> statements = new ArrayList<ASTNode>();
-        
+
         while(it.hasNext()){
             ASTNode t = visit(it.next());
             if(t != null) statements.add(t);

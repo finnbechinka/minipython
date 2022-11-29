@@ -8,18 +8,18 @@ import scopes.Symbol;
 import scopes.Variable;
 
 public class ASTSymbolVisitor implements ASTVisitor<Object> {
-    
+
     private Scope scope;
-    
+
     @Override
     public Object visit(AssignNode node) {
-        
+
         if(((IDNode)node.getId()).getInstanceId() != null){
 
             Symbol sym = scope.resolve(((IDNode)node.getId()).getInstanceId());
 
             if(sym == null){
-                System.out.println("Instance dosent exist!"); 
+                System.out.println("Instance doesnt exist!");
                 return null;
             }
 
@@ -33,39 +33,39 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
             scope.bind(new Variable(((IDNode)node.getId()).getId(), s instanceof Clazz ? (Clazz)s : null));
             node.setScope(scope);
         }
-        
+
 
         return null;
     }
 
     @Override
     public Object visit(BinaryExprNode node) {
-        
+
         node.setScope(scope);
         visit(node.getLeftNode());
         visit(node.getRightNode());
-        
+
         return null;
     }
 
     @Override
     public Object visit(UnaryExprNode node) {
-        
+
         node.setScope(scope);
         visit(node.getChildNode());
-        
+
         return null;
     }
 
     @Override
     public Object visit(BlockNode node) {
-        
+
         scope = new Scope(scope);
-        
+
         for(ASTNode inst : node.getInstructions()) visit(inst);
 
         node.setScope(scope);
-        
+
         scope = scope.getScope();
 
         return null;
@@ -73,7 +73,7 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
     @Override
     public Object visit(CallNode node) {
-        
+
         node.setScope(scope);
 
         if(((IDNode)node.getId()).getInstanceId() != null){
@@ -81,12 +81,11 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
             Symbol sym = scope.resolve(((IDNode)node.getId()).getInstanceId());
 
             if(sym == null){
-                System.out.println("Instance dosent exist!"); 
+                System.out.println("Instance doesnt exist!");
                 return null;
             }
 
             Clazz instance = (Clazz) ((Variable) sym).getType();
-
             if(instance == null){
                 System.out.println("PANIC");
                 return null;
@@ -94,7 +93,7 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
             sym = instance.resolveMember(((IDNode)node.getId()).getId());
 
             if(sym == null){
-                System.out.println("Member dosent exist!"); 
+                System.out.println("Member doesnt exist!");
                 return null;
             }
 
@@ -102,17 +101,17 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
         }
         else{
             Symbol sym = scope.resolve(((IDNode)node.getId()).getId());
-            
+
             if(sym == null) {
                 System.out.println("DOSENT EXIST!");
                 return null;
-            } 
+            }
             else if(sym instanceof Variable) {
                 System.out.println("NOT A FUNC OR CLASS");
                 return null;
-            } 
+            }
             //TODO: Exceptionhandling
-        
+
             for(ASTNode arg : node.getArgs()) visit(arg);
 
             if(sym instanceof Clazz) return sym;
@@ -126,7 +125,7 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
         Clazz parent = null;
 
-        if(node.getParentId() != null) 
+        if(node.getParentId() != null)
             parent = (Clazz) scope.resolve(node.getParentId());
 
         Clazz c = new Clazz(node.getId(), parent,  null, scope);
@@ -134,7 +133,7 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
         node.setScope(c);
 
         scope = c;
-        
+
         for(ASTNode method : node.getMethods()) visit(method);
 
         scope = scope.getScope();
@@ -170,7 +169,7 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
     @Override
     public Object visit(WhileStmtNode node) {
-        
+
         node.setScope(scope);
 
         visit(node.getCondition());
@@ -186,17 +185,18 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
         scope.bind(fun);
         scope = fun;
         node.setScope(fun);
-        
+
         for(String param : node.getParameters()){
             if(param.equals("self")) scope.bind(new Variable(param, (Clazz)scope.getScope()));
             else scope.bind(new Variable(param, null));
         }
         visit(node.getBody());
-        
-        scope = node.getBody().getScope();
-        visit(node.getReturnExpr());
-        scope = scope.getScope();
 
+        if(node.getReturnExpr() != null) {
+            scope = node.getBody().getScope();
+            visit(node.getReturnExpr());
+            scope = scope.getScope();
+        }
         scope = scope.getScope();
 
         return null;
@@ -207,7 +207,7 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
         Symbol sym = scope.resolve(node.getId());
         if(!(sym instanceof Variable)) System.out.println("NOT A VAR: "+node.getId());
-        
+
         node.setScope(scope);
 
         return null;
@@ -220,14 +220,14 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
     @Override
     public Object visit(ProgNode node) {
-        
+
         scope = new Scope(null);
         node.setScope(scope);
         scope.bind(new Builtin("print", null));
         scope.bind(new Builtin("input", null));
 
         for(ASTNode stmt : node.getStmts()) visit(stmt);
-        
+
         return null;
     }
 
