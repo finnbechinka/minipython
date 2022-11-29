@@ -1,6 +1,8 @@
 package visitors;
 
 import environment.*;
+import environment.functions.Input;
+import environment.functions.Print;
 import nodes.*;
 
 import java.util.ArrayList;
@@ -16,7 +18,10 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
     public Object visit(AssignNode node) {
         Object value = visit(node.getValueNode());
 
-        if (env.assign(((IDNode) node.getId()).getId(), value) == null) {
+        if(((IDNode)node.getId()).getInstanceId() != null) {
+            env.getEnclosingEnvironment().define(((IDNode) node.getId()).getId(), value);
+        }
+        else if (env.assign(((IDNode) node.getId()).getId(), value) == null) {
             env.define(((IDNode) node.getId()).getId(), value);
         }
         return null;
@@ -28,7 +33,7 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
         Object leftNode = visit(node.getLeftNode());
 
         switch (node.getOperator()) {
-            case "+": {
+            case "+" -> {
                 if (leftNode instanceof Integer && rightNode instanceof Integer)
                     return (int) leftNode + (int) rightNode;
                 else if (leftNode instanceof String && rightNode instanceof String) {
@@ -36,61 +41,50 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
                 } else if (leftNode instanceof String) {
                     return leftNode.toString() + rightNode;
                 }
-                break;
             }
-            case "-": {
+            case "-" -> {
                 if (leftNode instanceof Integer && rightNode instanceof Integer)
                     return (int) leftNode - (int) rightNode;
-                break;
             }
-            case "/": {
+            case "/" -> {
                 if (leftNode instanceof Integer && rightNode instanceof Integer)
                     return (int) leftNode / (int) rightNode;
-                break;
             }
-            case "*": {
+            case "*" -> {
                 if (leftNode instanceof Integer && rightNode instanceof Integer)
                     return (int) leftNode * (int) rightNode;
-                break;
             }
-            case "==": {
+            case "==" -> {
                 return leftNode.equals(rightNode);
             }
-            case "!=": {
+            case "!=" -> {
                 return !leftNode.equals(rightNode);
             }
-            case ">=": {
+            case ">=" -> {
                 if (rightNode instanceof Integer && leftNode instanceof Integer)
                     return (int) leftNode >= (int) rightNode;
-                break;
             }
-            case ">": {
+            case ">" -> {
                 if (rightNode instanceof Integer && leftNode instanceof Integer)
                     return (int) leftNode > (int) rightNode;
-                break;
             }
-            case "<=": {
+            case "<=" -> {
                 if (rightNode instanceof Integer && leftNode instanceof Integer)
                     return (int) leftNode <= (int) rightNode;
-                break;
             }
-            case "<": {
+            case "<" -> {
                 if (rightNode instanceof Integer && leftNode instanceof Integer)
                     return (int) leftNode < (int) rightNode;
-                break;
             }
-            case "and": {
+            case "and" -> {
                 if (rightNode instanceof Boolean && leftNode instanceof Boolean)
                     return (boolean) leftNode && (boolean) rightNode;
-                break;
             }
-            case "or": {
+            case "or" -> {
                 if (rightNode instanceof Boolean && leftNode instanceof Boolean)
                     return (boolean) leftNode || (boolean) rightNode;
-                break;
             }
-            default:
-                throw new UnsupportedOperationException();
+            default -> throw new UnsupportedOperationException();
         }
         return null;
     }
@@ -125,7 +119,7 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
             Object instance = env.get(((IDNode) node.getId()).getInstanceId());
 
             if (instance instanceof Clazz.Instance) {
-                callObj = ((Clazz.Instance) instance).get(((IDNode) node.getId()).getId());
+                callObj = ((Clazz.Instance) instance).getFunction(((IDNode) node.getId()).getId());
                 args.add(instance);
             }
         }
@@ -150,7 +144,12 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
             Function f = new Function(((FuncDefNode) method).getId(), env, (FuncDefNode) method);
             methods.put(f.getName(), f);
         }
-        Clazz clazz = new Clazz(node.getId(), env, methods);
+
+        Clazz parent = null;
+        if(node.getParentId() != null) {
+            parent = (Clazz) env.get(node.getParentId());
+        }
+        Clazz clazz = new Clazz(node.getId(), parent, env, methods);
         env.define(clazz.getName(), clazz);
         return null;
     }

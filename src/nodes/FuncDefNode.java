@@ -28,7 +28,7 @@ public class FuncDefNode extends ASTNode{
     }
 
     public int getChildCount() {
-        return 2;
+        return returnExpr == null ? 1 : 2;
     }
 
     public String getId(){
@@ -46,7 +46,7 @@ public class FuncDefNode extends ASTNode{
     public ASTNode getReturnExpr(){
         return this.returnExpr;
     }
-    
+
     @Override
     public String toStringTree() {
         return "FuncDef: " + id + " " + parameters.toString();

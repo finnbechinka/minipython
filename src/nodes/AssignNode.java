@@ -11,8 +11,7 @@ public class AssignNode extends ASTNode{
     private ASTNode id;
     private ASTNode valueNode;
 
-    public AssignNode(ASTNode id, ASTNode valueNode){
-
+    public AssignNode(ASTNode id, ASTNode valueNode) {
         this.id = id;
         this.valueNode = valueNode;
     }
@@ -52,5 +51,5 @@ public class AssignNode extends ASTNode{
     public void setScope(Scope scope) {
         this.scope = scope;
     }
-    
+
 }

@@ -1,5 +1,8 @@
-package environment;
+package environment.functions;
 
+import environment.Environment;
+import environment.Function;
+import environment.Return;
 import visitors.ASTEvalVisitor;
 
 import java.util.List;

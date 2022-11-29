@@ -1,5 +1,7 @@
-package environment;
+package environment.functions;
 
+import environment.Environment;
+import environment.Function;
 import visitors.ASTEvalVisitor;
 
 import java.util.List;
@@ -12,8 +14,8 @@ public class Print extends Function {
 
     @Override
     public void call(ASTEvalVisitor interpreter, List<Object> args) {
-        for(int i = 0; i < args.size(); i++){
-            System.out.print(args.get(i));
+        for (Object arg : args) {
+            System.out.print(arg instanceof Boolean ? ((boolean) arg ? "True": "False") : arg);
         }
         System.out.print("\n");
     }
