@@ -44,7 +44,8 @@ public class App {
         ASTNode ast = tree.accept(cst);
         ast.accept(symbol);
         ast.accept(eval);
-        
+
+        System.out.println("============================");
         System.out.println(ast.accept(str));
 
         TreeViewer viewer = new TreeViewer(Collections.emptyList(), ast);
