@@ -4,7 +4,9 @@ import environment.*;
 import nodes.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ASTEvalVisitor implements ASTVisitor<Object> {
 
@@ -12,7 +14,12 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
 
     @Override
     public Object visit(AssignNode node) {
-        return env.getElements().put(((IDNode)node.getId()).getId(), visit(node.getValueNode()));
+        Object value = visit(node.getValueNode());
+
+        if (env.assign(((IDNode) node.getId()).getId(), value) == null) {
+            env.define(((IDNode) node.getId()).getId(), value);
+        }
+        return null;
     }
 
     @Override
@@ -20,31 +27,30 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
         Object rightNode = visit(node.getRightNode());
         Object leftNode = visit(node.getLeftNode());
 
-        switch(node.getOperator()) {
+        switch (node.getOperator()) {
             case "+": {
-                if(leftNode instanceof Integer && rightNode instanceof Integer)
-                    return (int)leftNode + (int)rightNode;
-                else if(leftNode instanceof String && rightNode instanceof String) {
+                if (leftNode instanceof Integer && rightNode instanceof Integer)
+                    return (int) leftNode + (int) rightNode;
+                else if (leftNode instanceof String && rightNode instanceof String) {
                     return leftNode.toString() + rightNode;
-                }
-                else if(leftNode instanceof String) {
+                } else if (leftNode instanceof String) {
                     return leftNode.toString() + rightNode;
                 }
                 break;
             }
             case "-": {
-                if(leftNode instanceof Integer && rightNode instanceof Integer)
-                    return (int)leftNode - (int)rightNode;
+                if (leftNode instanceof Integer && rightNode instanceof Integer)
+                    return (int) leftNode - (int) rightNode;
                 break;
             }
             case "/": {
-                if(leftNode instanceof Integer && rightNode instanceof Integer)
-                    return (int)leftNode / (int)rightNode;
+                if (leftNode instanceof Integer && rightNode instanceof Integer)
+                    return (int) leftNode / (int) rightNode;
                 break;
             }
             case "*": {
-                if(leftNode instanceof Integer && rightNode instanceof Integer)
-                    return (int)leftNode * (int)rightNode;
+                if (leftNode instanceof Integer && rightNode instanceof Integer)
+                    return (int) leftNode * (int) rightNode;
                 break;
             }
             case "==": {
@@ -54,33 +60,33 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
                 return !leftNode.equals(rightNode);
             }
             case ">=": {
-                if(rightNode instanceof Integer && leftNode instanceof Integer)
-                    return (int)leftNode >= (int)rightNode;
+                if (rightNode instanceof Integer && leftNode instanceof Integer)
+                    return (int) leftNode >= (int) rightNode;
                 break;
             }
             case ">": {
-                if(rightNode instanceof Integer && leftNode instanceof Integer)
-                    return (int)leftNode > (int)rightNode;
+                if (rightNode instanceof Integer && leftNode instanceof Integer)
+                    return (int) leftNode > (int) rightNode;
                 break;
             }
             case "<=": {
-                if(rightNode instanceof Integer && leftNode instanceof Integer)
-                    return (int)leftNode <= (int)rightNode;
+                if (rightNode instanceof Integer && leftNode instanceof Integer)
+                    return (int) leftNode <= (int) rightNode;
                 break;
             }
             case "<": {
-                if(rightNode instanceof Integer && leftNode instanceof Integer)
-                    return (int)leftNode < (int)rightNode;
+                if (rightNode instanceof Integer && leftNode instanceof Integer)
+                    return (int) leftNode < (int) rightNode;
                 break;
             }
             case "and": {
-                if(rightNode instanceof Boolean && leftNode instanceof Boolean)
-                    return (boolean)leftNode && (boolean)rightNode;
+                if (rightNode instanceof Boolean && leftNode instanceof Boolean)
+                    return (boolean) leftNode && (boolean) rightNode;
                 break;
             }
             case "or": {
-                if(rightNode instanceof Boolean && leftNode instanceof Boolean)
-                    return (boolean)leftNode || (boolean)rightNode;
+                if (rightNode instanceof Boolean && leftNode instanceof Boolean)
+                    return (boolean) leftNode || (boolean) rightNode;
                 break;
             }
             default:
@@ -92,10 +98,8 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
     @Override
     public Object visit(UnaryExprNode node) {
         Object val = visit(node.getChildNode());
-        switch(node.getOperator()) {
-            case "not": {
-                return !(boolean)val;
-            }
+        if ("not".equals(node.getOperator())) {
+            return !(boolean) val;
         }
         return null;
     }
@@ -105,7 +109,7 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
         Environment blockEnv = new Environment(env);
         env = blockEnv;
 
-        for(ASTNode instr: node.getInstructions()) {
+        for (ASTNode instr : node.getInstructions()) {
             visit(instr);
         }
         env = env.getEnclosingEnvironment();
@@ -114,77 +118,93 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
 
     @Override
     public Object visit(CallNode node) {
-        Object callObj = env.get(((IDNode)node.getId()).getId());
         List<Object> args = new ArrayList<>();
+        Callable callObj = null;
 
-        for(ASTNode arg: node.getArgs())
+        if (((IDNode) node.getId()).getInstanceId() != null) {
+            Object instance = env.get(((IDNode) node.getId()).getInstanceId());
+
+            if (instance instanceof Clazz.Instance) {
+                callObj = ((Clazz.Instance) instance).get(((IDNode) node.getId()).getId());
+                args.add(instance);
+            }
+        }
+        if (callObj == null) callObj = (Callable) env.get(((IDNode) node.getId()).getId());
+
+
+        for (ASTNode arg : node.getArgs())
             args.add(visit(arg));
-
-        if(callObj instanceof Callable) {
-            try {
-                ((Callable) callObj).call(this, args);
-            }
-            catch(ReturnException e) {
-                return e.getVal();
-            }
+        try {
+            callObj.call(this, args);
+        } catch (Return ret) {
+            return ret.getVal();
         }
         return null;
     }
 
     @Override
     public Object visit(ClazzDefNode node) {
+        Map<String, Function> methods = new HashMap<>();
+
+        for (ASTNode method : node.getMethods()) {
+            Function f = new Function(((FuncDefNode) method).getId(), env, (FuncDefNode) method);
+            methods.put(f.getName(), f);
+        }
+        Clazz clazz = new Clazz(node.getId(), env, methods);
+        env.define(clazz.getName(), clazz);
         return null;
     }
 
     @Override
     public Object visit(IfStmtNode node) {
         Object resultObj = visit(node.getIfCondition());
-        if(resultObj instanceof Boolean){
-            if((Boolean) resultObj){
+        if (resultObj instanceof Boolean) {
+            if ((Boolean) resultObj) {
                 env = new Environment(env);
                 visit(node.getIfBody());
                 env = env.getEnclosingEnvironment();
-            }else{
-                for(ASTNode elif: node.getElifs()) {
+            } else {
+                for (ASTNode elif : node.getElifs()) {
                     resultObj = visit(elif);
-                    if(resultObj instanceof Boolean){
-                        if((Boolean) resultObj){
+                    if (resultObj instanceof Boolean) {
+                        if ((Boolean) resultObj) {
                             break;
-                        }}
+                        }
+                    }
                 }
-                if(resultObj instanceof Boolean){
-                    if(!(Boolean) resultObj){
+                if (resultObj instanceof Boolean) {
+                    if (!(Boolean) resultObj) {
                         env = new Environment(env);
                         visit(node.getElseBody());
                         env = env.getEnclosingEnvironment();
-                    }}
+                    }
+                }
             }
         }
-
         return null;
     }
 
     @Override
     public Object visit(ElifStmtNode node) {
         Object resultObj = visit(node.getCondition());
-        if(resultObj instanceof Boolean){
-            if((Boolean) resultObj){
+        if (resultObj instanceof Boolean) {
+            if ((Boolean) resultObj) {
                 env = new Environment(env);
                 visit(node.getBody());
                 env = env.getEnclosingEnvironment();
-            }}
+            }
+        }
 
         return resultObj;
     }
 
     @Override
     public Object visit(WhileStmtNode node) {
-        visit(node.getCondition());
-
-        env = new Environment(env);
-        visit(node.getBody());
-        env = env.getEnclosingEnvironment();
-
+        while ((boolean) visit(node.getCondition())) {
+            env = new Environment(env);
+            visit(node.getBody());
+            env = env.getEnclosingEnvironment();
+        }
         return null;
     }
 
@@ -211,7 +231,7 @@ public class ASTEvalVisitor implements ASTVisitor<Object> {
         this.env.define("print", new Print(this.env));
         this.env.define("input", new Input(this.env));
 
-        for(ASTNode stmt: node.getStmts())
+        for (ASTNode stmt : node.getStmts())
             visit(stmt);
         return null;
     }
