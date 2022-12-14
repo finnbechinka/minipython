@@ -36,12 +36,12 @@ public class App {
 
         ParseTree tree = parser.prog();
 
-        MiniPythonASTVisitor cst = new MiniPythonASTVisitor();
+        MiniPythonASTVisitor astVisitor = new MiniPythonASTVisitor();
         ASTStringVisitor str = new ASTStringVisitor();
         ASTSymbolVisitor symbol = new ASTSymbolVisitor();
         ASTEvalVisitor eval = new ASTEvalVisitor();
 
-        ASTNode ast = tree.accept(cst);
+        ASTNode ast = tree.accept(astVisitor);
         ast.accept(symbol);
         ast.accept(eval);
 
