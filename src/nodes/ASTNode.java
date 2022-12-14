@@ -1,4 +1,5 @@
 package nodes;
+
 import org.antlr.v4.runtime.tree.Tree;
 
 import scopes.Scope;
@@ -6,34 +7,35 @@ import visitors.*;
 
 public abstract class ASTNode implements Tree {
 
-    public Tree getChild(int arg0) {
-        return null;
-    }
+  public abstract <T> T accept(ASTVisitor<T> visitor);
 
-    public int getChildCount() {
-        return 0;
-    }
+  public abstract void setScope(Scope scope);
 
-    @Override
-    public Tree getParent() {
-        return null;
-    }
+  public abstract Scope getScope();
 
-    @Override
-    public Object getPayload() {
-        return this;
-    }
+  public Tree getChild(int arg0) {
+    return null;
+  }
 
-    @Override
-    public abstract String toStringTree();
+  public int getChildCount() {
+    return 0;
+  }
 
-    @Override
-    public String toString(){
-        return toStringTree();
-    }
+  @Override
+  public Tree getParent() {
+    return null;
+  }
 
-    public abstract <T> T accept(ASTVisitor<T> visitor);
-    
-    public abstract Scope getScope();
-    public abstract void setScope(Scope scope);
+  @Override
+  public Object getPayload() {
+    return this;
+  }
+
+  @Override
+  public abstract String toStringTree();
+
+  @Override
+  public String toString() {
+    return toStringTree();
+  }
 }

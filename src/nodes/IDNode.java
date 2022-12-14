@@ -3,30 +3,31 @@ package nodes;
 import scopes.Scope;
 import visitors.ASTVisitor;
 
-public class IDNode extends ASTNode{
+public class IDNode extends ASTNode {
 
     private Scope scope;
-
     private String instanceId;
     private String id;
 
-    public IDNode(String instanceId, String id){
+    public IDNode(String instanceId, String id) {
         this.instanceId = instanceId;
         this.id = id;
     }
 
-    public String getInstanceId(){
+    public String getInstanceId() {
         return this.instanceId;
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
     @Override
     public String toStringTree() {
-        if(instanceId == null) return "ID: " + id;
-        else return "ID: " + instanceId +"."+ id;
+        if (instanceId == null)
+            return "ID: " + id;
+        else
+            return "ID: " + instanceId + "." + id;
     }
 
     @Override

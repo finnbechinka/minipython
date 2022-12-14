@@ -4,34 +4,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Scope {
-    
-    protected Scope enclosingScope;
-    protected Map<String, Symbol> symbols;
 
-    public Scope(Scope enclosingScope){
-        this.enclosingScope = enclosingScope;
-        this.symbols = new HashMap<>();
-    }
+  protected Scope enclosingScope;
+  protected Map<String, Symbol> symbols;
 
-    public void bind(Symbol symbol){
-        symbols.put(symbol.getName(), symbol);
-    }
+  public Scope(Scope enclosingScope) {
+    this.enclosingScope = enclosingScope;
+    this.symbols = new HashMap<>();
+  }
 
-    public Symbol resolve(String name){
+  public void bind(Symbol symbol) {
+    symbols.put(symbol.getName(), symbol);
+  }
 
-        if (symbols.get(name) != null) return symbols.get(name);
+  public Symbol resolve(String name) {
 
-        if (enclosingScope != null) return enclosingScope.resolve(name);
+    if (symbols.get(name) != null)
+      return symbols.get(name);
 
-        return null;
-    }
+    if (enclosingScope != null)
+      return enclosingScope.resolve(name);
 
-    public Scope getScope(){
-        return this.enclosingScope;
-    }
+    return null;
+  }
 
-    @Override
-    public String toString(){
-        return symbols.toString();
-    }
+  public Scope getScope() {
+    return this.enclosingScope;
+  }
+
+  @Override
+  public String toString() {
+    return symbols.toString();
+  }
 }

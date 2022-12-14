@@ -7,63 +7,62 @@ import org.antlr.v4.runtime.tree.Tree;
 import scopes.Scope;
 import visitors.ASTVisitor;
 
-public class FuncDefNode extends ASTNode{
+public class FuncDefNode extends ASTNode {
 
-    private Scope scope;
+  private Scope scope;
+  private String id;
+  private List<String> parameters;
+  private ASTNode body;
+  private ASTNode returnExpr;
 
-    private String id;
-    private List<String> parameters;
-    private ASTNode body;
-    private ASTNode returnExpr;
+  public FuncDefNode(String id, List<String> parameters, ASTNode body, ASTNode returnExpr) {
+    this.id = id;
+    this.parameters = parameters;
+    this.body = body;
+    this.returnExpr = returnExpr;
+  }
 
-    public FuncDefNode(String id, List<String> parameters, ASTNode body, ASTNode returnExpr){
-        this.id = id;
-        this. parameters = parameters;
-        this.body = body;
-        this.returnExpr = returnExpr;
-    }
+  public Tree getChild(int arg0) {
+    return arg0 == 0 ? body : returnExpr;
+  }
 
-    public Tree getChild(int arg0) {
-        return arg0 == 0 ? body : returnExpr;
-    }
+  public int getChildCount() {
+    return returnExpr == null ? 1 : 2;
+  }
 
-    public int getChildCount() {
-        return returnExpr == null ? 1 : 2;
-    }
+  public String getId() {
+    return this.id;
+  }
 
-    public String getId(){
-        return this.id;
-    }
+  public List<String> getParameters() {
+    return this.parameters;
+  }
 
-    public List<String> getParameters(){
-        return this.parameters;
-    }
+  public ASTNode getBody() {
+    return this.body;
+  }
 
-    public ASTNode getBody(){
-        return this.body;
-    }
+  public ASTNode getReturnExpr() {
+    return this.returnExpr;
+  }
 
-    public ASTNode getReturnExpr(){
-        return this.returnExpr;
-    }
+  @Override
+  public String toStringTree() {
+    return "FuncDef: " + id + " " + parameters.toString();
+  }
 
-    @Override
-    public String toStringTree() {
-        return "FuncDef: " + id + " " + parameters.toString();
-    }
+  @Override
+  public <T> T accept(ASTVisitor<T> visitor) {
+    return visitor.visit(this);
+  }
 
-    @Override
-    public <T> T accept(ASTVisitor<T> visitor) {
-        return visitor.visit(this);
-    }
+  @Override
+  public Scope getScope() {
+    return this.scope;
+  }
 
-    @Override
-    public Scope getScope() {
-        return this.scope;
-    }
-
-    @Override
-    public void setScope(Scope scope) {
-        this.scope = scope;
-    }
+  @Override
+  public void setScope(Scope scope) {
+    this.scope = scope;
+  }
 }

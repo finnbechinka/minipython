@@ -44,10 +44,10 @@ public class Clazz extends Callable {
                 }
                 else {
                     state.visit(node);
+    
                 }
             }
         }
-
         throw new Return(i);
     }
 
@@ -85,15 +85,13 @@ public class Clazz extends Callable {
         public Instance(Clazz clazz) {
             this.clazz = clazz;
         }
-
         public Function getFunction(String name) {
             Function func = this.clazz.findFunction(name);
 
             if (func != null) return func.bind(this);
             else
-                throw new RuntimeException("PANIC");
+                throw new RuntimeException();
         }
-
         public String toString() {
             return this.clazz.getName();
         }
