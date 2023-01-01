@@ -94,12 +94,12 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(IDNode node) {
-    return null;
+    return node.getId();
   }
 
   @Override
   public Object visit(LitNode<?> node) {
-    return null;
+    return node.getValue();
   }
 
   @Override
