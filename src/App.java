@@ -9,9 +9,11 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import visitors.ASTEvalVisitor;
 import visitors.ASTStringVisitor;
 import visitors.ASTSymbolVisitor;
+import visitors.ASTBuildVisitor;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.nio.file.Path;
 import java.util.Collections;
 
 public class App {
@@ -40,10 +42,12 @@ public class App {
         ASTStringVisitor str = new ASTStringVisitor();
         ASTSymbolVisitor symbol = new ASTSymbolVisitor();
         ASTEvalVisitor eval = new ASTEvalVisitor();
+        ASTBuildVisitor build = new ASTBuildVisitor(Path.of("bin"));
 
         ASTNode ast = tree.accept(astVisitor);
         ast.accept(symbol);
         ast.accept(eval);
+        ast.accept(build);
 
         System.out.println("============================");
         System.out.println(ast.accept(str));
