@@ -48,7 +48,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
       builder.addStatement(ass);
     }
 
-    return null;
+    return ass;
   }
 
   @Override
@@ -124,10 +124,11 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(BlockNode node) {
+    List<Statement> stmts = new ArrayList<Statement>();
     for (ASTNode instr : node.getInstructions()) {
-      visit(instr);
+      stmts.add((Statement) visit(instr));
     }
-    return null;
+    return stmts;
   }
 
   @Override
@@ -152,9 +153,9 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(WhileStmtNode node) {
-    System.out.println(node.getBody().toString());
-    List<Statement> body = List.of(new Expression[] {});
-    Statement whileStatement = new WhileStatement(new BoolLiteral(true), body);
+    Boolean con = (boolean) visit(node.getCondition());
+    List<Statement> body = (List<Statement>) visit(node.getBody());
+    Statement whileStatement = new WhileStatement(new BoolLiteral(con), body);
     builder.addStatement(whileStatement);
     return null;
   }
