@@ -14,6 +14,10 @@ import java.util.Map;
 import CBuilder.*;
 import CBuilder.literals.*;
 import CBuilder.variables.*;
+import CBuilder.conditions.*;
+import CBuilder.objects.*;
+import CBuilder.keywords.*;
+import CBuilder.conditions.conditionalStatement.*;
 
 public class ASTBuildVisitor implements ASTVisitor<Object> {
   private final Path output_folder;
@@ -49,16 +53,80 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(BinaryExprNode node) {
+    Object rightNode = visit(node.getRightNode());
+    Object leftNode = visit(node.getLeftNode());
+
+    switch (node.getOperator()) {
+      case "+" -> {
+        if (leftNode instanceof Integer && rightNode instanceof Integer)
+          return (int) leftNode + (int) rightNode;
+        else if (leftNode instanceof String && rightNode instanceof String) {
+          return leftNode.toString() + rightNode;
+        } else if (leftNode instanceof String) {
+          return leftNode.toString() + rightNode;
+        }
+      }
+      case "-" -> {
+        if (leftNode instanceof Integer && rightNode instanceof Integer)
+          return (int) leftNode - (int) rightNode;
+      }
+      case "/" -> {
+        if (leftNode instanceof Integer && rightNode instanceof Integer)
+          return (int) leftNode / (int) rightNode;
+      }
+      case "*" -> {
+        if (leftNode instanceof Integer && rightNode instanceof Integer)
+          return (int) leftNode * (int) rightNode;
+      }
+      case "==" -> {
+        return leftNode.equals(rightNode);
+      }
+      case "!=" -> {
+        return !leftNode.equals(rightNode);
+      }
+      case ">=" -> {
+        if (rightNode instanceof Integer && leftNode instanceof Integer)
+          return (int) leftNode >= (int) rightNode;
+      }
+      case ">" -> {
+        if (rightNode instanceof Integer && leftNode instanceof Integer)
+          return (int) leftNode > (int) rightNode;
+      }
+      case "<=" -> {
+        if (rightNode instanceof Integer && leftNode instanceof Integer)
+          return (int) leftNode <= (int) rightNode;
+      }
+      case "<" -> {
+        if (rightNode instanceof Integer && leftNode instanceof Integer)
+          return (int) leftNode < (int) rightNode;
+      }
+      case "and" -> {
+        if (rightNode instanceof Boolean && leftNode instanceof Boolean)
+          return (boolean) leftNode && (boolean) rightNode;
+      }
+      case "or" -> {
+        if (rightNode instanceof Boolean && leftNode instanceof Boolean)
+          return (boolean) leftNode || (boolean) rightNode;
+      }
+      default -> throw new UnsupportedOperationException();
+    }
     return null;
   }
 
   @Override
   public Object visit(UnaryExprNode node) {
+    Object val = visit(node.getChildNode());
+    if ("not".equals(node.getOperator())) {
+      return !(boolean) val;
+    }
     return null;
   }
 
   @Override
   public Object visit(BlockNode node) {
+    for (ASTNode instr : node.getInstructions()) {
+      visit(instr);
+    }
     return null;
   }
 
@@ -84,6 +152,10 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(WhileStmtNode node) {
+    System.out.println(node.getBody().toString());
+    List<Statement> body = List.of(new Expression[] {});
+    Statement whileStatement = new WhileStatement(new BoolLiteral(true), body);
+    builder.addStatement(whileStatement);
     return null;
   }
 

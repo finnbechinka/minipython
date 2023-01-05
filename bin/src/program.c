@@ -21,7 +21,7 @@ int main() {
 	
 	
 	__mpy_obj_ref_dec(ID: a);
-	ID: a = __mpy_obj_init_int(5);
+	ID: a = __mpy_obj_init_boolean(true);
 	__mpy_obj_ref_inc(ID: a);
 	
 	

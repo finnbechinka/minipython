@@ -53,6 +53,6 @@ public class App {
         System.out.println(ast.accept(str));
 
         TreeViewer viewer = new TreeViewer(Collections.emptyList(), ast);
-        viewer.open();
+        // viewer.open();
     }
 }
