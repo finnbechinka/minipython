@@ -147,15 +147,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
       Reference printRef = new Reference("print");
       List<Expression> params = new ArrayList<Expression>();
       for (Object arg : args) {
-        if (arg instanceof Boolean) {
-          if ((Boolean) arg) {
-            params.add(new StringLiteral("True"));
-          } else {
-            params.add(new StringLiteral("False"));
-          }
-        } else {
-          params.add(new StringLiteral(arg.toString()));
-        }
+        params.add((Expression) arg);
       }
       Call printCall = new Call(printRef, params);
       builder.addStatement(printCall);
