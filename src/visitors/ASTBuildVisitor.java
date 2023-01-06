@@ -55,7 +55,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
         if (leftNode instanceof Reference && rightNode instanceof IntLiteral) {
           AttributeReference attRef = new AttributeReference("__add__", (Reference) leftNode);
           Call add = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
-          builder.addStatement(add);
+          return add;
         } else if (leftNode instanceof Integer && rightNode instanceof Integer)
           return (int) leftNode + (int) rightNode;
         else if (leftNode instanceof String && rightNode instanceof String) {
