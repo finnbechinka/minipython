@@ -47,8 +47,6 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   public Object visit(BinaryExprNode node) {
     Object rightNode = visit(node.getRightNode());
     Object leftNode = visit(node.getLeftNode());
-    System.out.println(rightNode);
-    System.out.println(leftNode);
 
     switch (node.getOperator()) {
       case "+" -> {
@@ -56,6 +54,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
           AttributeReference attRef = new AttributeReference("__add__", (Reference) leftNode);
           Call add = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
           return add;
+
         } else if (leftNode instanceof Integer && rightNode instanceof Integer)
           return (int) leftNode + (int) rightNode;
         else if (leftNode instanceof String && rightNode instanceof String) {
