@@ -23,16 +23,24 @@ int main() {
 	__mpy_obj_ref_dec(ID: a);
 	ID: a = __mpy_obj_init_int(5);
 	__mpy_obj_ref_inc(ID: a);
-	__mpy_obj_ref_dec(ID: b);
-	ID: b = __mpy_obj_init_boolean(true);
-	__mpy_obj_ref_inc(ID: b);
-	while (__mpy_boolean_raw(__mpy_call(__mpy_obj_get_attr(__mpy_obj_init_boolean(false), "__bool__"), __mpy_obj_init_tuple(0), NULL))) {
+	__mpy_obj_ref_dec(ID: a);
+	ID: a = __mpy_obj_init_int(3);
+	__mpy_obj_ref_inc(ID: a);
+	__mpy_obj_ref_dec(ID: a);
+	ID: a = __mpy_obj_init_int(1);
+	__mpy_obj_ref_inc(ID: a);
+	if (__mpy_boolean_raw(__mpy_call(__mpy_obj_get_attr(__mpy_obj_init_boolean(true), "__bool__"), __mpy_obj_init_tuple(0), NULL))) {
 		__mpy_obj_ref_dec(ID: a);
 	ID: a = __mpy_obj_init_int(5);
 	__mpy_obj_ref_inc(ID: a);
-		__mpy_obj_ref_dec(ID: b);
-	ID: b = __mpy_obj_init_boolean(true);
-	__mpy_obj_ref_inc(ID: b);
+	}else if (__mpy_boolean_raw(__mpy_call(__mpy_obj_get_attr(__mpy_obj_init_boolean(false), "__bool__"), __mpy_obj_init_tuple(0), NULL))) {
+		__mpy_obj_ref_dec(ID: a);
+	ID: a = __mpy_obj_init_int(3);
+	__mpy_obj_ref_inc(ID: a);
+	}else {
+		__mpy_obj_ref_dec(ID: a);
+	ID: a = __mpy_obj_init_int(1);
+	__mpy_obj_ref_inc(ID: a);
 	}
 	
 	

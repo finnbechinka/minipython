@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import CBuilder.*;
 import CBuilder.literals.*;
@@ -143,6 +144,24 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(IfStmtNode node) {
+    Expression ifCondition = new BoolLiteral((Boolean) visit(node.getIfCondition()));
+    List<Statement> ifBody = (List<Statement>) visit(node.getIfBody());
+    IfStatement ifStatement = new IfStatement(ifCondition, ifBody);
+
+    List<ElifStatement> elifs = new ArrayList<ElifStatement>();
+    for (ASTNode e : node.getElifs()) {
+      ElifStmtNode elif = (ElifStmtNode) e;
+      Expression elifCondition = new BoolLiteral((Boolean) visit(elif.getCondition()));
+      List<Statement> elifBody = (List<Statement>) visit(elif.getBody());
+      ElifStatement elifStatement = new ElifStatement(elifCondition, elifBody);
+      elifs.add(elifStatement);
+    }
+
+    List<Statement> elseBody = (List<Statement>) visit(node.getElseBody());
+    ElseStatement elseStatement = new ElseStatement(elseBody);
+
+    Statement conditional = new IfThenElseStatement(ifStatement, Optional.of(elifs), Optional.of(elseStatement));
+    builder.addStatement(conditional);
     return null;
   }
 
