@@ -124,6 +124,12 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   public Object visit(BlockNode node) {
     List<Statement> stmts = new ArrayList<Statement>();
     for (ASTNode instr : node.getInstructions()) {
+      if (instr instanceof AssignNode) {
+        AssignNode assignment = (AssignNode) instr;
+        IDNode idn = (IDNode) assignment.getId();
+        VariableDeclaration var = new VariableDeclaration(idn.getId());
+        builder.addVariable(var);
+      }
       stmts.add((Statement) visit(instr));
     }
     return stmts;
@@ -227,6 +233,12 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   @Override
   public Object visit(ProgNode node) {
     for (ASTNode stmt : node.getStmts()) {
+      if (stmt instanceof AssignNode) {
+        AssignNode assignment = (AssignNode) stmt;
+        IDNode idn = (IDNode) assignment.getId();
+        VariableDeclaration var = new VariableDeclaration(idn.getId());
+        builder.addVariable(var);
+      }
       visit(stmt);
     }
     builder.writeProgram(output_folder);
