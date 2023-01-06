@@ -134,6 +134,29 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(CallNode node) {
+    IDNode idn = (IDNode) node.getId();
+    List<Object> args = new ArrayList<>();
+    for (ASTNode arg : node.getArgs()) {
+      args.add(visit(arg));
+    }
+
+    if (idn.getId().contains("print")) {
+      Reference printRef = new Reference("print");
+      List<Expression> params = new ArrayList<Expression>();
+      for (Object arg : args) {
+        if (arg instanceof Boolean) {
+          if ((Boolean) arg) {
+            params.add(new StringLiteral("True"));
+          } else {
+            params.add(new StringLiteral("False"));
+          }
+        } else {
+          params.add(new StringLiteral(arg.toString()));
+        }
+      }
+      Call printCall = new Call(printRef, params);
+      builder.addStatement(printCall);
+    }
     return null;
   }
 

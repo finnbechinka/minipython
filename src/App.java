@@ -46,7 +46,7 @@ public class App {
 
         ASTNode ast = tree.accept(astVisitor);
         ast.accept(symbol);
-        ast.accept(eval);
+        // ast.accept(eval);
         ast.accept(build);
 
         System.out.println("============================");
