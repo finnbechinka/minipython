@@ -20,10 +20,10 @@ int main() {
 	
 	
 	
-	__mpy_obj_ref_dec(ID: a);
-	ID: a = __mpy_obj_init_str_static("wow");
-	__mpy_obj_ref_inc(ID: a);
-	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("a = "), __mpy_tuple_assign(1, __mpy_obj_init_str_static("a"), __mpy_obj_init_tuple(2))), NULL));
+	__mpy_obj_ref_dec(a);
+	a = __mpy_obj_init_int(5);
+	__mpy_obj_ref_inc(a);
+	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("CBuilder.Reference@2eafffde"), __mpy_obj_init_tuple(1)), NULL));
 	
 	
 	

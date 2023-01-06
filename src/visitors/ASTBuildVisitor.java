@@ -31,19 +31,10 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(AssignNode node) {
-    Object value = visit(node.getValueNode());
+    Reference ref = (Reference) visit(node.getId());
+    Expression value = (Expression) visit(node.getValueNode());
 
-    Reference var = new Reference(node.getId().toString());
-    Assignment ass = null;
-    if (value instanceof Integer) {
-      ass = new Assignment(var, new IntLiteral((int) value));
-    }
-    if (value instanceof String) {
-      ass = new Assignment(var, new StringLiteral((String) value));
-    }
-    if (value instanceof Boolean) {
-      ass = new Assignment(var, new BoolLiteral((Boolean) value));
-    }
+    Assignment ass = new Assignment(ref, value);
 
     if (ass != null) {
       builder.addStatement(ass);
@@ -56,10 +47,16 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   public Object visit(BinaryExprNode node) {
     Object rightNode = visit(node.getRightNode());
     Object leftNode = visit(node.getLeftNode());
+    System.out.println(rightNode);
+    System.out.println(leftNode);
 
     switch (node.getOperator()) {
       case "+" -> {
-        if (leftNode instanceof Integer && rightNode instanceof Integer)
+        if (leftNode instanceof Reference && rightNode instanceof IntLiteral) {
+          AttributeReference attRef = new AttributeReference("__add__", (Reference) leftNode);
+          Call add = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+          builder.addStatement(add);
+        } else if (leftNode instanceof Integer && rightNode instanceof Integer)
           return (int) leftNode + (int) rightNode;
         else if (leftNode instanceof String && rightNode instanceof String) {
           return leftNode.toString() + rightNode;
@@ -204,17 +201,27 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(FuncDefNode node) {
+
     return null;
   }
 
   @Override
   public Object visit(IDNode node) {
-    return node.getId();
+    return new Reference(node.getId());
   }
 
   @Override
   public Object visit(LitNode<?> node) {
-    return node.getValue();
+    if (node.getValue() instanceof Integer) {
+      return new IntLiteral((Integer) node.getValue());
+    }
+    if (node.getValue() instanceof String) {
+      return new StringLiteral((String) node.getValue());
+    }
+    if (node.getValue() instanceof Boolean) {
+      return new BoolLiteral((Boolean) node.getValue());
+    }
+    return null;
   }
 
   @Override
