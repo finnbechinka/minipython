@@ -19,6 +19,8 @@ import CBuilder.literals.*;
 import CBuilder.variables.*;
 import CBuilder.conditions.*;
 import CBuilder.objects.*;
+import CBuilder.objects.functions.Argument;
+import CBuilder.objects.functions.Function;
 import CBuilder.keywords.*;
 import CBuilder.keywords.bool.AndKeyword;
 import CBuilder.keywords.bool.NotKeyword;
@@ -149,16 +151,14 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
       args.add(visit(arg));
     }
 
-    if (idn.getId().contains("print")) {
-      Reference printRef = new Reference("print");
-      List<Expression> params = new ArrayList<Expression>();
-      for (Object arg : args) {
-        params.add((Expression) arg);
-      }
-      Call printCall = new Call(printRef, params);
-      return printCall;
+    System.out.println(idn.getId());
+    Reference ref = new Reference(idn.getId());
+    List<Expression> params = new ArrayList<Expression>();
+    for (Object arg : args) {
+      params.add((Expression) arg);
     }
-    return null;
+    Call call = new Call(ref, params);
+    return call;
   }
 
   @Override
@@ -215,8 +215,24 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(FuncDefNode node) {
+    List<Statement> body = (List<Statement>) visit(node.getBody());
+    List<Argument> params = new ArrayList<Argument>();
+    List<VariableDeclaration> vars = new ArrayList<VariableDeclaration>();
 
-    return null;
+    for (int i = 0; i < node.getParameters().size(); i++) {
+      params.add(new Argument(node.getParameters().get(i), i));
+    }
+
+    BlockNode block = (BlockNode) node.getBody();
+    for (ASTNode instr : block.getInstructions()) {
+      if (instr instanceof AssignNode) {
+        AssignNode assignment = (AssignNode) instr;
+        IDNode idn = (IDNode) assignment.getId();
+        vars.add(new VariableDeclaration(idn.getId()));
+      }
+    }
+
+    return new Function(node.getId(), body, params, vars);
   }
 
   @Override
@@ -242,8 +258,12 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   public Object visit(ProgNode node) {
     declareVariables(node.getStmts());
     for (ASTNode stmt : node.getStmts()) {
-      Statement e = (Statement) visit(stmt);
-      builder.addStatement(e);
+      Object e = (Object) visit(stmt);
+      if (e instanceof Function) {
+        builder.addFunction((Function) e);
+      } else if (e instanceof Statement) {
+        builder.addStatement((Statement) e);
+      }
     }
     builder.writeProgram(output_folder);
     return null;
