@@ -163,7 +163,24 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(ClazzDefNode node) {
-    return null;
+    List<Function> methods = new ArrayList<>();
+
+    Statement simpleSuperCall = new SuperCall(List.of());
+    List<Statement> initBody = List.of(new Statement[] { simpleSuperCall });
+    List<Argument> initParamList = List.of(new Argument[] { new Argument("self", 0) });
+    methods.add(new Function("__init__", initBody, initParamList, List.of()));
+
+    for (ASTNode m : node.getMethods()) {
+      Function method = (Function) visit(m);
+      methods.add(method);
+    }
+    Reference superClass = new Reference("__MPyType_Object");
+
+    if (node.getParentId() != null) {
+      superClass = new Reference(node.getParentId());
+    }
+
+    return new MPyClass(node.getId(), superClass, methods, Map.of());
   }
 
   @Override
@@ -259,7 +276,9 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
     declareVariables(node.getStmts());
     for (ASTNode stmt : node.getStmts()) {
       Object e = (Object) visit(stmt);
-      if (e instanceof Function) {
+      if (e instanceof MPyClass) {
+        builder.addClass((MPyClass) e);
+      } else if (e instanceof Function) {
         builder.addFunction((Function) e);
       } else if (e instanceof Statement) {
         builder.addStatement((Statement) e);
