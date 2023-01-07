@@ -12,6 +12,7 @@
 #include "type-hierarchy/object.h"
 #include "type-hierarchy/type.h"
 
+__MPyObj *obj;
 
 
 __MPyObj *A;
@@ -60,6 +61,8 @@ __MPyObj* func_A_foo(__MPyObj *args, __MPyObj *kwargs) {
 
 int main() {
 	__mpy_builtins_setup();
+	obj = __mpy_obj_init_object();
+	__mpy_obj_ref_inc(obj);
 	
 	
 	A = __mpy_obj_init_type("A", __MPyType_Object);
@@ -79,7 +82,12 @@ int main() {
 		__mpy_obj_ref_dec(foo);
 	}
 	
+	__mpy_obj_ref_dec(obj);
+	obj = __mpy_call(A, __mpy_obj_init_tuple(0), NULL);
+	__mpy_obj_ref_inc(obj);
+	__mpy_obj_ref_dec(__mpy_call(foo, __mpy_tuple_assign(0, __mpy_obj_init_int(5), __mpy_obj_init_tuple(1)), NULL));
 	
+	__mpy_obj_ref_dec(obj);
 	
 	
 	__mpy_obj_ref_dec(A);
