@@ -13,14 +13,11 @@
 #include "type-hierarchy/type.h"
 
 __MPyObj *a;
-__MPyObj *a;
 
 
 
 int main() {
 	__mpy_builtins_setup();
-	a = __mpy_obj_init_object();
-	__mpy_obj_ref_inc(a);
 	a = __mpy_obj_init_object();
 	__mpy_obj_ref_inc(a);
 	
@@ -29,11 +26,10 @@ int main() {
 	__mpy_obj_ref_dec(a);
 	a = __mpy_obj_init_int(0);
 	__mpy_obj_ref_inc(a);
-	__mpy_obj_ref_dec(a);
-	a = __mpy_obj_init_int(2);
-	__mpy_obj_ref_inc(a);
-	
-	__mpy_obj_ref_dec(a);
+	if (__mpy_boolean_raw(__mpy_call(__mpy_obj_get_attr(__mpy_obj_init_boolean(true), "__bool__"), __mpy_obj_init_tuple(0), NULL))) {
+		__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, a, __mpy_obj_init_tuple(1)), NULL));
+	}else {
+	}
 	__mpy_obj_ref_dec(a);
 	
 	

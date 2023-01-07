@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.swing.plaf.nimbus.State;
+
 import CBuilder.*;
 import CBuilder.literals.*;
 import CBuilder.variables.*;
@@ -34,14 +36,14 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(AssignNode node) {
-    Reference ref = (Reference) visit(node.getId());
+    Object ref = (Object) visit(node.getId());
     Expression value = (Expression) visit(node.getValueNode());
 
-    Assignment ass = new Assignment(ref, value);
+    Assignment ass = new Assignment((Reference) ref, value);
 
-    if (ass != null) {
-      builder.addStatement(ass);
-    }
+    // if (ass != null) {
+    // builder.addStatement(ass);
+    // }
 
     return ass;
   }
@@ -189,9 +191,10 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
     List<Statement> elseBody = (List<Statement>) visit(node.getElseBody());
     ElseStatement elseStatement = new ElseStatement(elseBody);
 
-    Statement conditional = new IfThenElseStatement(ifStatement, Optional.of(elifs), Optional.of(elseStatement));
-    builder.addStatement(conditional);
-    return null;
+    IfThenElseStatement conditional = new IfThenElseStatement(ifStatement, Optional.of(elifs),
+        Optional.of(elseStatement));
+    // builder.addStatement(conditional);
+    return conditional;
   }
 
   @Override
@@ -201,11 +204,13 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(WhileStmtNode node) {
-    Boolean con = (boolean) visit(node.getCondition());
+    Expression con = (Expression) visit(node.getCondition());
+    BlockNode whileBlock = (BlockNode) node.getBody();
+    declareVariables(whileBlock.getInstructions());
     List<Statement> body = (List<Statement>) visit(node.getBody());
-    Statement whileStatement = new WhileStatement(new BoolLiteral(con), body);
-    builder.addStatement(whileStatement);
-    return null;
+    WhileStatement whileStatement = new WhileStatement(con, body);
+    // builder.addStatement(whileStatement);
+    return whileStatement;
   }
 
   @Override
@@ -237,7 +242,8 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   public Object visit(ProgNode node) {
     declareVariables(node.getStmts());
     for (ASTNode stmt : node.getStmts()) {
-      visit(stmt);
+      Statement e = (Statement) visit(stmt);
+      builder.addStatement(e);
     }
     builder.writeProgram(output_folder);
     return null;
