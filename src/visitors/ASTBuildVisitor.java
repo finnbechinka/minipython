@@ -128,13 +128,13 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   public Object visit(BlockNode node) {
     List<Statement> stmts = new ArrayList<Statement>();
     for (ASTNode instr : node.getInstructions()) {
-      if (instr instanceof AssignNode) {
-        AssignNode assignment = (AssignNode) instr;
-        IDNode idn = (IDNode) assignment.getId();
-        VariableDeclaration var = new VariableDeclaration(idn.getId());
-        builder.addVariable(var);
-      }
-      stmts.add((Statement) visit(instr));
+      // if (instr instanceof AssignNode) {
+      // AssignNode assignment = (AssignNode) instr;
+      // IDNode idn = (IDNode) assignment.getId();
+      // VariableDeclaration var = new VariableDeclaration(idn.getId());
+      // builder.addVariable(var);
+      // }
+      stmts.add((Expression) visit(instr));
     }
     return stmts;
   }
@@ -154,7 +154,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
         params.add((Expression) arg);
       }
       Call printCall = new Call(printRef, params);
-      builder.addStatement(printCall);
+      return printCall;
     }
     return null;
   }
@@ -166,19 +166,47 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(IfStmtNode node) {
-    Expression ifCondition = new BoolLiteral((Boolean) visit(node.getIfCondition()));
+    Expression ifCondition = (Expression) visit(node.getIfCondition());
+    BlockNode ifBlock = (BlockNode) node.getIfBody();
+    for (ASTNode instr : ifBlock.getInstructions()) {
+      if (instr instanceof AssignNode) {
+        AssignNode assignment = (AssignNode) instr;
+        IDNode idn = (IDNode) assignment.getId();
+        VariableDeclaration var = new VariableDeclaration(idn.getId());
+        builder.addVariable(var);
+      }
+    }
+
     List<Statement> ifBody = (List<Statement>) visit(node.getIfBody());
     IfStatement ifStatement = new IfStatement(ifCondition, ifBody);
 
     List<ElifStatement> elifs = new ArrayList<ElifStatement>();
     for (ASTNode e : node.getElifs()) {
       ElifStmtNode elif = (ElifStmtNode) e;
-      Expression elifCondition = new BoolLiteral((Boolean) visit(elif.getCondition()));
+      Expression elifCondition = (Expression) visit(elif.getCondition());
+      BlockNode elifBlock = (BlockNode) elif.getBody();
+      for (ASTNode instr : elifBlock.getInstructions()) {
+        if (instr instanceof AssignNode) {
+          AssignNode assignment = (AssignNode) instr;
+          IDNode idn = (IDNode) assignment.getId();
+          VariableDeclaration var = new VariableDeclaration(idn.getId());
+          builder.addVariable(var);
+        }
+      }
       List<Statement> elifBody = (List<Statement>) visit(elif.getBody());
       ElifStatement elifStatement = new ElifStatement(elifCondition, elifBody);
       elifs.add(elifStatement);
     }
 
+    BlockNode elseBlock = (BlockNode) node.getElseBody();
+    for (ASTNode instr : elseBlock.getInstructions()) {
+      if (instr instanceof AssignNode) {
+        AssignNode assignment = (AssignNode) instr;
+        IDNode idn = (IDNode) assignment.getId();
+        VariableDeclaration var = new VariableDeclaration(idn.getId());
+        builder.addVariable(var);
+      }
+    }
     List<Statement> elseBody = (List<Statement>) visit(node.getElseBody());
     ElseStatement elseStatement = new ElseStatement(elseBody);
 
