@@ -14,6 +14,7 @@
 
 __MPyObj *a;
 __MPyObj *b;
+__MPyObj *c;
 
 
 
@@ -23,24 +24,25 @@ int main() {
 	__mpy_obj_ref_inc(a);
 	b = __mpy_obj_init_object();
 	__mpy_obj_ref_inc(b);
+	c = __mpy_obj_init_object();
+	__mpy_obj_ref_inc(c);
 	
 	
 	
 	__mpy_obj_ref_dec(a);
-	a = __mpy_obj_init_boolean(true);
+	a = __mpy_obj_init_int(5);
 	__mpy_obj_ref_inc(a);
 	__mpy_obj_ref_dec(b);
-	b = __mpy_obj_init_boolean(false);
+	b = __mpy_obj_init_int(2);
 	__mpy_obj_ref_inc(b);
-	if (__mpy_boolean_raw(__mpy_call(__mpy_obj_get_attr(b, "__bool__"), __mpy_obj_init_tuple(0), NULL))) {
-		__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("b"), __mpy_obj_init_tuple(1)), NULL));
-	}else if (__mpy_boolean_raw(__mpy_call(__mpy_obj_get_attr(a, "__bool__"), __mpy_obj_init_tuple(0), NULL))) {
-		__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("a"), __mpy_obj_init_tuple(1)), NULL));
-	}else {
-		__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("dooh"), __mpy_obj_init_tuple(1)), NULL));
-	}
+	__mpy_obj_ref_dec(c);
+	c = __mpy_call(__mpy_obj_get_attr(a, "__add__"), __mpy_tuple_assign(0, b, __mpy_obj_init_tuple(1)), NULL);
+	__mpy_obj_ref_inc(c);
+	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, c, __mpy_obj_init_tuple(1)), NULL));
+	
 	__mpy_obj_ref_dec(a);
 	__mpy_obj_ref_dec(b);
+	__mpy_obj_ref_dec(c);
 	
 	
 	
