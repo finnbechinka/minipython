@@ -151,12 +151,16 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
       args.add(visit(arg));
     }
 
-    System.out.println(idn.getId());
-    Reference ref = new Reference(idn.getId());
     List<Expression> params = new ArrayList<Expression>();
     for (Object arg : args) {
       params.add((Expression) arg);
     }
+
+    String instance = ((IDNode) node.getId()).getInstanceId();
+    if (instance != null) {
+      return new Call(new AttributeReference(idn.getId(), new Reference((String) instance)), params);
+    }
+    Reference ref = new Reference(idn.getId());
     Call call = new Call(ref, params);
     return call;
   }
@@ -275,6 +279,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   public Object visit(ProgNode node) {
     declareVariables(node.getStmts());
     for (ASTNode stmt : node.getStmts()) {
+
       Object e = (Object) visit(stmt);
       if (e instanceof MPyClass) {
         builder.addClass((MPyClass) e);
