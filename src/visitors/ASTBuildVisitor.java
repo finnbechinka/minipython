@@ -18,6 +18,9 @@ import CBuilder.variables.*;
 import CBuilder.conditions.*;
 import CBuilder.objects.*;
 import CBuilder.keywords.*;
+import CBuilder.keywords.bool.AndKeyword;
+import CBuilder.keywords.bool.NotKeyword;
+import CBuilder.keywords.bool.OrKeyword;
 import CBuilder.conditions.conditionalStatement.*;
 
 public class ASTBuildVisitor implements ASTVisitor<Object> {
@@ -50,71 +53,73 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
     switch (node.getOperator()) {
       case "+" -> {
-        if (leftNode instanceof Reference && rightNode instanceof IntLiteral) {
-          AttributeReference attRef = new AttributeReference("__add__", (Reference) leftNode);
-          Call add = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
-          return add;
-
-        } else if (leftNode instanceof Integer && rightNode instanceof Integer)
-          return (int) leftNode + (int) rightNode;
-        else if (leftNode instanceof String && rightNode instanceof String) {
-          return leftNode.toString() + rightNode;
-        } else if (leftNode instanceof String) {
-          return leftNode.toString() + rightNode;
-        }
+        AttributeReference attRef = new AttributeReference("__add__", (Expression) leftNode);
+        Call add = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+        return add;
       }
       case "-" -> {
-        if (leftNode instanceof Integer && rightNode instanceof Integer)
-          return (int) leftNode - (int) rightNode;
+        AttributeReference attRef = new AttributeReference("__sub__", (Expression) leftNode);
+        Call sub = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+        return sub;
       }
       case "/" -> {
-        if (leftNode instanceof Integer && rightNode instanceof Integer)
-          return (int) leftNode / (int) rightNode;
+        AttributeReference attRef = new AttributeReference("__div__", (Expression) leftNode);
+        Call div = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+        return div;
       }
       case "*" -> {
-        if (leftNode instanceof Integer && rightNode instanceof Integer)
-          return (int) leftNode * (int) rightNode;
+        AttributeReference attRef = new AttributeReference("__mul__", (Expression) leftNode);
+        Call mul = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+        return mul;
       }
       case "==" -> {
-        return leftNode.equals(rightNode);
+        AttributeReference attRef = new AttributeReference("__eq__", (Expression) leftNode);
+        Call eq = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+        return eq;
       }
       case "!=" -> {
-        return !leftNode.equals(rightNode);
+        AttributeReference attRef = new AttributeReference("__ne__", (Expression) leftNode);
+        Call ne = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+        return ne;
       }
       case ">=" -> {
-        if (rightNode instanceof Integer && leftNode instanceof Integer)
-          return (int) leftNode >= (int) rightNode;
+        AttributeReference attRef = new AttributeReference("__ge__", (Expression) leftNode);
+        Call ge = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+        return ge;
       }
       case ">" -> {
-        if (rightNode instanceof Integer && leftNode instanceof Integer)
-          return (int) leftNode > (int) rightNode;
+        AttributeReference attRef = new AttributeReference("__gt__", (Expression) leftNode);
+        Call gt = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+        return gt;
       }
       case "<=" -> {
-        if (rightNode instanceof Integer && leftNode instanceof Integer)
-          return (int) leftNode <= (int) rightNode;
+        AttributeReference attRef = new AttributeReference("__le__", (Expression) leftNode);
+        Call le = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+        return le;
       }
       case "<" -> {
-        if (rightNode instanceof Integer && leftNode instanceof Integer)
-          return (int) leftNode < (int) rightNode;
+        AttributeReference attRef = new AttributeReference("__lt__", (Expression) leftNode);
+        Call lt = new Call(attRef, List.of(new Expression[] { (Expression) rightNode }));
+        return lt;
       }
       case "and" -> {
-        if (rightNode instanceof Boolean && leftNode instanceof Boolean)
-          return (boolean) leftNode && (boolean) rightNode;
+        Expression and = new AndKeyword((Expression) leftNode, (Expression) rightNode);
+        return and;
       }
       case "or" -> {
-        if (rightNode instanceof Boolean && leftNode instanceof Boolean)
-          return (boolean) leftNode || (boolean) rightNode;
+        Expression or = new OrKeyword((Expression) leftNode, (Expression) rightNode);
+        return or;
       }
       default -> throw new UnsupportedOperationException();
     }
-    return null;
   }
 
   @Override
   public Object visit(UnaryExprNode node) {
-    Object val = visit(node.getChildNode());
+    Expression e = (Expression) visit(node.getChildNode());
     if ("not".equals(node.getOperator())) {
-      return !(boolean) val;
+      Expression not = new NotKeyword(e);
+      return not;
     }
     return null;
   }
