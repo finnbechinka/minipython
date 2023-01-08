@@ -138,7 +138,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
       // VariableDeclaration var = new VariableDeclaration(idn.getId());
       // builder.addVariable(var);
       // }
-      stmts.add((Expression) visit(instr));
+      stmts.add((Statement) visit(instr));
     }
     return stmts;
   }
