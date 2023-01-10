@@ -41,7 +41,7 @@ public class App {
         MiniPythonASTVisitor astVisitor = new MiniPythonASTVisitor();
         ASTStringVisitor str = new ASTStringVisitor();
         ASTSymbolVisitor symbol = new ASTSymbolVisitor();
-        ASTEvalVisitor eval = new ASTEvalVisitor();
+        // ASTEvalVisitor eval = new ASTEvalVisitor();
         ASTBuildVisitor build = new ASTBuildVisitor(Path.of("bin"));
 
         ASTNode ast = tree.accept(astVisitor);
