@@ -26,7 +26,7 @@ __MPyObj* func_A___init__(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__MPyObj *retValue = NULL;
 	
-	__mpy_obj_ref_dec(__mpy_call(super, __mpy_obj_init_tuple(0), NULL));
+	__mpy_obj_ref_dec(__mpy_call(__mpy_super, __mpy_tuple_assign(0, self, __mpy_obj_init_tuple(1)), NULL));
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, x, __mpy_obj_init_tuple(1)), NULL));
 	
 	__mpy_obj_ref_dec(self);
@@ -50,7 +50,7 @@ __MPyObj* func_B___init__(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__MPyObj *retValue = NULL;
 	
-	__mpy_obj_ref_dec(__mpy_call(super, __mpy_tuple_assign(0, y, __mpy_obj_init_tuple(1)), NULL));
+	__mpy_obj_ref_dec(__mpy_call(__mpy_super, __mpy_tuple_assign(0, self, __mpy_tuple_assign(1, y, __mpy_obj_init_tuple(2))), NULL));
 	
 	__mpy_obj_ref_dec(self);
 	__mpy_obj_ref_dec(y);
