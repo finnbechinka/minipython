@@ -27,6 +27,12 @@ import CBuilder.keywords.bool.NotKeyword;
 import CBuilder.keywords.bool.OrKeyword;
 import CBuilder.conditions.conditionalStatement.*;
 
+class NoSuperException extends Exception {
+  public NoSuperException(String message) {
+    super(message);
+  }
+}
+
 public class ASTBuildVisitor implements ASTVisitor<Object> {
   private final Path output_folder;
   private ProgramBuilder builder;
@@ -40,6 +46,15 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   public Object visit(AssignNode node) {
     Object ref = (Object) visit(node.getId());
     Expression value = (Expression) visit(node.getValueNode());
+
+    // String[] subStrs = ((IDNode) node.getId()).getId().split(".");
+    // System.out.println(((IDNode) node.getId()).getId());
+    // if (subStrs.length > 0) {
+    // System.out.println(subStrs[0]);
+    // if (subStrs[0].equals("self")) {
+    // System.out.println("self");
+    // }
+    // }
 
     Assignment ass = new Assignment((Reference) ref, value);
 
@@ -156,6 +171,10 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
       params.add((Expression) arg);
     }
 
+    if (idn.getId().equals("super")) {
+      return new SuperCall(params);
+    }
+
     String instance = ((IDNode) node.getId()).getInstanceId();
     if (instance != null) {
       return new Call(new AttributeReference(idn.getId(), new Reference((String) instance)), params);
@@ -168,13 +187,53 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   @Override
   public Object visit(ClazzDefNode node) {
     List<Function> methods = new ArrayList<>();
+    Boolean hasInit = false;
+    Function firstMethod = (Function) visit(node.getMethods().get(0));
+    if (!firstMethod.getName().equals("__init__")) {
+      Statement simpleSuperCall = new SuperCall(List.of());
+      List<Statement> initBody = List.of(new Statement[] { simpleSuperCall });
+      List<Argument> initParamList = List.of(new Argument[] { new Argument("self", 0) });
+      methods.add(new Function("__init__", initBody, initParamList, List.of()));
+    } else {
+      hasInit = true;
+      ASTNode firstStatement = ((BlockNode) ((FuncDefNode) node.getMethods().get(0)).getBody()).getInstructions()
+          .get(0);
+      if (!(firstStatement instanceof CallNode)) {
 
-    Statement simpleSuperCall = new SuperCall(List.of());
-    List<Statement> initBody = List.of(new Statement[] { simpleSuperCall });
-    List<Argument> initParamList = List.of(new Argument[] { new Argument("self", 0) });
-    methods.add(new Function("__init__", initBody, initParamList, List.of()));
+        Statement simpleSuperCall = new SuperCall(List.of());
+        List<Statement> body = (List<Statement>) visit(((FuncDefNode) node.getMethods().get(0)).getBody());
+        body.add(0, simpleSuperCall);
+        List<Argument> params = new ArrayList<Argument>();
+        List<VariableDeclaration> vars = new ArrayList<VariableDeclaration>();
+
+        for (int i = 0; i < ((FuncDefNode) node.getMethods().get(0)).getParameters().size(); i++) {
+          params.add(new Argument(((FuncDefNode) node.getMethods().get(0)).getParameters().get(i), i));
+        }
+
+        BlockNode block = (BlockNode) ((FuncDefNode) node.getMethods().get(0)).getBody();
+        for (ASTNode instr : block.getInstructions()) {
+          if (instr instanceof AssignNode) {
+            AssignNode assignment = (AssignNode) instr;
+            IDNode idn = (IDNode) assignment.getId();
+            vars.add(new VariableDeclaration(idn.getId()));
+          }
+        }
+
+        methods.add(new Function("__init__", body, params, vars));
+      } else {
+
+        CallNode call = (CallNode) firstStatement;
+        if (((IDNode) call.getId()).getId().equals("super")) {
+
+          methods.add((Function) visit(node.getMethods().get(0)));
+        }
+      }
+    }
 
     for (ASTNode m : node.getMethods()) {
+      if (hasInit && node.getMethods().indexOf(m) == 0) {
+        continue;
+      }
       Function method = (Function) visit(m);
       methods.add(method);
     }
