@@ -47,22 +47,11 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
     Object ref = (Object) visit(node.getId());
     Expression value = (Expression) visit(node.getValueNode());
 
-    // String[] subStrs = ((IDNode) node.getId()).getId().split(".");
-    // System.out.println(((IDNode) node.getId()).getId());
-    // if (subStrs.length > 0) {
-    // System.out.println(subStrs[0]);
-    // if (subStrs[0].equals("self")) {
-    // System.out.println("self");
-    // }
-    // }
+    if (ref instanceof AttributeReference) {
+      return new AttributeAssignment((AttributeReference) ref, value);
+    }
 
-    Assignment ass = new Assignment((Reference) ref, value);
-
-    // if (ass != null) {
-    // builder.addStatement(ass);
-    // }
-
-    return ass;
+    return new Assignment((Reference) ref, value);
   }
 
   @Override
@@ -317,6 +306,9 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(IDNode node) {
+    if (node.getInstanceId() != null) {
+      return new AttributeReference(node.getId(), new Reference(node.getInstanceId()));
+    }
     return new Reference(node.getId());
   }
 
