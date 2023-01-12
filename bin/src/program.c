@@ -66,7 +66,7 @@ __MPyObj* func_A_foo(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__MPyObj *retValue = NULL;
 	
-	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, x, __mpy_obj_init_tuple(1)), NULL));
+	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("hi"), __mpy_obj_init_tuple(1)), NULL));
 	
 	__mpy_obj_ref_dec(self);
 	
@@ -106,7 +106,6 @@ int main() {
 	__mpy_obj_ref_dec(obj);
 	obj = __mpy_call(A, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(obj);
-	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj, "foo"), __mpy_obj_init_tuple(0), NULL));
 	__mpy_obj_ref_dec(__mpy_call(moo, __mpy_tuple_assign(0, obj, __mpy_obj_init_tuple(1)), NULL));
 	
 	__mpy_obj_ref_dec(obj);
