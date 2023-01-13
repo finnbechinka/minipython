@@ -345,12 +345,16 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   }
 
   private void declareVariables(List<ASTNode> statements) {
+    List<String> vars = new ArrayList<>();
     for (ASTNode stmt : statements) {
       if (stmt instanceof AssignNode) {
         AssignNode assignment = (AssignNode) stmt;
         IDNode idn = (IDNode) assignment.getId();
-        VariableDeclaration var = new VariableDeclaration(idn.getId());
-        builder.addVariable(var);
+        if (!vars.contains(idn.getId())) {
+          vars.add(idn.getId());
+          VariableDeclaration var = new VariableDeclaration(idn.getId());
+          builder.addVariable(var);
+        }
       }
     }
   }
