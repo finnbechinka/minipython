@@ -21,6 +21,10 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
     return null;
   }
 
+  @Override public ASTNode visitType(MiniPythonParser.TypeContext ctx) { 
+    return visitChildren(ctx); 
+  }
+
   @Override
   public ASTNode visitIdentifier(MiniPythonParser.IdentifierContext ctx) {
     if (ctx.children.size() > 2)
@@ -111,7 +115,8 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
 
   @Override
   public ASTNode visitAssign(MiniPythonParser.AssignContext ctx) {
-    return new AssignNode(visit(ctx.identifier()), visit(ctx.getChild(2)));
+    String type = ctx.type() == null ? "" : ctx.type().getText();
+    return new AssignNode(visit(ctx.identifier()), type, visit(ctx.getChild(ctx.getChildCount()-2)));
   }
 
   @Override
