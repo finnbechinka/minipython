@@ -1,4 +1,7 @@
-grammar miniPython;
+grammar MiniPython;
+
+WS    : [ \t]+ -> skip;
+NL	  : '\r'? '\n';
 
 /** KEY-WORDS */
 IF    : 'if';
@@ -6,75 +9,82 @@ ELIF  : 'elif';
 ELSE  : 'else';
 WHILE : 'while';
 CLAZZ : 'class';
-DEF   : 'def';
-RET   : 'return';
+DEF	  : 'def';
+RET	  : 'return';
 SELF  : 'self';
-
-WS    : [ \t]+ -> skip;
-NL    : [\n\r]+;
+TYPE_INT  : 'int';
+TYPE_STR  : 'string';
+TYPE_BOOL : 'bool';
 
 /** DATATYPES */
-INT   : [1-9][0-9]*;
-BOOL  : 'True' | 'False';
-STRING: '"' ('\\' ["\\] | ~["\\\r\n])* '"';
+INT    : [1-9][0-9]* | [0]; 
+BOOL   : 'True' | 'False';
+STRING : '"' ('\\' ["\\] | ~["\\\r\n])* '"';
 
 /** IDENTIFIER */
 ID    : [a-zA-Z_][a-zA-Z_0-9]*;
 
 /** END-MARKER TO CLOSE SCOPES */
-END   : '#end' NL?;
+END   : '#end'NL;
 
-lit   : INT | BOOL | STRING;
+lit   : INT | STRING | BOOL;
 
-expr : expr  '*'   expr # MUL
-     | expr  '/'   expr # DIV
-     | expr  '+'   expr # ADD
-     | expr  '-'   expr # SUB
-     | expr  '=='  expr # EQUI
-     | expr  '!='  expr # UNEQUI
-     | expr  '>='  expr # GEQUI
-     | expr  '>'   expr # GREATER
-     | expr  '<='  expr # LEQUI
-     | expr  '<'   expr # LESS
-     | expr  'or'  expr # OR
-     | expr  'and' expr # AND
-     |       'not' expr # NOT
-     | ID               # ID
-     | lit              # ATOM
-     ;
+type : TYPE_INT | TYPE_STR | TYPE_BOOL | ID;
+
+identifier : (SELF | ID ) '.' ID
+		   | ID
+		   ;
+
+expr : expr  op='*'   expr	# MUL
+	 | expr  op='/'   expr  # DIV
+	 | expr  op='+'   expr  # ADD
+	 | expr  op='-'   expr  # SUB
+	 | expr  op='=='  expr  # EQUI
+	 | expr  op='!='  expr  # UNEQUI
+	 | expr  op='>='  expr  # GEQUI
+	 | expr  op='>'   expr  # GREATER
+	 | expr  op='<='  expr  # LEQUI
+	 | expr  op='<'   expr  # LESS
+	 |       op='not' expr  # NOT
+	 | expr  op='and' expr  # AND
+	 | expr  op='or'  expr  # OR
+	 | lit					# ATOM
+	 | call					# ExprCall
+	 | identifier		 	# ID
+	 ;
+
+parameters : ID (':'type)? (','ID (':'type)?)*;
+
+arguments  : expr (','expr)*;
+
+return : RET expr NL;
+
 
 /** INSTRUCTIONS */
 
-assign : ID '=' expr NL
-       | ID '=' methodCall
-       | ID '=' funcCall
-       | ID '=' obj;
+assign : identifier (':'type)? '=' expr NL;
 
-block : (inst)*;
-
-funcCall : ID '(' (expr  (','expr)*)? ')' NL;
-
-methodCall : ID'.'ID'(' (expr (','expr)*)? ')' NL;
-
-obj : ID'('(expr  (','expr)*)? ')' NL;
+call : identifier '(' arguments? ')';
 
 whileStmt : WHILE expr ':' NL block END;
 
-ifStmt : IF expr ':' NL block (ELIF expr ':' NL block)* (ELSE ':' NL block)? END;
+ifStmt   : IF expr ':' NL block elifStmt* (ELSE ':' NL block)? END;
+elifStmt : ELIF expr ':' NL block;
 
-inst : assign
-     | funcCall 
-     | methodCall 
-     | whileStmt 
-     | ifStmt;
+statement : assign
+		  | call NL 
+	      | whileStmt 
+	      | ifStmt
+		  ;
+
+block : (statement | NL)*;
 
 /** FUNCTION, METHOD, CLASS DEFINITION */
 
-funcDef : DEF ID '(' (ID (','ID)*)? '):' NL block (RET expr NL)? END;
+funcDef : DEF ID '(' parameters? '):' (type':')? NL block return? END;
+
+methodDef : DEF ID '(' SELF (',' parameters)? '):' (type':')? NL block return? END;
 
 clazz : CLAZZ ID '(' ID? '):' NL (methodDef)* END;
 
-methodDef : DEF ID '(' SELF (','ID)* '):' NL block (RET expr NL)? END;
-
-
-prog : (funcDef | clazz | inst | NL)* EOF;
+prog : (funcDef | clazz | statement | NL)* EOF;
