@@ -191,7 +191,9 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
         params.add(ctx.parameters().ID().get(i).toString());
       }
     }
-    return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()),
+
+    String type = ctx.type() != null ? ctx.type().getText() : "";
+    return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()), type,
         ctx.return_() != null ? visit(ctx.return_()) : null);
   }
 
@@ -221,8 +223,9 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
         params.add(ctx.parameters().ID().get(i).toString());
       }
     }
-
-    return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()),
+    
+    String type = ctx.type() != null ? ctx.type().getText() : "";
+    return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()), type,
         ctx.return_() != null ? visit(ctx.return_()) : null);
   }
 

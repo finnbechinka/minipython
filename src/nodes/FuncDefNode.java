@@ -13,12 +13,14 @@ public class FuncDefNode extends ASTNode {
   private String id;
   private List<String> parameters;
   private ASTNode body;
+  private String returnType;
   private ASTNode returnExpr;
 
-  public FuncDefNode(String id, List<String> parameters, ASTNode body, ASTNode returnExpr) {
+  public FuncDefNode(String id, List<String> parameters, ASTNode body, String returnType, ASTNode returnExpr) {
     this.id = id;
     this.parameters = parameters;
     this.body = body;
+    this.returnType = returnType;
     this.returnExpr = returnExpr;
   }
 
@@ -42,13 +44,17 @@ public class FuncDefNode extends ASTNode {
     return this.body;
   }
 
+  public String getReturnType(){
+    return this.returnType;
+  }
+
   public ASTNode getReturnExpr() {
     return this.returnExpr;
   }
 
   @Override
   public String toStringTree() {
-    return "FuncDef: " + id + " " + parameters.toString();
+    return "FuncDef: " + id + " " + parameters.toString() + " Type: " + returnType;
   }
 
   @Override
