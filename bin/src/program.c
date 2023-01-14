@@ -1,5 +1,4 @@
 #include <stddef.h>
-#include <stdio.h>
 
 #include "assert.h"
 #include "mpy_aliases.h"
@@ -14,39 +13,43 @@
 #include "type-hierarchy/type.h"
 
 __MPyObj *a;
-__MPyObj *b;
-__MPyObj *c;
+
+__MPyObj *getfive;
+__MPyObj *func_getfive(__MPyObj *args, __MPyObj *kwargs)
+{
+	assert(args != NULL && kwargs != NULL);
+
+	__MPyGetArgsState argHelper = __mpy_args_init("getfive", args, kwargs, 0);
+	__mpy_args_finish(&argHelper);
+
+	__MPyObj *retValue = NULL;
+
+	goto ret;
+ret:
+	if (retValue == NULL)
+	{
+		retValue = __mpy_obj_init_object();
+	}
+	return __mpy_obj_return(retValue);
+}
 
 int main()
 {
 	__mpy_builtins_setup();
 	a = __mpy_obj_init_object();
 	__mpy_obj_ref_inc(a);
-	b = __mpy_obj_init_object();
-	__mpy_obj_ref_inc(b);
-	c = __mpy_obj_init_object();
-	__mpy_obj_ref_inc(c);
+
+	getfive = __mpy_obj_init_func(&func_getfive);
+	__mpy_obj_ref_inc(getfive);
 
 	__mpy_obj_ref_dec(a);
-	a = __mpy_obj_init_int(5);
-	printf("%s\n", __mpy_type_name(__mpy_obj_init_int(5)->__MPyFunc_type));
+	printf("%s", __mpy_type_name(__mpy_call(getfive, __mpy_obj_init_tuple(0), NULL)->__MPyFunc_type));
+	a = __mpy_call(getfive, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(a);
-	__mpy_obj_ref_dec(b);
-	b = __mpy_obj_init_str_static("haha");
-	printf("%s\n", __mpy_type_name(__mpy_obj_init_str_static("haha")->__MPyFunc_type));
-	__mpy_obj_ref_inc(b);
-	__mpy_obj_ref_dec(c);
-	c = __mpy_obj_init_boolean(true);
-	printf("%s\n", __mpy_type_name(__mpy_obj_init_boolean(true)->__MPyFunc_type));
-	__mpy_obj_ref_inc(c);
-
-	printf("%s\n", __mpy_type_name(a->__MPyFunc_type));
-	printf("%s\n", __mpy_type_name(b->__MPyFunc_type));
-	printf("%s\n", __mpy_type_name(c->__MPyFunc_type));
 
 	__mpy_obj_ref_dec(a);
-	__mpy_obj_ref_dec(b);
-	__mpy_obj_ref_dec(c);
+
+	__mpy_obj_ref_dec(getfive);
 
 	__mpy_builtins_cleanup();
 	return 0;
