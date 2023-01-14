@@ -138,7 +138,7 @@ __MPyObj *__mpy_obj_get_attr_rec(__MPyObj *self, const char *name, const char *t
 __MPyObj *__mpy_obj_get_attr(__MPyObj *self, const char *name)
 {
     assert(self != NULL);
-    printf("%c", __mpy_type_name(self->type));
+    printf("%s", __mpy_type_name(self->type));
     return __mpy_obj_get_attr_rec(self, name, __mpy_type_name(self->type));
 }
 
