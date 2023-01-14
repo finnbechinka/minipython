@@ -16,7 +16,6 @@
 __MPyObj *a;
 __MPyObj *b;
 __MPyObj *c;
-__MPyObj *f;
 
 int main()
 {
@@ -27,24 +26,27 @@ int main()
 	__mpy_obj_ref_inc(b);
 	c = __mpy_obj_init_object();
 	__mpy_obj_ref_inc(c);
-	f = __mpy_obj_init_object();
-	__mpy_obj_ref_inc(f);
 
 	__mpy_obj_ref_dec(a);
-	a = __mpy_obj_init_int(10);
+	a = __mpy_obj_init_int(5);
+	printf("%s\n", mpy_type_name(__mpy_obj_init_int(5)->__MPyFunc_type));
 	__mpy_obj_ref_inc(a);
-	__mpy_obj_ref_dec(f);
-	f = __mpy_obj_init_int(2);
-	__mpy_obj_ref_inc(f);
-	__mpy_obj_ref_inc(f);
-	__mpy_obj_ref_dec(a);
-	printf("%s", __mpy_type_name(f->__MPyFunc_type));
-	a = f->__MPyFunc_type;
+	__mpy_obj_ref_dec(b);
+	b = __mpy_obj_init_str_static("haha");
+	printf("%s\n", mpy_type_name(__mpy_obj_init_str_static("haha")->__MPyFunc_type));
+	__mpy_obj_ref_inc(b);
+	__mpy_obj_ref_dec(c);
+	c = __mpy_obj_init_boolean(true);
+	printf("%s\n", mpy_type_name(__mpy_obj_init_boolean(true)->__MPyFunc_type));
+	__mpy_obj_ref_inc(c);
+
+	printf("%s\n", mpy_type_name(a->__MPyFunc_type));
+	printf("%s\n", mpy_type_name(b->__MPyFunc_type));
+	printf("%s\n", mpy_type_name(c->__MPyFunc_type));
 
 	__mpy_obj_ref_dec(a);
 	__mpy_obj_ref_dec(b);
 	__mpy_obj_ref_dec(c);
-	__mpy_obj_ref_dec(f);
 
 	__mpy_builtins_cleanup();
 	return 0;
