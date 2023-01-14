@@ -28,9 +28,9 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
   @Override
   public ASTNode visitIdentifier(MiniPythonParser.IdentifierContext ctx) {
     if (ctx.children.size() > 2)
-      return new IDNode(ctx.children.get(0).getText(), ctx.children.get(2).getText());
+      return new IDNode(ctx.children.get(0).getText(), ctx.children.get(2).getText(), null);
     else
-      return new IDNode(null, ctx.ID(0).getText());
+      return new IDNode(null, ctx.ID(0).getText(), null);
   }
 
   @Override
@@ -115,8 +115,10 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
 
   @Override
   public ASTNode visitAssign(MiniPythonParser.AssignContext ctx) {
-    String type = ctx.type() == null ? "" : ctx.type().getText();
-    return new AssignNode(visit(ctx.identifier()), type, visit(ctx.getChild(ctx.getChildCount()-2)));
+    
+    IDNode id = (IDNode) visit(ctx.identifier());
+    id.setType(ctx.type() != null ? ctx.type().getText() : "");
+    return new AssignNode(id, visit(ctx.getChild(ctx.getChildCount()-2)));
   }
 
   @Override

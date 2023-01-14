@@ -9,12 +9,10 @@ public class AssignNode extends ASTNode {
 
   private Scope scope;
   private ASTNode id;
-  private String type;
   private ASTNode valueNode;
 
-  public AssignNode(ASTNode id, String type, ASTNode valueNode) {
+  public AssignNode(ASTNode id, ASTNode valueNode) {
     this.id = id;
-    this.type = type;
     this.valueNode = valueNode;
   }
 
@@ -30,17 +28,13 @@ public class AssignNode extends ASTNode {
     return this.id;
   }
 
-  public String getType() {
-    return this.type;
-  }
-
   public ASTNode getValueNode() {
     return this.valueNode;
   }
 
   @Override
   public String toStringTree() {
-    return "Assign " + type;
+    return "Assign";
   }
 
   @Override
