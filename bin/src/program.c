@@ -1,5 +1,4 @@
 #include <stddef.h>
-#include <stdio.h>
 
 #include "assert.h"
 #include "mpy_aliases.h"
@@ -16,48 +15,37 @@
 __MPyObj *a;
 __MPyObj *b;
 
-int main()
-{
+
+
+int main() {
 	__mpy_builtins_setup();
 	a = __mpy_obj_init_object_w_type("");
 	__mpy_obj_ref_inc(a);
 	b = __mpy_obj_init_object_w_type("");
 	__mpy_obj_ref_inc(b);
-
-	printf("here\n");
+	
+	
+	
 	__mpy_obj_ref_dec(a);
-	printf("here\n");
-	__mpy_type_check(a, __mpy_obj_init_int(5));
-	printf("here\n");
+	__mpy_type_check(a,__mpy_obj_init_int(5));
 	a = __mpy_obj_init_int(5);
-	printf("here\n");
 	__mpy_obj_ref_inc(a);
-	printf("here\n");
 	__mpy_obj_ref_dec(b);
-	printf("here\n");
-	__mpy_type_check(b, __mpy_obj_init_int(2));
-	printf("here\n");
+	__mpy_type_check(b,__mpy_obj_init_int(2));
 	b = __mpy_obj_init_int(2);
-	printf("here\n");
 	__mpy_obj_ref_inc(b);
-	printf("here\n");
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, a, __mpy_obj_init_tuple(1)), NULL));
-	printf("here\n");
 	__mpy_obj_ref_inc(b);
-	printf("here\n");
 	__mpy_obj_ref_dec(a);
-	printf("here\n");
-	__mpy_type_check(a, b);
-	printf("here\n");
+	__mpy_type_check(a,b);
 	a = b;
-	printf("here\n");
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, b, __mpy_obj_init_tuple(1)), NULL));
-	printf("here\n");
+	
 	__mpy_obj_ref_dec(a);
-	printf("here\n");
 	__mpy_obj_ref_dec(b);
-	printf("here\n");
-
+	
+	
+	
 	__mpy_builtins_cleanup();
 	return 0;
 }

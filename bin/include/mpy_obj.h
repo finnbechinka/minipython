@@ -78,8 +78,6 @@ struct __MPyObj
      * Note that this is *not* the type of the parent class, but an instance of the parent class.
      */
     __MPyObj *parent;
-
-    __MPyObj *expl_type;
 };
 
 /**
