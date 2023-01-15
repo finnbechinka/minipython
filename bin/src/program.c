@@ -25,6 +25,8 @@ __MPyObj *func_getfive(__MPyObj *args, __MPyObj *kwargs)
 
 	__MPyObj *retValue = NULL;
 
+	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("getting"), __mpy_obj_init_tuple(1)), NULL));
+
 	goto ret;
 ret:
 	if (retValue == NULL)
@@ -44,9 +46,10 @@ int main()
 	__mpy_obj_ref_inc(getfive);
 
 	__mpy_obj_ref_dec(a);
-	printf("%s", __mpy_type_name(__mpy_call(getfive, __mpy_obj_init_tuple(0), NULL)->__MPyFunc_type));
+	printf("%s\n", __mpy_type_name(__mpy_call(getfive, __mpy_obj_init_tuple(0), NULL)->__MPyFunc_type));
 	a = __mpy_call(getfive, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(a);
+	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, a, __mpy_obj_init_tuple(1)), NULL));
 
 	__mpy_obj_ref_dec(a);
 
