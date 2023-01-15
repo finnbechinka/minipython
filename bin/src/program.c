@@ -142,8 +142,8 @@ int main()
 	}
 
 	__mpy_obj_ref_dec(obj);
-	__mpy_type_check(obj, __mpy_call(A, __mpy_obj_init_tuple(0), NULL));
 	printf("%s", __mpy_type_name(__mpy_call(A, __mpy_obj_init_tuple(0), NULL)->__MPyFunc_type));
+	__mpy_type_check(obj, __mpy_call(A, __mpy_obj_init_tuple(0), NULL));
 	obj = __mpy_call(A, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(obj);
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("hi"), __mpy_obj_init_tuple(1)), NULL));

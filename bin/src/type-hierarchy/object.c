@@ -97,6 +97,10 @@ __MPyObj *__mpy_obj_init_object_w_type(const char *type)
     {
         obj->type = __MPyType_Boolean;
     }
+    else if (!strcmp(type, ""))
+    {
+        obj->type = __MPyType_Object;
+    }
     else
     {
         obj->type = __mpy_obj_init_type(type, __MPyType_Object)->type;
