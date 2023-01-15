@@ -12,13 +12,15 @@ public class FuncDefNode extends ASTNode {
   private Scope scope;
   private String id;
   private List<String> parameters;
+  private List<String> parameterTypes;
   private ASTNode body;
   private String returnType;
   private ASTNode returnExpr;
 
-  public FuncDefNode(String id, List<String> parameters, ASTNode body, String returnType, ASTNode returnExpr) {
+  public FuncDefNode(String id, List<String> parameters, List<String> parameterTypes, ASTNode body, String returnType, ASTNode returnExpr) {
     this.id = id;
     this.parameters = parameters;
+    this.parameterTypes = parameterTypes;
     this.body = body;
     this.returnType = returnType;
     this.returnExpr = returnExpr;
@@ -40,6 +42,10 @@ public class FuncDefNode extends ASTNode {
     return this.parameters;
   }
 
+  public List<String> getParameterTypes() {
+    return this.parameterTypes;
+  }
+
   public ASTNode getBody() {
     return this.body;
   }
@@ -54,7 +60,7 @@ public class FuncDefNode extends ASTNode {
 
   @Override
   public String toStringTree() {
-    return "FuncDef: " + id + " " + parameters.toString() + " Type: " + returnType;
+    return "FuncDef: " + id + " " + parameters.toString() + "   " + parameterTypes.toString() +" Type: " + returnType;
   }
 
   @Override
