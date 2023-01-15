@@ -20,16 +20,14 @@ int main()
 {
 	__mpy_builtins_setup();
 	a = __mpy_obj_init_object_w_type("num");
-	fprintf(stderr, "%s\n", __mpy_type_name(a->expl_type));
 	__mpy_obj_ref_inc(a);
 	b = __mpy_obj_init_object_w_type("num");
 	__mpy_obj_ref_inc(b);
 	c = __mpy_obj_init_object_w_type("bool");
 	__mpy_obj_ref_inc(c);
 
-	fprintf(stderr, "%s\n", __mpy_type_name(a->expl_type));
-
 	__mpy_obj_ref_dec(a);
+	fprintf(stderr, "%s\n", __mpy_type_name(a->expl_type));
 	a = __mpy_type_check(a, __mpy_obj_init_int(5));
 	__mpy_obj_ref_inc(a);
 	__mpy_obj_ref_dec(b);
