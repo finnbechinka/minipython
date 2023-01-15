@@ -2,5 +2,9 @@
   "java.project.referencedLibraries": [
     "lib/**/*.jar",
     "lib/*.jar"
-  ]
+  ],
+  "files.associations": {
+    "object.h": "c",
+    "errors.h": "c"
+  }
 }
