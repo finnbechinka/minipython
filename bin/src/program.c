@@ -41,8 +41,15 @@ int main() {
 	__mpy_type_check(c,__mpy_obj_init_boolean(true));
 	c = __mpy_obj_init_boolean(true);
 	__mpy_obj_ref_inc(c);
+	__mpy_obj_ref_inc(b);
+	__mpy_obj_ref_dec(a);
+	__mpy_type_check(a,b);
+	a = b;
+	__mpy_obj_ref_inc(b);
+	__mpy_obj_ref_dec(c);
+	__mpy_type_check(c,b);
+	c = b;
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, a, __mpy_obj_init_tuple(1)), NULL));
-	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, b, __mpy_obj_init_tuple(1)), NULL));
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, c, __mpy_obj_init_tuple(1)), NULL));
 	
 	__mpy_obj_ref_dec(a);
