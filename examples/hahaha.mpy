@@ -1,0 +1,21 @@
+class A():
+def __init__(self):
+super()
+self.x:int = 42
+#end
+def foo(self):
+self.x = "fourtytwo"
+#end
+#end
+obj = A()
+obj.foo()
+obj2:A = A()
+class B(A):
+def moo(self):
+print(self.x)
+#end
+#end
+obj3 = B()
+obj3.moo()
+obj2 = B()
+obj2.moo()

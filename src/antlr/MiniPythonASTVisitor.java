@@ -29,9 +29,9 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
   @Override
   public ASTNode visitIdentifier(MiniPythonParser.IdentifierContext ctx) {
     if (ctx.children.size() > 2)
-      return new IDNode(ctx.children.get(0).getText(), ctx.children.get(2).getText(), null);
+      return new IDNode(ctx.children.get(0).getText(), ctx.children.get(2).getText(), "");
     else
-      return new IDNode(null, ctx.ID(0).getText(), null);
+      return new IDNode(null, ctx.ID(0).getText(), "");
   }
 
   @Override
@@ -131,7 +131,7 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
           break;
 
         default:
-          id.setType("");
+          id.setType(ctx.type().getText());
           break;
       }
     }
@@ -220,7 +220,7 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
           case "bool":
             types.add("bool");
             break;
-  
+
           default:
             types.add("");
             break;
@@ -287,7 +287,7 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
           case "bool":
             types.add("bool");
             break;
-  
+
           default:
             types.add("");
             break;
@@ -296,7 +296,7 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
     }
 
     String retType = ctx.type() != null ? ctx.type().getText() : "";
-    
+
     switch (retType) {
       case "string":
         retType = "str";
