@@ -29,6 +29,7 @@ __MPyObj* func_A___init__(__MPyObj *args, __MPyObj *kwargs) {
 	__MPyObj *x = __mpy_obj_init_object();
 	__mpy_obj_ref_inc(x);
 	__mpy_obj_ref_dec(__mpy_call(__mpy_super, __mpy_tuple_assign(0, self, __mpy_obj_init_tuple(1)), NULL));
+	__mpy_type_check("int",__mpy_obj_init_int(42));
 	__mpy_obj_set_attr(self, "x", __mpy_obj_init_int(42));
 	__mpy_obj_ref_dec(self);
 	
@@ -50,6 +51,7 @@ __MPyObj* func_A_foo(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__MPyObj *x = __mpy_obj_init_object();
 	__mpy_obj_ref_inc(x);
+	__mpy_type_check("",__mpy_obj_init_str_static("fourtytwo"));
 	__mpy_obj_set_attr(self, "x", __mpy_obj_init_str_static("fourtytwo"));
 	__mpy_obj_ref_dec(self);
 	
