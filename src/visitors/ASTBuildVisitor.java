@@ -205,7 +205,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
           if (instr instanceof AssignNode) {
             AssignNode assignment = (AssignNode) instr;
             IDNode idn = (IDNode) assignment.getId();
-            vars.add(new VariableDeclaration(idn.getId()));
+            vars.add(new VariableDeclaration(idn.getId(), idn.getType()));
           }
         }
 
@@ -301,7 +301,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
       if (instr instanceof AssignNode) {
         AssignNode assignment = (AssignNode) instr;
         IDNode idn = (IDNode) assignment.getId();
-        vars.add(new VariableDeclaration(idn.getId()));
+        vars.add(new VariableDeclaration(idn.getId(), idn.getType()));
       }
     }
 
@@ -356,7 +356,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
         IDNode idn = (IDNode) assignment.getId();
         if (!vars.contains(idn.getId())) {
           vars.add(idn.getId());
-          VariableDeclaration var = new VariableDeclaration(idn.getId());
+          VariableDeclaration var = new VariableDeclaration(idn.getId(), idn.getType());
           builder.addVariable(var);
         }
       }

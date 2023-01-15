@@ -135,7 +135,6 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
           break;
       }
     }
-    id.setType(ctx.type() != null ? ctx.type().getText() : "");
     return new AssignNode(id, visit(ctx.getChild(ctx.getChildCount() - 2)));
   }
 

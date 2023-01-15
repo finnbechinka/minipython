@@ -5,6 +5,7 @@
   ],
   "files.associations": {
     "object.h": "c",
-    "errors.h": "c"
+    "errors.h": "c",
+    "type.h": "c"
   }
 }
