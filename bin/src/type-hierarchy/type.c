@@ -96,7 +96,7 @@ int __mpy_type_check(const char *ref_type, __MPyObj *ex)
     {
         ex_type = "num";
     }
-    fprintf(stderr, "ref_type '%s' ex_type '%s'\n", ref_type, ex_type);
+    fprintf(stderr, "ref_type '%s' ex_type '%s' '%s'\n", ref_type, ex_type, ((__MPyTypeContent *)ex->content)->name);
     if (!strcmp(ref_type, "") || !strcmp(ref_type, ex_type))
     {
         return 1;
