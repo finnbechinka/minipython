@@ -1,5 +1,4 @@
 #include <stddef.h>
-#include <stdio.h>
 
 #include "assert.h"
 #include "mpy_aliases.h"
@@ -17,8 +16,9 @@ __MPyObj *a;
 __MPyObj *b;
 __MPyObj *c;
 
-int main()
-{
+
+
+int main() {
 	__mpy_builtins_setup();
 	a = __mpy_obj_init_object_w_type("num");
 	__mpy_obj_ref_inc(a);
@@ -26,18 +26,18 @@ int main()
 	__mpy_obj_ref_inc(b);
 	c = __mpy_obj_init_object_w_type("bool");
 	__mpy_obj_ref_inc(c);
-
-	fprintf(stderr, " '%s'\n", __mpy_type_name(a->expl_type));
-
+	
+	
+	
+	__mpy_obj_ref_inc(a);
 	__mpy_obj_ref_dec(a);
 	a = __mpy_type_check(a, __mpy_obj_init_int(5));
-	__mpy_obj_ref_inc(a);
+	__mpy_obj_ref_inc(b);
 	__mpy_obj_ref_dec(b);
 	b = __mpy_type_check(b, __mpy_obj_init_int(2));
-	__mpy_obj_ref_inc(b);
+	__mpy_obj_ref_inc(c);
 	__mpy_obj_ref_dec(c);
 	c = __mpy_type_check(c, __mpy_obj_init_boolean(true));
-	__mpy_obj_ref_inc(c);
 	__mpy_obj_ref_inc(a);
 	__mpy_obj_ref_dec(b);
 	b = __mpy_type_check(b, a);
@@ -46,11 +46,13 @@ int main()
 	__mpy_obj_ref_dec(b);
 	b = __mpy_type_check(b, c);
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, b, __mpy_obj_init_tuple(1)), NULL));
-
+	
 	__mpy_obj_ref_dec(a);
 	__mpy_obj_ref_dec(b);
 	__mpy_obj_ref_dec(c);
-
+	
+	
+	
 	__mpy_builtins_cleanup();
 	return 0;
 }
