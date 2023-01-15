@@ -89,7 +89,7 @@ __MPyObj *__mpy_obj_init_object_w_type(const char *type)
     __MPyObj *obj = __mpy_obj_new();
     if (!strcmp(type, "num"))
     {
-        fprintf(stderr, "hahahahhaha\n", type);
+        fprintf(stderr, "hahahahhaha\n");
 
         obj->expl_type = __MPyType_Num;
     }
