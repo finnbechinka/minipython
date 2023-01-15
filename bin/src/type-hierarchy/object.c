@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <stdio.h>
 
 #include "mpy_obj.h"
 #include "builtins-setup.h"
@@ -88,34 +87,24 @@ __MPyObj *__mpy_obj_init_object_w_type(const char *type)
     __MPyObj *obj = __mpy_obj_new();
     if (!strcmp(type, "num"))
     {
-        fprintf(stderr, "5");
-
         obj->expl_type = __MPyType_Num;
     }
     else if (!strcmp(type, "str"))
     {
-        fprintf(stderr, "4");
-
         obj->expl_type = __MPyType_Str;
     }
     else if (!strcmp(type, "bool"))
     {
-        fprintf(stderr, "3");
-
         obj->expl_type = __MPyType_Boolean;
     }
     else if (!strcmp(type, ""))
     {
-        fprintf(stderr, "2");
         obj->expl_type = __MPyType_Object;
     }
     else
     {
-        fprintf(stderr, "1");
         obj->expl_type = __mpy_obj_init_type(type, __MPyType_Object)->type;
     }
-    fprintf(stderr, "1");
-
     obj->type = __MPyType_Object;
 
     obj->content = __mpy_hash_map_init(&__mpy_hash_map_str_key_cmp);
@@ -130,6 +119,7 @@ __MPyObj *__mpy_obj_init_object()
 {
     __MPyObj *obj = __mpy_obj_new();
     obj->type = __MPyType_Object;
+    obj->expl_type = __MPyType_Object;
     obj->content = __mpy_hash_map_init(&__mpy_hash_map_str_key_cmp);
     obj->cleanupAction = cleanup_object;
     obj->attrSetter = __mpy_object_set_attr_impl;
