@@ -21,8 +21,9 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
     return null;
   }
 
-  @Override public ASTNode visitType(MiniPythonParser.TypeContext ctx) { 
-    return visitChildren(ctx); 
+  @Override
+  public ASTNode visitType(MiniPythonParser.TypeContext ctx) {
+    return visitChildren(ctx);
   }
 
   @Override
@@ -115,10 +116,27 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
 
   @Override
   public ASTNode visitAssign(MiniPythonParser.AssignContext ctx) {
-    
+
     IDNode id = (IDNode) visit(ctx.identifier());
+    if (ctx.type() != null) {
+      switch (ctx.type().getText()) {
+        case "string":
+          id.setType("str");
+          break;
+        case "int":
+          id.setType("num");
+          break;
+        case "bool":
+          id.setType("bool");
+          break;
+
+        default:
+          id.setType("");
+          break;
+      }
+    }
     id.setType(ctx.type() != null ? ctx.type().getText() : "");
-    return new AssignNode(id, visit(ctx.getChild(ctx.getChildCount()-2)));
+    return new AssignNode(id, visit(ctx.getChild(ctx.getChildCount() - 2)));
   }
 
   @Override
@@ -225,7 +243,7 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
         params.add(ctx.parameters().ID().get(i).toString());
       }
     }
-    
+
     String type = ctx.type() != null ? ctx.type().getText() : "";
     return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()), type,
         ctx.return_() != null ? visit(ctx.return_()) : null);
