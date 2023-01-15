@@ -108,7 +108,7 @@ int main() {
 	__mpy_builtins_setup();
 	obj = __mpy_obj_init_object_w_type("");
 	__mpy_obj_ref_inc(obj);
-	obj2 = __mpy_obj_init_object_w_type("");
+	obj2 = __mpy_obj_init_object_w_type("A");
 	__mpy_obj_ref_inc(obj2);
 	
 	
