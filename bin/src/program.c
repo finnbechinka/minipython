@@ -98,7 +98,7 @@ __MPyObj* func_B_foo(__MPyObj *args, __MPyObj *kwargs) {
 
 int main() {
 	__mpy_builtins_setup();
-	obj = __mpy_obj_init_object_w_type("");
+	obj = __mpy_obj_init_object_w_type("null");
 	__mpy_obj_ref_inc(obj);
 	
 	
