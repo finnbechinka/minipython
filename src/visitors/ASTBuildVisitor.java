@@ -21,6 +21,7 @@ import CBuilder.conditions.*;
 import CBuilder.objects.*;
 import CBuilder.objects.functions.Argument;
 import CBuilder.objects.functions.Function;
+import CBuilder.objects.functions.ReturnStatement;
 import CBuilder.keywords.*;
 import CBuilder.keywords.bool.AndKeyword;
 import CBuilder.keywords.bool.NotKeyword;
@@ -285,6 +286,9 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   @Override
   public Object visit(FuncDefNode node) {
     List<Statement> body = (List<Statement>) visit(node.getBody());
+    if (node.getReturnExpr() != null) {
+      body.add(new ReturnStatement((Expression) visit(node.getReturnExpr())));
+    }
     List<Argument> params = new ArrayList<Argument>();
     List<VariableDeclaration> vars = new ArrayList<VariableDeclaration>();
 
@@ -307,9 +311,9 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   @Override
   public Object visit(IDNode node) {
     if (node.getInstanceId() != null) {
-      return new AttributeReference(node.getId(), new Reference(node.getInstanceId()));
+      return new AttributeReference(node.getId(), new Reference(node.getInstanceId()), node.getType());
     }
-    return new Reference(node.getId());
+    return new Reference(node.getId(), node.getType());
   }
 
   @Override
