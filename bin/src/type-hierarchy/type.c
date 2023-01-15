@@ -91,7 +91,7 @@ __MPyObj *__mpy_type_check(__MPyObj *ref, __MPyObj *ex)
     fprintf(stderr, " '%s'  '%s'\n", ex_type, ref_type);
     if (ref->expl_type == __MPyType_Object || ref->expl_type == ex->type)
     {
-        ex->expl_type = ref->expl_type;
+        // ex->expl_type = ref->expl_type;
         return ex;
     }
     fprintf(stderr, "TypeError: can't assign value of type '%s' to variable of type '%s'\n", ex_type, ref_type);
