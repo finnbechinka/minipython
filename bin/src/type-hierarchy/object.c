@@ -85,8 +85,8 @@ __MPyObj *__mpy_object_get_attr_impl(__MPyObj *self, const char *name)
 
 __MPyObj *__mpy_obj_init_object_w_type(const char *type)
 {
-    __MPyObj *obj = __mpy_obj_new();
     printf("%s", type);
+    __MPyObj *obj = __mpy_obj_new();
     if (!strcmp(type, "num"))
     {
         obj->expl_type = __MPyType_Num;
