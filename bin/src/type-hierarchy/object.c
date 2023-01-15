@@ -114,6 +114,8 @@ __MPyObj *__mpy_obj_init_object_w_type(const char *type)
         printf("1");
         obj->expl_type = __mpy_obj_init_type(type, __MPyType_Object)->type;
     }
+    printf("9");
+
     obj->type = __MPyType_Object;
 
     obj->content = __mpy_hash_map_init(&__mpy_hash_map_str_key_cmp);
