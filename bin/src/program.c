@@ -19,9 +19,9 @@ __MPyObj *b;
 
 int main() {
 	__mpy_builtins_setup();
-	a = __mpy_obj_init_object_w_type("");
+	a = __mpy_obj_init_object_w_type("num");
 	__mpy_obj_ref_inc(a);
-	b = __mpy_obj_init_object_w_type("");
+	b = __mpy_obj_init_object_w_type("num");
 	__mpy_obj_ref_inc(b);
 	
 	
