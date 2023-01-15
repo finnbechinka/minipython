@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <stdio.h>
 
 #include "mpy_obj.h"
 #include "builtins-setup.h"
