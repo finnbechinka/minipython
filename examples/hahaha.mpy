@@ -17,5 +17,7 @@ print(self.x)
 #end
 obj3 = B()
 obj3.moo()
+obj3.foo()
+obj3.moo()
 obj2 = B()
 obj2.moo()

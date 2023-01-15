@@ -158,6 +158,8 @@ int main() {
 	obj3 = __mpy_call(B, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(obj3);
 	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj3, "moo"), __mpy_obj_init_tuple(0), NULL));
+	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj3, "foo"), __mpy_obj_init_tuple(0), NULL));
+	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj3, "moo"), __mpy_obj_init_tuple(0), NULL));
 	__mpy_obj_ref_dec(obj2);
 	__mpy_type_check(obj2,__mpy_call(B, __mpy_obj_init_tuple(0), NULL));
 	obj2 = __mpy_call(B, __mpy_obj_init_tuple(0), NULL);
