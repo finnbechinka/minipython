@@ -71,8 +71,6 @@ void __mpy_obj_ref_dec(__MPyObj *obj)
 
     if (obj->refCount == 0)
     {
-        fprintf(stderr, " wtf\n");
-
         if (obj->parent != NULL)
         {
             // assumption: no recursive parent relationships possible

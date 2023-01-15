@@ -1,5 +1,4 @@
 #include <stddef.h>
-#include <stdio.h>
 
 #include "assert.h"
 #include "mpy_aliases.h"
@@ -115,8 +114,6 @@ int main()
 	obj = __mpy_obj_init_object_w_type("");
 	__mpy_obj_ref_inc(obj);
 	obj2 = __mpy_obj_init_object_w_type("A");
-	fprintf(stderr, " %s\n", __mpy_type_name(obj2->expl_type));
-
 	__mpy_obj_ref_inc(obj2);
 	obj3 = __mpy_obj_init_object_w_type("");
 	__mpy_obj_ref_inc(obj3);
