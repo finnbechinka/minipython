@@ -153,6 +153,8 @@ int main()
 		__mpy_obj_ref_dec(moo);
 	}
 
+	printf("hi");
+
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("1"), __mpy_obj_init_tuple(1)), NULL));
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("1"), __mpy_obj_init_tuple(1)), NULL));
 	printf("hi");
