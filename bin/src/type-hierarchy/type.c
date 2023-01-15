@@ -86,7 +86,6 @@ const char *__mpy_type_name(__MPyObj *self)
 
 __MPyObj *__mpy_type_check(__MPyObj *ref, __MPyObj *ex)
 {
-    fprintf(stderr, " '%s'  '%s'\n", __mpy_type_name(ex->type), __mpy_type_name(ref->expl_type));
     if (ref->expl_type == __MPyType_None || ref->expl_type == ex->type)
     {
         ex->expl_type = ref->expl_type;
