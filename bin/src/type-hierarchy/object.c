@@ -99,7 +99,7 @@ __MPyObj *__mpy_obj_init_object_w_type(const char *type)
     }
     else if (!strcmp(type, ""))
     {
-        obj->expl_type = __MPyType_Object;
+        obj->expl_type = __MPyType_None;
     }
     else
     {
@@ -119,7 +119,7 @@ __MPyObj *__mpy_obj_init_object()
 {
     __MPyObj *obj = __mpy_obj_new();
     obj->type = __MPyType_Object;
-    obj->expl_type = __MPyType_Object;
+    obj->expl_type = __MPyType_None;
     obj->content = __mpy_hash_map_init(&__mpy_hash_map_str_key_cmp);
     obj->cleanupAction = cleanup_object;
     obj->attrSetter = __mpy_object_set_attr_impl;
