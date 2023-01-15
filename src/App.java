@@ -45,12 +45,12 @@ public class App {
         ASTBuildVisitor build = new ASTBuildVisitor(Path.of("bin"));
 
         ASTNode ast = tree.accept(astVisitor);
-        ast.accept(symbol);
+        // ast.accept(symbol);
         // ast.accept(eval);
         ast.accept(build);
 
-        System.out.println("============================");
-        System.out.println(ast.accept(str));
+        // System.out.println("============================");
+        // System.out.println(ast.accept(str));
 
         TreeViewer viewer = new TreeViewer(Collections.emptyList(), ast);
         // viewer.open();

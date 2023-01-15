@@ -301,7 +301,9 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
       if (instr instanceof AssignNode) {
         AssignNode assignment = (AssignNode) instr;
         IDNode idn = (IDNode) assignment.getId();
-        vars.add(new VariableDeclaration(idn.getId(), idn.getType()));
+        if (idn.getInstanceId() == null) {
+          vars.add(new VariableDeclaration(idn.getId(), idn.getType()));
+        }
       }
     }
 
