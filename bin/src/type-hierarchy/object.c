@@ -100,7 +100,6 @@ __MPyObj *__mpy_obj_init_object_w_type(const char *type)
     }
     else if (!strcmp(type, ""))
     {
-        fprintf(stderr, "'%s'\n", type);
         obj->type = __MPyType_Object;
     }
     else
