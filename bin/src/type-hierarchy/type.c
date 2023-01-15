@@ -84,7 +84,7 @@ const char *__mpy_type_name(__MPyObj *self)
     return ((__MPyTypeContent *)self->content)->name;
 }
 
-int __mpy_type_check(__MPyObj *ref, __MPyObj *ex)
+__MPyObj *__mpy_type_check(__MPyObj *ref, __MPyObj *ex)
 {
     const char *ref_type = __mpy_type_name(ref->expl_type);
     const char *ex_type = __mpy_type_name(ex->type);
@@ -92,11 +92,11 @@ int __mpy_type_check(__MPyObj *ref, __MPyObj *ex)
     if (ref->expl_type == __MPyType_Object || ref->expl_type == ex->type)
     {
         ex->expl_type = ref->expl_type;
-        return 1;
+        return ex;
     }
     fprintf(stderr, "TypeError: can't assign value of type '%s' to variable of type '%s'\n", ex_type, ref_type);
     __mpy_fatal_error(__MPY_ERROR_USER);
-    return 0;
+    return NULL;
 }
 
 __MPyObj *__mpy_type_set_attr_impl(__MPyObj *self, const char *name, __MPyObj *value)

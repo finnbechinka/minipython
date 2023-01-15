@@ -30,26 +30,21 @@ int main() {
 	
 	
 	__mpy_obj_ref_dec(a);
-	__mpy_type_check(a,__mpy_obj_init_int(5));
-	a = __mpy_obj_init_int(5);
+	a = __mpy_type_check(a,__mpy_obj_init_int(5));
 	__mpy_obj_ref_inc(a);
 	__mpy_obj_ref_dec(b);
-	__mpy_type_check(b,__mpy_obj_init_int(2));
-	b = __mpy_obj_init_int(2);
+	b = __mpy_type_check(b,__mpy_obj_init_int(2));
 	__mpy_obj_ref_inc(b);
 	__mpy_obj_ref_dec(c);
-	__mpy_type_check(c,__mpy_obj_init_boolean(true));
-	c = __mpy_obj_init_boolean(true);
+	c = __mpy_type_check(c,__mpy_obj_init_boolean(true));
 	__mpy_obj_ref_inc(c);
 	__mpy_obj_ref_inc(a);
 	__mpy_obj_ref_dec(b);
-	__mpy_type_check(b,a);
-	b = a;
+	b = __mpy_type_check(b,a);
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, b, __mpy_obj_init_tuple(1)), NULL));
 	__mpy_obj_ref_inc(c);
 	__mpy_obj_ref_dec(b);
-	__mpy_type_check(b,c);
-	b = c;
+	b = __mpy_type_check(b,c);
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, b, __mpy_obj_init_tuple(1)), NULL));
 	
 	__mpy_obj_ref_dec(a);
