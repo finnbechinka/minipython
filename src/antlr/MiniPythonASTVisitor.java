@@ -205,15 +205,49 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
   @Override
   public ASTNode visitFuncDef(MiniPythonParser.FuncDefContext ctx) {
     List<String> params = new ArrayList<>();
+    List<String> types = new ArrayList<>();
 
     if (ctx.parameters() != null) {
       for (int i = 0; i < ctx.parameters().ID().size(); i++) {
         params.add(ctx.parameters().ID().get(i).toString());
+
+        switch (ctx.parameters().type(i).getText()) {
+          case "string":
+            types.add("str");
+            break;
+          case "int":
+            types.add("num");
+            break;
+          case "bool":
+            types.add("bool");
+            break;
+  
+          default:
+            types.add("");
+            break;
+        }
       }
     }
 
-    String type = ctx.type() != null ? ctx.type().getText() : "";
-    return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()), type,
+    String retType = ctx.type() != null ? ctx.type().getText() : "";
+
+    switch (retType) {
+      case "string":
+        retType = "str";
+        break;
+      case "int":
+        retType = "num";
+        break;
+      case "bool":
+        retType = "bool";
+        break;
+
+      default:
+        retType = "";
+        break;
+    }
+
+    return new FuncDefNode(ctx.ID().getText(), params, types, visit(ctx.block()), retType,
         ctx.return_() != null ? visit(ctx.return_()) : null);
   }
 
@@ -238,14 +272,49 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
     List<String> params = new ArrayList<>();
     params.add("self");
 
+    List<String> types = new ArrayList<>();
+    types.add("");
+
     if (ctx.parameters() != null) {
       for (int i = 0; i < ctx.parameters().ID().size(); i++) {
         params.add(ctx.parameters().ID().get(i).toString());
+        switch (ctx.parameters().type(i).getText()) {
+          case "string":
+            types.add("str");
+            break;
+          case "int":
+            types.add("num");
+            break;
+          case "bool":
+            types.add("bool");
+            break;
+  
+          default:
+            types.add("");
+            break;
+        }
       }
     }
 
-    String type = ctx.type() != null ? ctx.type().getText() : "";
-    return new FuncDefNode(ctx.ID().getText(), params, visit(ctx.block()), type,
+    String retType = ctx.type() != null ? ctx.type().getText() : "";
+    
+    switch (retType) {
+      case "string":
+        retType = "str";
+        break;
+      case "int":
+        retType = "num";
+        break;
+      case "bool":
+        retType = "bool";
+        break;
+
+      default:
+        retType = "";
+        break;
+    }
+
+    return new FuncDefNode(ctx.ID().getText(), params, types, visit(ctx.block()), retType,
         ctx.return_() != null ? visit(ctx.return_()) : null);
   }
 
