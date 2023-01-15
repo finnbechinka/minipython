@@ -1,7 +1,7 @@
 class A():
 def __init__(self):
 super()
-self.x:int = 42
+self.x = 42
 #end
 def foo(self):
 self.x = "fourtytwo"
