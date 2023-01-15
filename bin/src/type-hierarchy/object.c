@@ -104,7 +104,7 @@ __MPyObj *__mpy_obj_init_object_w_type(const char *type)
     }
     else
     {
-        printf("%s", __mpy_type_name(__mpy_obj_init_type(type, __MPyType_Object)->type));
+        printf("%s", __mpy_type_name(__mpy_obj_init_type(type, __MPyType_Object)));
         obj->expl_type = __mpy_obj_init_type(type, __MPyType_Object)->type;
     }
     obj->type = __MPyType_Object;
