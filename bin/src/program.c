@@ -26,10 +26,10 @@ __MPyObj* func_A___init__(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__MPyObj *retValue = NULL;
 	
-	__MPyObj *x = __mpy_obj_init_object();
+	__MPyObj *x = __mpy_obj_init_object("int");
 	__mpy_obj_ref_inc(x);
 	__mpy_obj_ref_dec(__mpy_call(__mpy_super, __mpy_tuple_assign(0, self, __mpy_obj_init_tuple(1)), NULL));
-	__mpy_type_check("int",__mpy_obj_init_int(42));
+	__mpy_type_check(CBuilder.objects.AttributeReference@402f32ff,__mpy_obj_init_int(42));
 	__mpy_obj_set_attr(self, "x", __mpy_obj_init_int(42));
 	__mpy_obj_ref_dec(self);
 	
@@ -49,9 +49,9 @@ __MPyObj* func_A_foo(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__MPyObj *retValue = NULL;
 	
-	__MPyObj *x = __mpy_obj_init_object();
+	__MPyObj *x = __mpy_obj_init_object("");
 	__mpy_obj_ref_inc(x);
-	__mpy_type_check("",__mpy_obj_init_str_static("fourtytwo"));
+	__mpy_type_check(CBuilder.objects.AttributeReference@5419f379,__mpy_obj_init_str_static("fourtytwo"));
 	__mpy_obj_set_attr(self, "x", __mpy_obj_init_str_static("fourtytwo"));
 	__mpy_obj_ref_dec(self);
 	
@@ -106,9 +106,9 @@ __MPyObj* func_B_moo(__MPyObj *args, __MPyObj *kwargs) {
 
 int main() {
 	__mpy_builtins_setup();
-	obj = __mpy_obj_init_object();
+	obj = __mpy_obj_init_object("");
 	__mpy_obj_ref_inc(obj);
-	obj2 = __mpy_obj_init_object();
+	obj2 = __mpy_obj_init_object("A");
 	__mpy_obj_ref_inc(obj2);
 	
 	
@@ -146,16 +146,16 @@ int main() {
 	}
 	
 	__mpy_obj_ref_dec(obj);
-	__mpy_type_check("",__mpy_call(A, __mpy_obj_init_tuple(0), NULL));
+	__mpy_type_check(obj,__mpy_call(A, __mpy_obj_init_tuple(0), NULL));
 	obj = __mpy_call(A, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(obj);
 	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj, "foo"), __mpy_obj_init_tuple(0), NULL));
 	__mpy_obj_ref_dec(obj2);
-	__mpy_type_check("A",__mpy_call(A, __mpy_obj_init_tuple(0), NULL));
+	__mpy_type_check(obj2,__mpy_call(A, __mpy_obj_init_tuple(0), NULL));
 	obj2 = __mpy_call(A, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(obj2);
 	__mpy_obj_ref_dec(obj2);
-	__mpy_type_check("",__mpy_call(B, __mpy_obj_init_tuple(0), NULL));
+	__mpy_type_check(obj2,__mpy_call(B, __mpy_obj_init_tuple(0), NULL));
 	obj2 = __mpy_call(B, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(obj2);
 	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj2, "moo"), __mpy_obj_init_tuple(0), NULL));

@@ -84,24 +84,23 @@ const char *__mpy_type_name(__MPyObj *self)
     return ((__MPyTypeContent *)self->content)->name;
 }
 
-int __mpy_type_check(const char *ref_type, __MPyObj *ex)
+int __mpy_type_check(__MPyObj *ref, __MPyObj *ex)
 {
-
+    const char *ref_type = __mpy_type_name(ref->type);
+    const char *ex_type = __mpy_type_name(ex->type);
     if (!strcmp(ref_type, "int"))
     {
         ref_type = "num";
     }
-    const char *ex_type = __mpy_type_name(ex->type);
     if (!strcmp(ex_type, "int"))
     {
         ex_type = "num";
     }
-    fprintf(stderr, "ref_type '%s' ex_type '%s' '%s'\n", ref_type, ex_type, ((__MPyTypeContent *)ex->content)->name);
     if (!strcmp(ref_type, "") || !strcmp(ref_type, ex_type))
     {
         return 1;
     }
-    fprintf(stderr, "TypeError: can't assign value of type '%s' to variable of type '%s'\n", ex_type, ref_type);
+    fprintf(stderr, "TypeError: can't assign value of type '%s' to variable of type '%s'\n", ref_type, ex_type);
     __mpy_fatal_error(__MPY_ERROR_USER);
     return 0;
 }
