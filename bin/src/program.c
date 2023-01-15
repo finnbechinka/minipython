@@ -144,16 +144,16 @@ int main() {
 	}
 	
 	__mpy_obj_ref_dec(obj);
-	__mpy_type_check(obj,__mpy_call(A, __mpy_obj_init_tuple(0), NULL));
+	__mpy_type_check(,__mpy_call(A, __mpy_obj_init_tuple(0), NULL));
 	obj = __mpy_call(A, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(obj);
 	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj, "foo"), __mpy_obj_init_tuple(0), NULL));
 	__mpy_obj_ref_dec(obj2);
-	__mpy_type_check(obj2,__mpy_call(A, __mpy_obj_init_tuple(0), NULL));
+	__mpy_type_check(A,__mpy_call(A, __mpy_obj_init_tuple(0), NULL));
 	obj2 = __mpy_call(A, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(obj2);
 	__mpy_obj_ref_dec(obj2);
-	__mpy_type_check(obj2,__mpy_call(B, __mpy_obj_init_tuple(0), NULL));
+	__mpy_type_check(,__mpy_call(B, __mpy_obj_init_tuple(0), NULL));
 	obj2 = __mpy_call(B, __mpy_obj_init_tuple(0), NULL);
 	__mpy_obj_ref_inc(obj2);
 	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj2, "moo"), __mpy_obj_init_tuple(0), NULL));

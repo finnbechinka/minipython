@@ -84,9 +84,8 @@ const char *__mpy_type_name(__MPyObj *self)
     return ((__MPyTypeContent *)self->content)->name;
 }
 
-int __mpy_type_check(__MPyObj *ref, __MPyObj *ex)
+int __mpy_type_check(const char *ref_type, __MPyObj *ex)
 {
-    const char *ref_type = __mpy_type_name(ref->type);
     const char *ex_type = __mpy_type_name(ex->type);
 
     if (!strcmp(ref_type, "") || !strcmp(ref_type, ex_type))
