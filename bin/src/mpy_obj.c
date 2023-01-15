@@ -34,7 +34,7 @@ __MPyObj *__mpy_obj_new()
     obj->temporary = false;
     obj->cleanupAction = NULL;
     obj->parent = NULL;
-    obj->expl_type = obj->type;
+    obj->expl_type = &obj->type;
 
     return obj;
 }
