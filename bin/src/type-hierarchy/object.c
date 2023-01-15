@@ -88,33 +88,33 @@ __MPyObj *__mpy_obj_init_object_w_type(const char *type)
     __MPyObj *obj = __mpy_obj_new();
     if (!strcmp(type, "num"))
     {
-        printf("5");
+        fprintf(stderr, "5");
 
         obj->expl_type = __MPyType_Num;
     }
     else if (!strcmp(type, "str"))
     {
-        printf("4");
+        fprintf(stderr, "4");
 
         obj->expl_type = __MPyType_Str;
     }
     else if (!strcmp(type, "bool"))
     {
-        printf("3");
+        fprintf(stderr, "3");
 
         obj->expl_type = __MPyType_Boolean;
     }
     else if (!strcmp(type, ""))
     {
-        printf("2");
+        fprintf(stderr, "2");
         obj->expl_type = __MPyType_Object;
     }
     else
     {
-        printf("1");
+        fprintf(stderr, "1");
         obj->expl_type = __mpy_obj_init_type(type, __MPyType_Object)->type;
     }
-    printf("9");
+    fprintf(stderr, "1");
 
     obj->type = __MPyType_Object;
 
