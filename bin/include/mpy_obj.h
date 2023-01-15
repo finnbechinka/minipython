@@ -53,7 +53,6 @@ struct __MPyObj
      */
     __MPyObj *type;
 
-    __MPyObj *expl_type;
     /**
      * allow an object to temporarily keep its content longer than refCount implies
      * by setting this to true instead of decrementing refCount
@@ -79,6 +78,8 @@ struct __MPyObj
      * Note that this is *not* the type of the parent class, but an instance of the parent class.
      */
     __MPyObj *parent;
+
+    __MPyObj *expl_type;
 };
 
 /**
