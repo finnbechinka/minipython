@@ -13,6 +13,7 @@
 #include "type-hierarchy/type.h"
 
 __MPyObj *ret;
+__MPyObj *xd;
 
 __MPyObj *foo;
 __MPyObj* func_foo(__MPyObj *args, __MPyObj *kwargs) {
@@ -76,6 +77,8 @@ int main() {
 	__mpy_builtins_setup();
 	ret = __mpy_obj_init_object_w_type("num");
 	__mpy_obj_ref_inc(ret);
+	xd = __mpy_obj_init_object_w_type("num");
+	__mpy_obj_ref_inc(xd);
 	
 	foo = __mpy_obj_init_func(&func_foo);
 	__mpy_obj_ref_inc(foo);
@@ -86,10 +89,13 @@ int main() {
 	__mpy_obj_ref_inc(ret);
 	__mpy_obj_ref_dec(ret);
 	ret = __mpy_type_check(ret, __mpy_call(foo, __mpy_tuple_assign(0, __mpy_obj_init_int(5), __mpy_tuple_assign(1, __mpy_obj_init_str_static("bar"), __mpy_obj_init_tuple(2))), NULL));
-	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, ret, __mpy_obj_init_tuple(1)), NULL));
-	__mpy_obj_ref_dec(__mpy_call(moo, __mpy_tuple_assign(0, __mpy_obj_init_int(42), __mpy_obj_init_tuple(1)), NULL));
+	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("ret"), __mpy_tuple_assign(1, ret, __mpy_obj_init_tuple(2))), NULL));
+	__mpy_obj_ref_inc(xd);
+	__mpy_obj_ref_dec(xd);
+	xd = __mpy_type_check(xd, __mpy_call(moo, __mpy_tuple_assign(0, __mpy_obj_init_boolean(true), __mpy_obj_init_tuple(1)), NULL));
 	
 	__mpy_obj_ref_dec(ret);
+	__mpy_obj_ref_dec(xd);
 	
 	__mpy_obj_ref_dec(foo);
 	__mpy_obj_ref_dec(moo);
