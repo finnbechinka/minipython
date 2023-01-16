@@ -12,8 +12,8 @@ CLAZZ : 'class';
 DEF	  : 'def';
 RET	  : 'return';
 SELF  : 'self';
-TYPE_INT  : 'int';
-TYPE_STR  : 'string';
+TYPE_NUM  : 'num';
+TYPE_STR  : 'str';
 TYPE_BOOL : 'bool';
 
 /** DATATYPES */
@@ -29,7 +29,7 @@ END   : '#end'NL;
 
 lit   : INT | STRING | BOOL;
 
-type : TYPE_INT | TYPE_STR | TYPE_BOOL | ID;
+type : TYPE_NUM | TYPE_STR | TYPE_BOOL | ID;
 
 identifier : (SELF | ID ) '.' ID
 		   | ID
