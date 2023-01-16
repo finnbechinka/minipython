@@ -20,7 +20,7 @@ public class MiniPythonParser extends Parser {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, WS=21, NL=22, IF=23, ELIF=24, ELSE=25, WHILE=26, 
-		CLAZZ=27, DEF=28, RET=29, SELF=30, TYPE_INT=31, TYPE_STR=32, TYPE_BOOL=33, 
+		CLAZZ=27, DEF=28, RET=29, SELF=30, TYPE_NUM=31, TYPE_STR=32, TYPE_BOOL=33, 
 		INT=34, BOOL=35, STRING=36, ID=37, END=38;
 	public static final int
 		RULE_lit = 0, RULE_type = 1, RULE_identifier = 2, RULE_expr = 3, RULE_parameters = 4, 
@@ -41,7 +41,7 @@ public class MiniPythonParser extends Parser {
 			null, "'.'", "'*'", "'/'", "'+'", "'-'", "'=='", "'!='", "'>='", "'>'", 
 			"'<='", "'<'", "'not'", "'and'", "'or'", "':'", "','", "'='", "'('", 
 			"')'", "'):'", null, null, "'if'", "'elif'", "'else'", "'while'", "'class'", 
-			"'def'", "'return'", "'self'", "'int'", "'string'", "'bool'"
+			"'def'", "'return'", "'self'", "'num'", "'str'", "'bool'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -49,7 +49,7 @@ public class MiniPythonParser extends Parser {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, "WS", "NL", "IF", 
-			"ELIF", "ELSE", "WHILE", "CLAZZ", "DEF", "RET", "SELF", "TYPE_INT", "TYPE_STR", 
+			"ELIF", "ELSE", "WHILE", "CLAZZ", "DEF", "RET", "SELF", "TYPE_NUM", "TYPE_STR", 
 			"TYPE_BOOL", "INT", "BOOL", "STRING", "ID", "END"
 		};
 	}
@@ -152,7 +152,7 @@ public class MiniPythonParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class TypeContext extends ParserRuleContext {
-		public TerminalNode TYPE_INT() { return getToken(MiniPythonParser.TYPE_INT, 0); }
+		public TerminalNode TYPE_NUM() { return getToken(MiniPythonParser.TYPE_NUM, 0); }
 		public TerminalNode TYPE_STR() { return getToken(MiniPythonParser.TYPE_STR, 0); }
 		public TerminalNode TYPE_BOOL() { return getToken(MiniPythonParser.TYPE_BOOL, 0); }
 		public TerminalNode ID() { return getToken(MiniPythonParser.ID, 0); }

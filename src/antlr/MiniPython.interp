@@ -30,8 +30,8 @@ null
 'def'
 'return'
 'self'
-'int'
-'string'
+'num'
+'str'
 'bool'
 null
 null
@@ -71,7 +71,7 @@ CLAZZ
 DEF
 RET
 SELF
-TYPE_INT
+TYPE_NUM
 TYPE_STR
 TYPE_BOOL
 INT

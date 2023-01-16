@@ -118,23 +118,8 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
   public ASTNode visitAssign(MiniPythonParser.AssignContext ctx) {
 
     IDNode id = (IDNode) visit(ctx.identifier());
-    if (ctx.type() != null) {
-      switch (ctx.type().getText()) {
-        case "string":
-          id.setType("str");
-          break;
-        case "int":
-          id.setType("num");
-          break;
-        case "bool":
-          id.setType("bool");
-          break;
-
-        default:
-          id.setType(ctx.type().getText());
-          break;
-      }
-    }
+    id.setType(ctx.type() != null ? ctx.type().getText() : "");
+    
     return new AssignNode(id, visit(ctx.getChild(ctx.getChildCount() - 2)));
   }
 
@@ -209,46 +194,11 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
     if (ctx.parameters() != null) {
       for (int i = 0; i < ctx.parameters().ID().size(); i++) {
         params.add(ctx.parameters().ID().get(i).toString());
-        if (ctx.parameters().type(i) != null) {
-          switch (ctx.parameters().type(i).getText()) {
-            case "string":
-              types.add("str");
-              break;
-            case "int":
-              types.add("num");
-              break;
-            case "bool":
-              types.add("bool");
-              break;
-
-            default:
-              types.add("");
-              break;
-          }
-        } else {
-          types.add("");
-        }
+        types.add(ctx.parameters().type(i) != null ? ctx.parameters().type(i).getText() : "");
       }
     }
 
     String retType = ctx.type() != null ? ctx.type().getText() : "";
-
-    switch (retType) {
-      case "string":
-        retType = "str";
-        break;
-      case "int":
-        retType = "num";
-        break;
-      case "bool":
-        retType = "bool";
-        break;
-
-      default:
-        retType = "";
-        break;
-    }
-
     return new FuncDefNode(ctx.ID().getText(), params, types, visit(ctx.block()), retType,
         ctx.return_() != null ? visit(ctx.return_()) : null);
   }
@@ -280,42 +230,11 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
     if (ctx.parameters() != null) {
       for (int i = 0; i < ctx.parameters().ID().size(); i++) {
         params.add(ctx.parameters().ID().get(i).toString());
-        switch (ctx.parameters().type(i).getText()) {
-          case "string":
-            types.add("str");
-            break;
-          case "int":
-            types.add("num");
-            break;
-          case "bool":
-            types.add("bool");
-            break;
-
-          default:
-            types.add("");
-            break;
-        }
+        types.add(ctx.parameters().type(i) != null ? ctx.parameters().type(i).getText() : "");
       }
     }
 
     String retType = ctx.type() != null ? ctx.type().getText() : "";
-
-    switch (retType) {
-      case "string":
-        retType = "str";
-        break;
-      case "int":
-        retType = "num";
-        break;
-      case "bool":
-        retType = "bool";
-        break;
-
-      default:
-        retType = "";
-        break;
-    }
-
     return new FuncDefNode(ctx.ID().getText(), params, types, visit(ctx.block()), retType,
         ctx.return_() != null ? visit(ctx.return_()) : null);
   }
