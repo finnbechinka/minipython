@@ -12,45 +12,50 @@
 #include "type-hierarchy/object.h"
 #include "type-hierarchy/type.h"
 
-__MPyObj *a;
-__MPyObj *b;
-__MPyObj *c;
 
+__MPyObj *foo;
+__MPyObj* func_foo(__MPyObj *args, __MPyObj *kwargs) {
+	assert(args != NULL && kwargs != NULL);
+	
+	__MPyGetArgsState argHelper = __mpy_args_init("foo", args, kwargs, 2);
+	__MPyObj *x = __mpy_obj_init_object_w_type("num");
+	__mpy_obj_ref_inc(x);
+	x = __mpy_type_check(x, __mpy_args_get_positional(&argHelper, 0, "x"));
+	__MPyObj *y = __mpy_obj_init_object_w_type("str");
+	__mpy_obj_ref_inc(y);
+	y = __mpy_type_check(y, __mpy_args_get_positional(&argHelper, 1, "y"));
+	__mpy_args_finish(&argHelper);
+	
+	__MPyObj *retValue = NULL;
+	
+	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, y, __mpy_obj_init_tuple(1)), NULL));
+	retValue = x;
+	goto ret;
+	
+	__mpy_obj_ref_dec(x);
+	__mpy_obj_ref_dec(y);
+	
+	goto ret;
+	ret:
+	if (retValue == NULL) {
+		retValue = __mpy_obj_init_object();
+	}
+	return __mpy_obj_return(retValue);
+}
 
 
 int main() {
 	__mpy_builtins_setup();
-	a = __mpy_obj_init_object_w_type("num");
-	__mpy_obj_ref_inc(a);
-	b = __mpy_obj_init_object_w_type("num");
-	__mpy_obj_ref_inc(b);
-	c = __mpy_obj_init_object_w_type("bool");
-	__mpy_obj_ref_inc(c);
+	
+	foo = __mpy_obj_init_func(&func_foo);
+	__mpy_obj_ref_inc(foo);
 	
 	
+	__mpy_obj_ref_dec(__mpy_call(foo, __mpy_tuple_assign(0, __mpy_obj_init_int(5), __mpy_tuple_assign(1, __mpy_obj_init_str_static("bar"), __mpy_obj_init_tuple(2))), NULL));
+	__mpy_obj_ref_dec(__mpy_call(foo, __mpy_tuple_assign(0, __mpy_obj_init_str_static("bar"), __mpy_tuple_assign(1, __mpy_obj_init_int(5), __mpy_obj_init_tuple(2))), NULL));
 	
-	__mpy_obj_ref_inc(a);
-	__mpy_obj_ref_dec(a);
-	a = __mpy_type_check(a, __mpy_obj_init_int(5));
-	__mpy_obj_ref_inc(b);
-	__mpy_obj_ref_dec(b);
-	b = __mpy_type_check(b, __mpy_obj_init_int(2));
-	__mpy_obj_ref_inc(c);
-	__mpy_obj_ref_dec(c);
-	c = __mpy_type_check(c, __mpy_obj_init_boolean(true));
-	__mpy_obj_ref_inc(a);
-	__mpy_obj_ref_dec(b);
-	b = __mpy_type_check(b, a);
-	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, b, __mpy_obj_init_tuple(1)), NULL));
-	__mpy_obj_ref_inc(c);
-	__mpy_obj_ref_dec(b);
-	b = __mpy_type_check(b, c);
-	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, b, __mpy_obj_init_tuple(1)), NULL));
 	
-	__mpy_obj_ref_dec(a);
-	__mpy_obj_ref_dec(b);
-	__mpy_obj_ref_dec(c);
-	
+	__mpy_obj_ref_dec(foo);
 	
 	
 	__mpy_builtins_cleanup();
