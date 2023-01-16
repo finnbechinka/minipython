@@ -10,6 +10,7 @@ import visitors.ASTVisitor;
 public class IfStmtNode extends ASTNode {
 
   private Scope scope;
+  
   private ASTNode ifCondition;
   private ASTNode ifBody;
   private List<ASTNode> elifs;

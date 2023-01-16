@@ -6,6 +6,7 @@ import visitors.ASTVisitor;
 public class LitNode<T> extends ASTNode {
 
   private Scope scope;
+  
   private T value;
 
   public LitNode(T value) {

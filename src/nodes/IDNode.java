@@ -6,6 +6,7 @@ import visitors.ASTVisitor;
 public class IDNode extends ASTNode {
 
     private Scope scope;
+
     private String instanceId;
     private String id;
     private String type;
@@ -35,9 +36,9 @@ public class IDNode extends ASTNode {
     @Override
     public String toStringTree() {
         if (instanceId == null)
-            return "ID: " + id + " Type: " + type;
+            return String.format("ID: %s Type: %s", id, type);
         else
-            return "ID: " + instanceId + "." + id  + " Type: " + type;
+            return String.format("ID: %s.%s Type: %s", instanceId, id, type);
     }
 
     @Override

@@ -14,7 +14,6 @@ public class BinaryExprNode extends ASTNode {
   private String operator;
 
   public BinaryExprNode(ASTNode leftNode, ASTNode rightNode, String operator) {
-
     this.leftNode = leftNode;
     this.rightNode = rightNode;
     this.operator = operator;
@@ -42,7 +41,7 @@ public class BinaryExprNode extends ASTNode {
 
   @Override
   public String toStringTree() {
-    return "Op: " + operator;
+    return String.format("Op: %s", operator);
   }
 
   @Override

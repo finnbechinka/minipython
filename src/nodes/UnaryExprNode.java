@@ -8,6 +8,7 @@ import visitors.ASTVisitor;
 public class UnaryExprNode extends ASTNode {
 
   private Scope scope;
+
   private ASTNode childNode;
   private String operator;
 
@@ -34,7 +35,7 @@ public class UnaryExprNode extends ASTNode {
 
   @Override
   public String toStringTree() {
-    return "Op: " + operator;
+    return String.format("Op: %s", operator);
   }
 
   @Override

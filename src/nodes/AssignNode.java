@@ -8,6 +8,7 @@ import visitors.ASTVisitor;
 public class AssignNode extends ASTNode {
 
   private Scope scope;
+  
   private ASTNode id;
   private ASTNode valueNode;
 

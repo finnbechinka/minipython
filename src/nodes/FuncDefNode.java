@@ -10,6 +10,7 @@ import visitors.ASTVisitor;
 public class FuncDefNode extends ASTNode {
 
   private Scope scope;
+
   private String id;
   private List<String> parameters;
   private List<String> parameterTypes;
@@ -60,7 +61,15 @@ public class FuncDefNode extends ASTNode {
 
   @Override
   public String toStringTree() {
-    return "FuncDef: " + id + " " + parameters.toString() + "   " + parameterTypes.toString() +" Type: " + returnType;
+    StringBuilder s = new StringBuilder();
+    
+    s.append(String.format("FuncDef: %s:%s  Parameters: [", id, returnType));
+    for(int i=0; i < parameters.size(); i++) {
+      s.append(String.format("%s:%s,", parameters.get(i), parameterTypes.get(i)));
+    }
+    s.setCharAt(s.length()-1, ']');
+
+    return s.toString();
   }
 
   @Override
