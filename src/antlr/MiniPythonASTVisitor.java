@@ -209,21 +209,24 @@ public class MiniPythonASTVisitor extends MiniPythonBaseVisitor<ASTNode> {
     if (ctx.parameters() != null) {
       for (int i = 0; i < ctx.parameters().ID().size(); i++) {
         params.add(ctx.parameters().ID().get(i).toString());
+        if (ctx.parameters().type(i) != null) {
+          switch (ctx.parameters().type(i).getText()) {
+            case "string":
+              types.add("str");
+              break;
+            case "int":
+              types.add("num");
+              break;
+            case "bool":
+              types.add("bool");
+              break;
 
-        switch (ctx.parameters().type(i).getText()) {
-          case "string":
-            types.add("str");
-            break;
-          case "int":
-            types.add("num");
-            break;
-          case "bool":
-            types.add("bool");
-            break;
-
-          default:
-            types.add("");
-            break;
+            default:
+              types.add("");
+              break;
+          }
+        } else {
+          types.add("");
         }
       }
     }

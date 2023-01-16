@@ -1,0 +1,11 @@
+def foo(x:int, y:string):int:
+print(y)
+return x
+#end
+ret:int = foo(5,"bar")
+print("ret",ret)
+def moo(x):bool:
+print(x)
+return x
+#end
+xd:int = moo(True)

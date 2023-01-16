@@ -287,13 +287,13 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
   public Object visit(FuncDefNode node) {
     List<Statement> body = (List<Statement>) visit(node.getBody());
     if (node.getReturnExpr() != null) {
-      body.add(new ReturnStatement((Expression) visit(node.getReturnExpr())));
+      body.add(new ReturnStatement((Expression) visit(node.getReturnExpr()), node.getReturnType()));
     }
     List<Argument> params = new ArrayList<Argument>();
     List<VariableDeclaration> vars = new ArrayList<VariableDeclaration>();
 
     for (int i = 0; i < node.getParameters().size(); i++) {
-      params.add(new Argument(node.getParameters().get(i), i));
+      params.add(new Argument(node.getParameters().get(i), i, node.getParameterTypes().get(i)));
     }
 
     BlockNode block = (BlockNode) node.getBody();
@@ -307,7 +307,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
       }
     }
 
-    return new Function(node.getId(), body, params, vars);
+    return new Function(node.getId(), body, params, vars, node.getReturnType(), node.getParameterTypes());
   }
 
   @Override
