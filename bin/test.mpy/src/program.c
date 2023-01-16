@@ -70,7 +70,7 @@ int main() {
 	c = __mpy_type_check(c, __mpy_obj_init_str_static("KaNsNsT dU maL meHreRe VaRiabLEn BenUtzEN?"));
 	__mpy_obj_ref_inc(a);
 	__mpy_obj_ref_dec(a);
-	a = __mpy_type_check(a, __mpy_call(input, __mpy_tuple_assign(0, __mpy_obj_init_str_static("OOOOOO"), __mpy_obj_init_tuple(1)), NULL));
+	a = __mpy_type_check(a, __mpy_call(input, __mpy_obj_init_tuple(0), NULL));
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, a, __mpy_obj_init_tuple(1)), NULL));
 	
 	__mpy_obj_ref_dec(b);
