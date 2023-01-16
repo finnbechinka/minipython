@@ -1,7 +1,0 @@
-class A():
-def init(self):
-print("INIT")
-#end
-#end
-
-a = A()
