@@ -111,11 +111,11 @@ __MPyObj* func_A_test(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__MPyObj *retValue = NULL;
 	
-	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_get_attr(self, "x"), __mpy_obj_init_tuple(1)), NULL));
-	__mpy_type_check(__mpy_obj_get_attr(self, "x"),__mpy_obj_init_int(10));
-	__mpy_obj_set_attr(self, "x", __mpy_obj_init_int(10));__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_get_attr(self, "x"), __mpy_obj_init_tuple(1)), NULL));
-	__mpy_type_check(__mpy_obj_get_attr(self, "x"),__mpy_obj_init_str_static("string"));
-	__mpy_obj_set_attr(self, "x", __mpy_obj_init_str_static("string"));__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_get_attr(self, "x"), __mpy_obj_init_tuple(1)), NULL));
+	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_get_attr(self, "number"), __mpy_obj_init_tuple(1)), NULL));
+	__mpy_type_check(__mpy_obj_get_attr(self, "number"),__mpy_obj_init_int(10));
+	__mpy_obj_set_attr(self, "number", __mpy_obj_init_int(10));__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_get_attr(self, "number"), __mpy_obj_init_tuple(1)), NULL));
+	__mpy_type_check(__mpy_obj_get_attr(self, "number"),__mpy_obj_init_str_static("string"));
+	__mpy_obj_set_attr(self, "number", __mpy_obj_init_str_static("string"));__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_get_attr(self, "number"), __mpy_obj_init_tuple(1)), NULL));
 	
 	__mpy_obj_ref_dec(self);
 	
