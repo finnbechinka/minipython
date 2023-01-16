@@ -10,6 +10,7 @@ import visitors.ASTVisitor;
 public class BlockNode extends ASTNode {
 
   private Scope scope;
+
   private List<ASTNode> instructions;
 
   public BlockNode(List<ASTNode> instructions) {

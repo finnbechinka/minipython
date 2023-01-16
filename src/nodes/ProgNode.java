@@ -10,6 +10,7 @@ import visitors.ASTVisitor;
 public class ProgNode extends ASTNode {
 
   private Scope scope;
+
   private List<ASTNode> stmts;
 
   public ProgNode(List<ASTNode> stmts) {
@@ -30,7 +31,7 @@ public class ProgNode extends ASTNode {
 
   @Override
   public String toStringTree() {
-    return "Prog";
+    return "Program";
   }
 
   @Override

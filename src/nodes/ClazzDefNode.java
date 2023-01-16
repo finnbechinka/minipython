@@ -9,6 +9,7 @@ import java.util.List;
 public class ClazzDefNode extends ASTNode {
 
   private Scope scope;
+
   private String id;
   private String parentId;
   private List<ASTNode> methods;
@@ -53,7 +54,7 @@ public class ClazzDefNode extends ASTNode {
 
   @Override
   public String toStringTree() {
-    return "Class: " + id + " Extends: " + parentId;
+    return String.format("Class: %s Parent: %s", id, parentId);
   }
 
   @Override

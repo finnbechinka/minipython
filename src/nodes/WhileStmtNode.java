@@ -8,6 +8,7 @@ import visitors.ASTVisitor;
 public class WhileStmtNode extends ASTNode {
 
   private Scope scope;
+  
   private ASTNode condition;
   private ASTNode body;
 

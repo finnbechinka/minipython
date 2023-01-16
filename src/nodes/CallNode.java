@@ -10,6 +10,7 @@ import visitors.ASTVisitor;
 public class CallNode extends ASTNode {
 
   private Scope scope;
+  
   private ASTNode id;
   private List<ASTNode> args;
 
