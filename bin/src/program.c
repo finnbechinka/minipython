@@ -13,7 +13,7 @@
 #include "type-hierarchy/type.h"
 
 __MPyObj *ret;
-__MPyObj *xd;
+__MPyObj *obj;
 
 __MPyObj *foo;
 __MPyObj* func_foo(__MPyObj *args, __MPyObj *kwargs) {
@@ -72,34 +72,106 @@ __MPyObj* func_moo(__MPyObj *args, __MPyObj *kwargs) {
 	return __mpy_obj_return(retValue);
 }
 
+__MPyObj *A;
+__MPyObj* func_A___init__(__MPyObj *args, __MPyObj *kwargs) {
+	assert(args != NULL && kwargs != NULL);
+	
+	__MPyGetArgsState argHelper = __mpy_args_init("__init__", args, kwargs, 2);
+	__MPyObj *self = __mpy_obj_init_object_w_type("");
+	__mpy_obj_ref_inc(self);
+	self = __mpy_type_check(self, __mpy_args_get_positional(&argHelper, 0, "self"));
+	__MPyObj *x = __mpy_obj_init_object_w_type("num");
+	__mpy_obj_ref_inc(x);
+	x = __mpy_type_check(x, __mpy_args_get_positional(&argHelper, 1, "x"));
+	__mpy_args_finish(&argHelper);
+	
+	__MPyObj *retValue = NULL;
+	
+	__mpy_obj_ref_dec(__mpy_call(__mpy_super, __mpy_tuple_assign(0, self, __mpy_obj_init_tuple(1)), NULL));
+	__mpy_type_check(__mpy_obj_get_attr(self, "number"),x);
+	__mpy_obj_set_attr(self, "number", x);
+	__mpy_obj_ref_dec(self);
+	__mpy_obj_ref_dec(x);
+	
+	goto ret;
+	ret:
+	if (retValue == NULL) {
+		retValue = __mpy_obj_init_object();
+	}
+	return __mpy_obj_return(retValue);
+}
+__MPyObj* func_A_test(__MPyObj *args, __MPyObj *kwargs) {
+	assert(args != NULL && kwargs != NULL);
+	
+	__MPyGetArgsState argHelper = __mpy_args_init("test", args, kwargs, 1);
+	__MPyObj *self = __mpy_obj_init_object_w_type("");
+	__mpy_obj_ref_inc(self);
+	self = __mpy_type_check(self, __mpy_args_get_positional(&argHelper, 0, "self"));
+	__mpy_args_finish(&argHelper);
+	
+	__MPyObj *retValue = NULL;
+	
+	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_get_attr(self, "x"), __mpy_obj_init_tuple(1)), NULL));
+	__mpy_type_check(__mpy_obj_get_attr(self, "x"),__mpy_obj_init_int(10));
+	__mpy_obj_set_attr(self, "x", __mpy_obj_init_int(10));__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_get_attr(self, "x"), __mpy_obj_init_tuple(1)), NULL));
+	__mpy_type_check(__mpy_obj_get_attr(self, "x"),__mpy_obj_init_str_static("string"));
+	__mpy_obj_set_attr(self, "x", __mpy_obj_init_str_static("string"));__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_get_attr(self, "x"), __mpy_obj_init_tuple(1)), NULL));
+	
+	__mpy_obj_ref_dec(self);
+	
+	goto ret;
+	ret:
+	if (retValue == NULL) {
+		retValue = __mpy_obj_init_object();
+	}
+	return __mpy_obj_return(retValue);
+}
 
 int main() {
 	__mpy_builtins_setup();
 	ret = __mpy_obj_init_object_w_type("num");
 	__mpy_obj_ref_inc(ret);
-	xd = __mpy_obj_init_object_w_type("num");
-	__mpy_obj_ref_inc(xd);
+	obj = __mpy_obj_init_object_w_type("");
+	__mpy_obj_ref_inc(obj);
 	
 	foo = __mpy_obj_init_func(&func_foo);
 	__mpy_obj_ref_inc(foo);
 	moo = __mpy_obj_init_func(&func_moo);
 	__mpy_obj_ref_inc(moo);
 	
+	A = __mpy_obj_init_type("A", __MPyType_Object);
+	__mpy_obj_ref_inc(A);
+	{
+		__MPyObj *__init__;
+		__init__ = __mpy_obj_init_func(&func_A___init__);
+		__mpy_obj_ref_inc(__init__);
+		__mpy_obj_set_attr(A, "__init__", __init__);
+		__mpy_obj_ref_dec(__init__);
+	}
+	{
+		__MPyObj *test;
+		test = __mpy_obj_init_func(&func_A_test);
+		__mpy_obj_ref_inc(test);
+		__mpy_obj_set_attr(A, "test", test);
+		__mpy_obj_ref_dec(test);
+	}
 	
 	__mpy_obj_ref_inc(ret);
 	__mpy_obj_ref_dec(ret);
 	ret = __mpy_type_check(ret, __mpy_call(foo, __mpy_tuple_assign(0, __mpy_obj_init_int(5), __mpy_tuple_assign(1, __mpy_obj_init_str_static("bar"), __mpy_obj_init_tuple(2))), NULL));
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("ret"), __mpy_tuple_assign(1, ret, __mpy_obj_init_tuple(2))), NULL));
-	__mpy_obj_ref_inc(xd);
-	__mpy_obj_ref_dec(xd);
-	xd = __mpy_type_check(xd, __mpy_call(moo, __mpy_tuple_assign(0, __mpy_obj_init_boolean(true), __mpy_obj_init_tuple(1)), NULL));
+	__mpy_obj_ref_inc(obj);
+	__mpy_obj_ref_dec(obj);
+	obj = __mpy_type_check(obj, __mpy_call(A, __mpy_tuple_assign(0, __mpy_obj_init_int(5), __mpy_obj_init_tuple(1)), NULL));
+	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj, "test"), __mpy_obj_init_tuple(0), NULL));
 	
 	__mpy_obj_ref_dec(ret);
-	__mpy_obj_ref_dec(xd);
+	__mpy_obj_ref_dec(obj);
 	
 	__mpy_obj_ref_dec(foo);
 	__mpy_obj_ref_dec(moo);
 	
+	__mpy_obj_ref_dec(A);
 	
 	__mpy_builtins_cleanup();
 	return 0;
