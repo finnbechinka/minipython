@@ -197,7 +197,8 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
         List<VariableDeclaration> vars = new ArrayList<VariableDeclaration>();
 
         for (int i = 0; i < ((FuncDefNode) node.getMethods().get(0)).getParameters().size(); i++) {
-          params.add(new Argument(((FuncDefNode) node.getMethods().get(0)).getParameters().get(i), i));
+          params.add(new Argument(((FuncDefNode) node.getMethods().get(0)).getParameters().get(i), i,
+              ((FuncDefNode) node.getMethods().get(0)).getParameterTypes().get(i)));
         }
 
         BlockNode block = (BlockNode) ((FuncDefNode) node.getMethods().get(0)).getBody();

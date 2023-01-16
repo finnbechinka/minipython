@@ -1,11 +1,26 @@
-def foo(x:int, y:string):int:
+def foo(x:num, y:str):num:
 print(y)
 return x
 #end
-ret:int = foo(5,"bar")
+ret:num = foo(5,"bar")
 print("ret",ret)
 def moo(x):bool:
 print(x)
 return x
 #end
-xd:int = moo(True)
+
+class A():
+def __init__(self, x:num):
+super()
+self.number = x
+#end
+def test(self):
+print(self.number)
+self.number = 10
+print(self.number)
+self.number = "string"
+print(self.number)
+#end
+#end
+obj = A(5)
+obj.test()
