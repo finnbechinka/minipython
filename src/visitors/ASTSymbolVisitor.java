@@ -34,7 +34,7 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
     } else {
       Object obj = visit(node.getValueNode());
 
-      if (scope.resolve(idnode.getType()) == null) {
+      if (idnode.getType() != "" && scope.resolve(idnode.getType()) == null) {
         System.out.println("PANIC: Type does not exist");
         return null;
       }
@@ -43,14 +43,18 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
         CallNode call = (CallNode) valuenode;
 
         if (!((IDNode) call.getId()).getId().equals(idnode.getType())) {
-          System.out
-              .println(
-                  "PANIC: The Type " + ((IDNode) call.getId()).getId() + " does not match with type "
-                      + idnode.getType());
+          System.out.println(String.format("PANIC: The Type %s does not match with the type %s",
+              ((IDNode) call.getId()).getId(), idnode.getType()));
           return null;
         }
-      } else {
+      } else if (valuenode instanceof LitNode) {
+        String type = (String) visit(valuenode);
 
+        if (!type.equals(idnode.getType())) {
+          System.out
+              .println(String.format("PANIC: The Type %s does not match with the type %s", type, idnode.getType()));
+          System.err.println("Hallo");
+        }
       }
 
       scope.bind(new Variable(idnode.getId(), obj instanceof Clazz ? (Clazz) obj : null));
@@ -229,8 +233,8 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
   public Object visit(IDNode node) {
 
     Symbol sym = scope.resolve(node.getId());
-    // if(!(sym instanceof Variable)) System.out.println("NOT A VAR:
-    // "+node.getId());
+    if (!(sym instanceof Variable))
+      System.out.println("NOT A VAR:" + node.getId());
 
     node.setScope(scope);
 
@@ -239,7 +243,16 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(LitNode<?> node) {
-    return null;
+    switch (node.getValue().getClass().getSimpleName()) {
+      case "String":
+        return "str";
+      case "Integer":
+        return "num";
+      case "Boolean":
+        return "bool";
+      default:
+        return null;
+    }
   }
 
   @Override
