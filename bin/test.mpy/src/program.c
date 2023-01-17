@@ -28,6 +28,7 @@ __MPyObj* func_sum(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__MPyObj *retValue = NULL;
 	
+	__MPyObj *tmp_attr_obj = NULL;
 	__MPyObj *a = __mpy_obj_init_object_w_type("");
 	__mpy_obj_ref_inc(a);
 	a = __mpy_type_check(a, __mpy_call(__mpy_obj_get_attr(__mpy_obj_init_int(1), "__add__"), __mpy_tuple_assign(0, x, __mpy_obj_init_tuple(1)), NULL));
@@ -37,6 +38,9 @@ __MPyObj* func_sum(__MPyObj *args, __MPyObj *kwargs) {
 	goto ret;
 	
 	__mpy_obj_ref_dec(x);
+	if (tmp_attr_obj != NULL){
+		__mpy_obj_ref_dec(tmp_attr_obj);
+	}
 	
 	goto ret;
 	ret:

@@ -22,11 +22,15 @@ __MPyObj* func_foo(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__MPyObj *retValue = NULL;
 	
+	__MPyObj *tmp_attr_obj = NULL;
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("ich bin eine Funktion"), __mpy_obj_init_tuple(1)), NULL));
 	__MPyObj *tmp_ret = __mpy_obj_init_object_w_type("");
 	retValue = __mpy_type_check(tmp_ret, __mpy_obj_init_int(1));
 	goto ret;
 	
+	if (tmp_attr_obj != NULL){
+		__mpy_obj_ref_dec(tmp_attr_obj);
+	}
 	
 	goto ret;
 	ret:

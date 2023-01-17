@@ -13,12 +13,14 @@ class A():
 def __init__(self, x:num):
 super()
 self.number = x
-self.number2:num = "haha"
+self.number2:num = 2
 #end
 def test(self):
 print(self.number)
 self.number = 10
 print(self.number)
+self.number2 = 10
+print(self.number2)
 self.number = "string"
 print(self.number)
 #end
