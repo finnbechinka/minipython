@@ -19,7 +19,7 @@ def test(self):
 print(self.number)
 self.number = 10
 print(self.number)
-self.number2 = 10
+self.number2 = False
 print(self.number2)
 self.number = "string"
 print(self.number)
