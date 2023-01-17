@@ -4,11 +4,13 @@ public class Function extends Scope implements Symbol {
 
   private String name;
   private Type type;
+  private String retType;
 
-  public Function(String name, Type type, Scope scope) {
+  public Function(String name, Type type, Scope scope, String retType) {
     super(scope);
     this.name = name;
     this.type = type;
+    this.retType = retType;
   }
 
   @Override
@@ -29,6 +31,10 @@ public class Function extends Scope implements Symbol {
   @Override
   public Type getType() {
     return this.type;
+  }
+
+  public String getRetType() {
+    return this.retType;
   }
 
   @Override
