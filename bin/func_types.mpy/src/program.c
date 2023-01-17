@@ -156,13 +156,11 @@ int main() {
 		__mpy_obj_ref_dec(test);
 	}
 	
-	__mpy_obj_ref_inc(ret);
-	__mpy_obj_ref_dec(ret);
 	ret = __mpy_type_check(ret, __mpy_call(foo, __mpy_tuple_assign(0, __mpy_obj_init_int(5), __mpy_tuple_assign(1, __mpy_obj_init_str_static("bar"), __mpy_obj_init_tuple(2))), NULL));
+	__mpy_obj_ref_inc(ret);
 	__mpy_obj_ref_dec(__mpy_call(print, __mpy_tuple_assign(0, __mpy_obj_init_str_static("ret"), __mpy_tuple_assign(1, ret, __mpy_obj_init_tuple(2))), NULL));
-	__mpy_obj_ref_inc(obj);
-	__mpy_obj_ref_dec(obj);
 	obj = __mpy_type_check(obj, __mpy_call(A, __mpy_tuple_assign(0, __mpy_obj_init_int(5), __mpy_obj_init_tuple(1)), NULL));
+	__mpy_obj_ref_inc(obj);
 	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj, "test"), __mpy_obj_init_tuple(0), NULL));
 	
 	__mpy_obj_ref_dec(ret);
