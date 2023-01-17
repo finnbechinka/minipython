@@ -49,7 +49,7 @@ public class ASTBuildVisitor implements ASTVisitor<Object> {
     Expression value = (Expression) visit(node.getValueNode());
 
     if (ref instanceof AttributeReference) {
-      return new AttributeAssignment((AttributeReference) ref, value);
+      return new AttributeAssignment((AttributeReference) ref, value, ((AttributeReference) ref).getType());
     }
 
     return new Assignment((Reference) ref, value);

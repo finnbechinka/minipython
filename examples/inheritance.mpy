@@ -12,3 +12,4 @@ return 0
 #end
 obj = B()
 obj.method_b()
+obj.method_a()
