@@ -31,11 +31,7 @@ __MPyObj* func_A___init__(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__MPyObj *tmp_attr_obj = NULL;
 	__mpy_obj_ref_dec(__mpy_call(__mpy_super, __mpy_tuple_assign(0, self, __mpy_obj_init_tuple(1)), NULL));
-	tmp_attr_obj = __mpy_obj_init_object_w_type("");
-	__mpy_obj_ref_inc(tmp_attr_obj);
-	tmp_attr_obj = __mpy_type_check(tmp_attr_obj, __mpy_obj_init_int(42));
-	__mpy_obj_ref_inc(tmp_attr_obj);
-	__mpy_obj_set_attr(self, "x", tmp_attr_obj);
+	__mpy_obj_set_attr(self, "x", __mpy_obj_init_int(42));
 	
 	__mpy_obj_ref_dec(self);
 	if (tmp_attr_obj != NULL){
@@ -61,11 +57,7 @@ __MPyObj* func_A_foo(__MPyObj *args, __MPyObj *kwargs) {
 	__MPyObj *retValue = NULL;
 	
 	__MPyObj *tmp_attr_obj = NULL;
-	tmp_attr_obj = __mpy_obj_init_object_w_type("");
-	__mpy_obj_ref_inc(tmp_attr_obj);
-	tmp_attr_obj = __mpy_type_check(tmp_attr_obj, __mpy_obj_init_str_static("fourtytwo"));
-	__mpy_obj_ref_inc(tmp_attr_obj);
-	__mpy_obj_set_attr(self, "x", tmp_attr_obj);
+	__mpy_obj_set_attr(self, "x", __mpy_obj_init_str_static("fourtytwo"));
 	
 	__mpy_obj_ref_dec(self);
 	if (tmp_attr_obj != NULL){
