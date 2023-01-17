@@ -9,6 +9,7 @@ import scopes.Function;
 import scopes.Scope;
 import scopes.Symbol;
 import scopes.Variable;
+import java.util.List;
 
 public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
@@ -138,8 +139,11 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
       if (sym instanceof Clazz)
         return sym;
-    }
 
+      if (sym instanceof Function)
+        return ((Function) sym).getRetType();
+    }
+    System.out.println("SCHMOCK");
     return null;
   }
 
@@ -206,17 +210,29 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
   @Override
   public Object visit(FuncDefNode node) {
 
-    Function fun = new Function(node.getId(), null, scope);
+    Function fun = new Function(node.getId(), null, scope, node.getReturnType());
     scope.bind(fun);
     scope = fun;
     node.setScope(fun);
 
-    for (String param : node.getParameters()) {
-      if (param.equals("self"))
-        scope.bind(new Variable(param, (Clazz) scope.getScope()));
-      else
-        scope.bind(new Variable(param, null));
+    List<String> params = node.getParameters();
+
+    for (int i = 0; i < params.size(); i++) {
+      if (params.get(i).equals("self")) {
+        scope.bind(new Variable(params.get(i), (Clazz) scope.getScope()));
+      } else {
+        if (!node.getParameterTypes().get(i).equals("")) {
+          Symbol type = scope.resolve(node.getParameterTypes().get(i));
+          if (type == null)
+            System.out.printf("Type doesnt exist!");
+        }
+        scope.bind(new Variable(params.get(i), null));
+      }
     }
+    if (scope.resolve(fun.getRetType()) == null) {
+      System.out.println("PANIC: RET TYPE DOES NOT EXIST " + fun.getRetType());
+    }
+
     visit(node.getBody());
 
     if (node.getReturnExpr() != null) {
@@ -231,14 +247,13 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(IDNode node) {
-
     Symbol sym = scope.resolve(node.getId());
     if (!(sym instanceof Variable))
       System.out.println("NOT A VAR:" + node.getId());
 
     node.setScope(scope);
 
-    return null;
+    return node.getType();
   }
 
   @Override
