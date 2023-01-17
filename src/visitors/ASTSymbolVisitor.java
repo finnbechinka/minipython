@@ -18,7 +18,7 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
   @Override
   public Object visit(AssignNode node) {
     IDNode idnode = (IDNode) node.getId();
-    ASTNode valuenode = node.getValueNode();
+    Object obj = visit(node.getValueNode());
 
     if (idnode.getInstanceId() != null) {
 
@@ -28,40 +28,16 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
         System.out.println("Instance doesnt exist!");
         return null;
       }
-
       Clazz instance = (Clazz) sym.getType();
       instance.bind(new Variable(idnode.getId(), null));
 
     } else {
-      Object obj = visit(node.getValueNode());
-
-      if (idnode.getType() != "" && scope.resolve(idnode.getType()) == null) {
-        System.out.println("PANIC: Type does not exist");
-        return null;
-      }
-
-      if (valuenode instanceof CallNode) {
-        CallNode call = (CallNode) valuenode;
-
-        if (!((IDNode) call.getId()).getId().equals(idnode.getType())) {
-          System.out.println(String.format("PANIC: The Type %s does not match with the type %s",
-              ((IDNode) call.getId()).getId(), idnode.getType()));
-          return null;
-        }
-      } else if (valuenode instanceof LitNode) {
-        String type = (String) visit(valuenode);
-
-        if (!type.equals(idnode.getType())) {
-          System.out
-              .println(String.format("PANIC: The Type %s does not match with the type %s", type, idnode.getType()));
-          System.err.println("Hallo");
-        }
-      }
-
-      scope.bind(new Variable(idnode.getId(), obj instanceof Clazz ? (Clazz) obj : null));
-      node.setScope(scope);
+      if (idnode.getType() != "" && !idnode.getType().equals(obj instanceof Clazz ? ((Clazz) obj).getName() : obj))
+        PANIC(String.format("The type %s does not match with %s", idnode.getType(),
+            obj instanceof Clazz ? ((Clazz) obj).getName() : obj));
     }
-
+    scope.bind(new Variable(idnode.getId(), obj instanceof Clazz ? (Clazz) obj : null));
+    node.setScope(scope);
     return null;
   }
 
@@ -99,57 +75,40 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
   public Object visit(CallNode node) {
     node.setScope(scope);
 
+    Symbol symbol = null;
+
     if (((IDNode) node.getId()).getInstanceId() != null) {
+      symbol = scope.resolve(((IDNode) node.getId()).getInstanceId());
+      if (symbol == null)
+        return PANIC(((IDNode) node.getId()).getInstanceId());
 
-      Symbol sym = scope.resolve(((IDNode) node.getId()).getInstanceId());
+      Clazz instance = (Clazz) ((Variable) symbol).getType();
+      if (instance == null)
+        return PANIC("1");
 
-      if (sym == null) {
-        System.out.println("Instance doesnt exist!");
-        return null;
-      }
-
-      Clazz instance = (Clazz) ((Variable) sym).getType();
-      if (instance == null) {
-        System.out.println("PANIC");
-        return null;
-      }
-      sym = instance.resolveMember(((IDNode) node.getId()).getId());
-
-      if (sym == null) {
-        System.out.println("Member doesnt exist!");
-        return null;
-      }
-
-      for (ASTNode arg : node.getArgs())
-        visit(arg);
+      symbol = instance.resolveMember(((IDNode) node.getId()).getId());
+      if (symbol == null)
+        return PANIC("2");
     } else {
-      Symbol sym = scope.resolve(((IDNode) node.getId()).getId());
+      symbol = scope.resolve(((IDNode) node.getId()).getId());
 
-      if (sym == null) {
-        System.out.println("DOSENT EXIST!");
-        return null;
-      } else if (sym instanceof Variable) {
-        System.out.println("NOT A FUNC OR CLASS");
-        return null;
-      }
-      // TODO: Exceptionhandling
-
-      for (ASTNode arg : node.getArgs())
-        visit(arg);
-
-      if (sym instanceof Clazz)
-        return sym;
-
-      if (sym instanceof Function)
-        return ((Function) sym).getRetType();
+      if (symbol == null)
+        return PANIC("3");
     }
-    System.out.println("SCHMOCK");
-    return null;
+
+    for (ASTNode arg : node.getArgs())
+      visit(arg);
+
+    if (symbol instanceof Clazz)
+      return symbol;
+    else if (symbol instanceof Function)
+      return ((Function) symbol).getRetType();
+    else
+      return null;
   }
 
   @Override
   public Object visit(ClazzDefNode node) {
-
     Clazz parent = null;
 
     if (node.getParentId() != null)
@@ -160,6 +119,7 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
     node.setScope(c);
 
     scope = c;
+    scope.bind(new Function("super", null, scope, node.getParentId()));
 
     for (ASTNode method : node.getMethods())
       visit(method);
@@ -171,7 +131,6 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(IfStmtNode node) {
-
     node.setScope(scope);
 
     visit(node.getIfCondition());
@@ -187,7 +146,6 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(ElifStmtNode node) {
-
     node.setScope(scope);
 
     visit(node.getCondition());
@@ -198,7 +156,6 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(WhileStmtNode node) {
-
     node.setScope(scope);
 
     visit(node.getCondition());
@@ -209,7 +166,6 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(FuncDefNode node) {
-
     Function fun = new Function(node.getId(), null, scope, node.getReturnType());
     scope.bind(fun);
     scope = fun;
@@ -229,7 +185,7 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
         scope.bind(new Variable(params.get(i), null));
       }
     }
-    if (scope.resolve(fun.getRetType()) == null) {
+    if (fun.getRetType() != "" && scope.resolve(fun.getRetType()) == null) {
       System.out.println("PANIC: RET TYPE DOES NOT EXIST " + fun.getRetType());
     }
 
@@ -248,8 +204,10 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
   @Override
   public Object visit(IDNode node) {
     Symbol sym = scope.resolve(node.getId());
-    if (!(sym instanceof Variable))
+
+    if (node.getInstanceId() == null && !(sym instanceof Variable)) {
       System.out.println("NOT A VAR:" + node.getId());
+    }
 
     node.setScope(scope);
 
@@ -272,7 +230,6 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(ProgNode node) {
-
     scope = new Scope(null);
     node.setScope(scope);
     scope.bind(new Builtin("print", null));
@@ -281,10 +238,14 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
     scope.bind(new Builtin("num", null));
     scope.bind(new Builtin("bool", null));
 
-    for (ASTNode stmt : node.getStmts())
+    for (ASTNode stmt : node.getStmts()) {
       visit(stmt);
-
+    }
     return null;
   }
 
+  private Object PANIC(String msg) {
+    System.err.println("PANIC: " + msg);
+    return null;
+  }
 }
