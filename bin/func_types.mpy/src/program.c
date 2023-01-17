@@ -89,6 +89,7 @@ __MPyObj* func_A___init__(__MPyObj *args, __MPyObj *kwargs) {
 	
 	__mpy_obj_ref_dec(__mpy_call(__mpy_super, __mpy_tuple_assign(0, self, __mpy_obj_init_tuple(1)), NULL));
 	__mpy_obj_set_attr(self, "number", x);
+	__mpy_obj_set_attr(slef, "number2", __mpy_obj_init_str_static("haha"));
 	
 	__mpy_obj_ref_dec(self);
 	__mpy_obj_ref_dec(x);

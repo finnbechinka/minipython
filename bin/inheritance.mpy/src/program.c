@@ -150,6 +150,7 @@ int main() {
 	obj = __mpy_type_check(obj, __mpy_call(B, __mpy_obj_init_tuple(0), NULL));
 	__mpy_obj_ref_inc(obj);
 	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj, "method_b"), __mpy_obj_init_tuple(0), NULL));
+	__mpy_obj_ref_dec(__mpy_call(__mpy_obj_get_attr(obj, "method_a"), __mpy_obj_init_tuple(0), NULL));
 	
 	__mpy_obj_ref_dec(obj);
 	
