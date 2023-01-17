@@ -1,5 +1,7 @@
 package visitors;
 
+import java.net.IDN;
+
 import nodes.*;
 import scopes.Builtin;
 import scopes.Clazz;
@@ -14,8 +16,10 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(AssignNode node) {
+    IDNode idnode = (IDNode) node.getId();
+    ASTNode valuenode = node.getValueNode();
 
-    if (((IDNode) node.getId()).getInstanceId() != null) {
+    if (idnode.getInstanceId() != null) {
 
       Symbol sym = scope.resolve(((IDNode) node.getId()).getInstanceId());
 
@@ -25,12 +29,31 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
       }
 
       Clazz instance = (Clazz) sym.getType();
-      instance.bind(new Variable(((IDNode) node.getId()).getId(), null));
+      instance.bind(new Variable(idnode.getId(), null));
 
     } else {
-      Object s = visit(node.getValueNode());
+      Object obj = visit(node.getValueNode());
 
-      scope.bind(new Variable(((IDNode) node.getId()).getId(), s instanceof Clazz ? (Clazz) s : null));
+      if (scope.resolve(idnode.getType()) == null) {
+        System.out.println("PANIC: Type does not exist");
+        return null;
+      }
+
+      if (valuenode instanceof CallNode) {
+        CallNode call = (CallNode) valuenode;
+
+        if (!((IDNode) call.getId()).getId().equals(idnode.getType())) {
+          System.out
+              .println(
+                  "PANIC: The Type " + ((IDNode) call.getId()).getId() + " does not match with type "
+                      + idnode.getType());
+          return null;
+        }
+      } else {
+
+      }
+
+      scope.bind(new Variable(idnode.getId(), obj instanceof Clazz ? (Clazz) obj : null));
       node.setScope(scope);
     }
 
@@ -39,7 +62,6 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(BinaryExprNode node) {
-
     node.setScope(scope);
     visit(node.getLeftNode());
     visit(node.getRightNode());
@@ -49,7 +71,6 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(UnaryExprNode node) {
-
     node.setScope(scope);
     visit(node.getChildNode());
 
@@ -58,14 +79,12 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(BlockNode node) {
-
     scope = new Scope(scope);
 
     for (ASTNode inst : node.getInstructions())
       visit(inst);
 
     node.setScope(scope);
-
     scope = scope.getScope();
 
     return null;
@@ -73,7 +92,6 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
 
   @Override
   public Object visit(CallNode node) {
-
     node.setScope(scope);
 
     if (((IDNode) node.getId()).getInstanceId() != null) {
@@ -231,6 +249,9 @@ public class ASTSymbolVisitor implements ASTVisitor<Object> {
     node.setScope(scope);
     scope.bind(new Builtin("print", null));
     scope.bind(new Builtin("input", null));
+    scope.bind(new Builtin("str", null));
+    scope.bind(new Builtin("num", null));
+    scope.bind(new Builtin("bool", null));
 
     for (ASTNode stmt : node.getStmts())
       visit(stmt);
