@@ -10,13 +10,20 @@ return x
 #end
 
 class A():
-def __init__(self, x:num):
+def __init__(self, x:num, y, z):
 super()
 self.number = x
-self.number2:num = 2
+self.number2:num = y
+self.number3:num = z
 #end
 def test(self):
 print(self.number)
+print(self.number2)
+print(self.number3)
+self.number2 = 42
+print(self.number)
+print(self.number2)
+print(self.number3)
 self.number = 10
 print(self.number)
 self.number2 = False
@@ -25,5 +32,5 @@ self.number = "string"
 print(self.number)
 #end
 #end
-obj = A(5)
+obj = A(5,6,7)
 obj.test()

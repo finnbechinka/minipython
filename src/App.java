@@ -42,9 +42,9 @@ public class App {
         ASTStringVisitor str = new ASTStringVisitor();
         ASTSymbolVisitor symbol = new ASTSymbolVisitor();
         ASTEvalVisitor eval = new ASTEvalVisitor();
-        ASTBuildVisitor build = new ASTBuildVisitor(Path.of("bin\\input"));
+        ASTBuildVisitor build = new ASTBuildVisitor(Path.of("bin/input"));
         if (args.length > 0) {
-            build = new ASTBuildVisitor(Path.of("bin\\" + Path.of(args[0]).getFileName().toString()));
+            build = new ASTBuildVisitor(Path.of("bin/" + Path.of(args[0]).getFileName().toString()));
         }
 
         ASTNode ast = tree.accept(astVisitor);
