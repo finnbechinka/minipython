@@ -1,0 +1,10 @@
+def sum(x):
+a=1+x
+return a
+#end
+sum(2)
+b=2
+c="KaNsNsT dU maL meHreRe VaRiabLEn BenUtzEN?"
+
+a = input()
+print(a)

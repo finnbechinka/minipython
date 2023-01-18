@@ -1,0 +1,15 @@
+class A():
+def method_a(self):
+print("method a")
+return 0
+#end
+#end
+class B(A):
+def method_b(self):
+self.method_a()
+return 0
+#end
+#end
+obj = B()
+obj.method_b()
+obj.method_a()
